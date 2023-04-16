@@ -26,7 +26,8 @@ arthur2000jose@gmail.com
 """
 
 
-#import time
+import time
+import random
 
 import random,datetime,csv,os
 from tkinter import *
@@ -686,52 +687,54 @@ class maze:
             self._canvas.create_line(y, x + w, y + w, x + w,width=2,fill=theme.value[1])
 
     _tracePathList=[]
-    def _tracePathSingle(self,a,p,kill,showMarked,delay):
+    def _tracePathSingle(self,agent,path,kill,showMarked,delay):
         '''
         An interal method to help tracePath method for tracing a path by agent.
         '''
         
-        def killAgent(a):
+        def killAgent(agent):
             '''
             if the agent should be killed after it reaches the Goal or completes the path
             '''
-            for i in range(len(a._body)):
-                self._canvas.delete(a._body[i])
-            self._canvas.delete(a._head)
+            for i in range(len(agent._body)):
+                self._canvas.delete(agent._body[i])
+            self._canvas.delete(agent._head)
+
+            print("kill")
 
         w=self._cell_width
-        if((a.x,a.y) in self.markCells and showMarked):
+        if((agent.x,agent.y) in self.markCells and showMarked):
             w=self._cell_width
-            x=a.x*w-w+self._LabWidth
-            y=a.y*w-w+self._LabWidth
+            x=agent.x*w-w+self._LabWidth
+            y=agent.y*w-w+self._LabWidth
             self._canvas.create_oval(y + w/2.5+w/20, x + w/2.5+w/20,y + w/2.5 +w/4-w/20, x + w/2.5 +w/4-w/20,fill='red',outline='red',tag='ov')
             self._canvas.tag_raise('ov')
        
-        if (a.x,a.y)==(a.goal):
-            del maze._tracePathList[0][0][a]
+        if (agent.x,agent.y)==(agent.goal):
+            del maze._tracePathList[0][0][agent]
             if maze._tracePathList[0][0]=={}:
                 del maze._tracePathList[0]
                 if len(maze._tracePathList)>0:
                     self.tracePath(maze._tracePathList[0][0],kill=maze._tracePathList[0][1],delay=maze._tracePathList[0][2])
             if kill:
-                self._win.after(300, killAgent,a)         
+                self._win.after(300, killAgent,agent)         
             return
 
         # If path is provided as List
-        if (type(p)==list):
-            if(len(p)==0):
-                del maze._tracePathList[0][0][a]
+        if (type(path)==list):
+            if(len(path)==0):
+                del maze._tracePathList[0][0][agent]
                 if maze._tracePathList[0][0]=={}:
                     del maze._tracePathList[0]
                     if len(maze._tracePathList)>0:
                         self.tracePath(maze._tracePathList[0][0],kill=maze._tracePathList[0][1],delay=maze._tracePathList[0][2])
                 if kill:                    
-                    self._win.after(300, killAgent,a)  
+                    self._win.after(300, killAgent,agent)  
                 return
-            if a.shape=='arrow':
-                old=(a.x,a.y)
-                new=p[0]
-                o=a._orient
+            if agent.shape=='arrow':
+                old=(agent.x,agent.y)
+                new=path[0]
+                o=agent._orient
                 
                 if old!=new:
                     if old[0]==new[0]:
@@ -746,47 +749,156 @@ class maze:
                         else:
                             mov=2#'S' #2
                     if mov-o==2:
-                        a._RCW()
+                        agent._RCW()
 
                     elif mov-o==-2:
-                        a._RCW()
+                        agent._RCW()
                     elif mov-o==1:
-                        a._RCW()
+                        agent._RCW()
                     elif mov-o==-1:
-                        a._RCCW()
+                        agent._RCCW()
                     elif mov-o==3:
-                        a._RCCW()
+                        agent._RCCW()
                     elif mov-o==-3:
-                        a._RCW()
+                        agent._RCW()
                     elif mov==o:
-                        a.x,a.y=p[0]
-                        del p[0]
+                        agent.x,agent.y=path[0]
+                        del path[0]
                 else:
-                    del p[0]
+                    del path[0]
             else:    
-                a.x,a.y=p[0]
-                del p[0]
+                agent.x,agent.y=path[0]
+                del path[0]
 
-        else:
-            print("path must be a list -> if you don't want this, check the forked base repository")
-            exit()
+        """ 
+        # If path is provided as Dictionary
+        if(type(path)==dict):
+            if(len(path)==0):
+                del maze._tracePathList[0][0][agent]
+                return
+            if agent.shape=='arrow':
+                old=(agent.x,agent.y)
+                new=path[(agent.x,agent.y)]
+                o=agent._orient
+
+                if old!=new:
+                    if old[0]==new[0]:
+                        if old[1]>new[1]:
+                            mov=3#'W' #3
+                        else:
+                            mov=1#'E' #1
+                    else:
+                        if old[0]>new[0]:
+                            mov=0#'N' #0
+
+                        else:
+                            mov=2#'S' #2
+                    if mov-o==2:
+                        agent._RCW()
+
+                    if mov-o==-2:
+                        agent._RCW()
+                    if mov-o==1:
+                        agent._RCW()
+                    if mov-o==-1:
+                        agent._RCCW()
+                    if mov-o==3:
+                        agent._RCCW()
+                    if mov-o==-3:
+                        agent._RCW()
+                    if mov==o:
+                        agent.x,agent.y=path[(agent.x,agent.y)]
+                else:
+                    del path[(agent.x,agent.y)]
+            else:    
+                agent.x,agent.y=path[(agent.x,agent.y)]
+
+        # If path is provided as String
+        if (type(path)==str):
+            if(len(path)==0):
+                del maze._tracePathList[0][0][agent]
+                if maze._tracePathList[0][0]=={}:
+                    del maze._tracePathList[0]
+                    if len(maze._tracePathList)>0:
+                        self.tracePath(maze._tracePathList[0][0],kill=maze._tracePathList[0][1],delay=maze._tracePathList[0][2])
+                if kill:
+
+                    self._win.after(300, killAgent,agent)         
+                return
+            if agent.shape=='arrow':
+                old=(agent.x,agent.y)
+                new=path[0]
+                o=agent._orient
+                if new=='N': mov=0
+                elif new=='E': mov=1
+                elif new=='S': mov=2
+                elif new=='W': mov=3
+
+                if mov-o==2:
+                    agent._RCW()
+
+                if mov-o==-2:
+                    agent._RCW()
+                if mov-o==1:
+                    agent._RCW()
+                if mov-o==-1:
+                    agent._RCCW()
+                if mov-o==3:
+                    agent._RCCW()
+                if mov-o==-3:
+                    agent._RCW()
+            if agent.shape=='square' or mov==o:    
+                move=path[0]
+                if move=='E':
+                    if agent.y+1<=self.cols:
+                        agent.y+=1
+                elif move=='W':
+                    if agent.y-1>0:
+                        agent.y-=1
+                elif move=='N':
+                    if agent.x-1>0:
+                        agent.x-=1
+                        agent.y=agent.y
+                elif move=='S':
+                    if agent.x+1<=self.rows:
+                        agent.x+=1
+                        agent.y=agent.y
+                elif move=='C':
+                    agent._RCW()
+                elif move=='A':
+                    agent._RCCW()
+                p=path[1:]
+        """
+       
 
         # Recursão
-        #self._win.after(delay, self._tracePathSingle,a,p,kill,showMarked,delay)    
+        self._win.after(delay, self._tracePathSingle,agent,path,kill,showMarked,delay)
 
-    def tracePath(self,d,kill=False,delay=300,showMarked=False):
+    def tracePath(self,agentPath,kill=False,delay=300,showMarked=False):
         '''
         A method to trace path by agent
         You can provide more than one agent/path details
         '''
-        self._tracePathList.append((d,kill,delay))
-        if maze._tracePathList[0][0]==d: 
-            for a,p in d.items():
-                if a.goal!=(a.x,a.y) and len(p)!=0:
-                    self._tracePathSingle(a,p,kill,showMarked,delay)
-                    """ for i in range(len(a._body)):
-                        self._tracePathSingle(a,p,kill,showMarked,delay)
-                        time.sleep(0.3) """
+
+        self._tracePathList.append((agentPath,kill,delay))
+        if maze._tracePathList[0][0]==agentPath: 
+            for agent,path in agentPath.items():
+                if agent.goal!=(agent.x,agent.y) and len(path)!=0:
+                    self._tracePathSingle(agent,path,kill,showMarked,delay)
+
+    def tracePaths(self,agentPaths,kill=False,delay=300,showMarked=False):
+        '''
+        A method to trace path by agent
+        You can provide more than one agent/path details
+        '''
+        size_of_paths = len(agentPaths)
+        for i in range(size_of_paths):
+            self._tracePathList.append((agentPaths[i],kill,delay))
+            if maze._tracePathList[i][0]==agentPaths[i]: 
+                for agent,path in agentPaths[i].items():
+                    if agent.goal!=(agent.x,agent.y) and len(path)!=0:
+                        self._tracePathSingle(agent,path,kill,showMarked,delay)
+                   
         
     def run(self):
         '''
