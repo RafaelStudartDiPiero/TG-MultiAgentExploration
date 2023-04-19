@@ -52,6 +52,8 @@ def my(m, agentWeight, start=None):
     parentList.append((-1,-1))
     currCell = start
     root_count = 0
+    tree_level = 1
+    agent_path = []
 
     while root_count < 2:
 
@@ -72,11 +74,14 @@ def my(m, agentWeight, start=None):
             explored.append(currCell)
             mySearch.append(currCell)
             currCell = parentList.pop()
+            tree_level -= 1
+            agent_path.pop()
             continue
 
         # Define the next step to the agent
-        next = defineAgentNextStep(agentWeight, count_children)
+        next = defineAgentNextStep(agentWeight, count_children, tree_level, agent_path)
         childCellPoint = currentChildren[next]
+        tree_level += 1
         parentList.append(currCell)
         explored.append(currCell)
         mySearch.append(currCell)
@@ -123,17 +128,27 @@ def getChildrenPoints(cellCoordinate, cellPoints, parent, explored):
 
     return children
 
-def defineAgentNextStep(agentWeight, count_children):
+def defineAgentNextStep(agentWeight, count_children, tree_level, agent_path):
+      
     if count_children == 1:
+        agent_path.append(0.0)
         return 0
     
-    epsilon = 0.0001
-    division = 1.0 / count_children
+    division = (1.0 / count_children) * (10 ** (-(tree_level - 1)))
 
     # Return the first child that is able to obey the limits
     for i in range(0, count_children):
-        if division * (i+1) > agentWeight[0] + epsilon:
+        threshold = division * (i + 1) + sum(agent_path)
+        print("sum(agent_path): ", sum(agent_path))
+        print("threshold: ", threshold)
+        print("agentWeight[0]: ", agentWeight[0])
+        print("tree_level: ", tree_level)
+        if agentWeight[0] <= threshold:
+            print("division * (i): ", division * (i))
+            agent_path.append(division * (i))
             return i
+        
+    #return count_children - 1
     
     #ERROR
     print("ERROR - defineAgentNextStep")
@@ -145,8 +160,8 @@ colorList = [COLOR.red, COLOR.cyan, COLOR.green, COLOR.blue, COLOR.yellow, COLOR
 
 if __name__=='__main__':
 
-    numOfLines = 100
-    numOfColumns = 100
+    numOfLines = 20
+    numOfColumns = 20
 
     m=maze(numOfLines,numOfColumns)
     m.CreateMaze(loopPercent=10,theme='light')
