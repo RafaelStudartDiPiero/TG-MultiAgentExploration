@@ -52,7 +52,6 @@ def my(m, agentWeight, start=None):
     parentList.append((-1,-1))
     currCell = start
     root_count = 0
-    tree_level = 1
     agent_path = []
 
     while root_count < 2:
@@ -74,14 +73,12 @@ def my(m, agentWeight, start=None):
             explored.append(currCell)
             mySearch.append(currCell)
             currCell = parentList.pop()
-            tree_level -= 1
             agent_path.pop()
             continue
 
         # Define the next step to the agent
-        next = defineAgentNextStep(agentWeight, count_children, tree_level, agent_path)
+        next = defineAgentNextStep(agentWeight, count_children, agent_path)
         childCellPoint = currentChildren[next]
-        tree_level += 1
         parentList.append(currCell)
         explored.append(currCell)
         mySearch.append(currCell)
@@ -128,31 +125,62 @@ def getChildrenPoints(cellCoordinate, cellPoints, parent, explored):
 
     return children
 
-def defineAgentNextStep(agentWeight, count_children, tree_level, agent_path):
+def defineAgentNextStep(agentWeight, count_children, agent_path):
       
+    # If there is only 1 child just go on
     if count_children == 1:
-        agent_path.append(0.0)
+        agent_path.append((-1, -1))
         return 0
     
-    division = (1.0 / count_children) * (10 ** (-(tree_level - 1)))
+    # Get the weight interval of each node
+    relative_node_weights = getRelativeNodeWeights(agent_path, count_children)
 
     # Return the first child that is able to obey the limits
     for i in range(0, count_children):
-        threshold = division * (i + 1) + sum(agent_path)
-        print("sum(agent_path): ", sum(agent_path))
-        print("threshold: ", threshold)
-        print("agentWeight[0]: ", agentWeight[0])
-        print("tree_level: ", tree_level)
-        if agentWeight[0] <= threshold:
-            print("division * (i): ", division * (i))
-            agent_path.append(division * (i))
+        if agentWeight[0] < relative_node_weights[i][1]:
+            agent_path.append((i, count_children))
             return i
         
-    #return count_children - 1
+    # Big weight agent in a light weight path
+    print("big weight agent in a light weight path")
+    return count_children - 1
     
     #ERROR
-    print("ERROR - defineAgentNextStep")
-    return None
+    #print("ERROR - defineAgentNextStep")
+    #return None
+
+def getRelativeNodeWeights(agent_path, count_children):
+
+    # Calculating the previous interval according the agent path
+    path_size = len(agent_path)
+    interval = (0, 1)
+    if path_size > 0:
+        chunk = 1 / agent_path[0][1]
+        interval = (agent_path[0][0] * chunk,  agent_path[0][0] * chunk + chunk)
+
+        for i in range(1, path_size):
+            if agent_path[i][0] == -1:
+                continue
+
+            interval_size = interval[1] - interval[0]
+            chunk = interval_size / agent_path[i][1]
+            interval = (interval[0], interval[0] + chunk)
+
+    # Calculating the weights of the next nodes
+    weights = []
+    interval_size = interval[1] - interval[0]
+    chunk = interval_size / count_children
+    start = 0
+    end = 0
+    for i in range(0, count_children):
+        start = interval[0] + chunk * i
+        end = start + chunk
+        weight = (start, end)
+        weights.append(weight)
+
+    return weights
+
+
 
 
 colorList = [COLOR.red, COLOR.cyan, COLOR.green, COLOR.blue, COLOR.yellow, COLOR.black]
@@ -160,8 +188,8 @@ colorList = [COLOR.red, COLOR.cyan, COLOR.green, COLOR.blue, COLOR.yellow, COLOR
 
 if __name__=='__main__':
 
-    numOfLines = 20
-    numOfColumns = 20
+    numOfLines = 15
+    numOfColumns = 15
 
     m=maze(numOfLines,numOfColumns)
     m.CreateMaze(loopPercent=10,theme='light')
@@ -190,3 +218,10 @@ if __name__=='__main__':
     m.tracePaths(paths, delay=100)
 
     m.run()
+
+
+'''
+Avisos para o professor:
+- O algoritmo não grava todo o percurso do agente. Se, por exemplo, ele retorna para um nó pai, o filho é desconsiderado
+
+'''
