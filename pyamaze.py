@@ -51,7 +51,7 @@ class COLOR(Enum):
     cyan=('cyan4','cyan4')
     green=('green4','pale green')
     blue=('DeepSkyBlue4','DeepSkyBlue2')
-    yellow=('yellow2','yellow2')
+    yellow=('yellow2','yellow1')
 
 class agent:
     '''
@@ -711,7 +711,7 @@ class maze:
             self._canvas.tag_raise('ov')
        
         if (agent.x,agent.y)==(agent.goal):
-            del maze._tracePathList[0][0][agent]
+            #del maze._tracePathList[0][0][agent]
             if maze._tracePathList[0][0]=={}:
                 del maze._tracePathList[0]
                 if len(maze._tracePathList)>0:
@@ -723,7 +723,7 @@ class maze:
         # If path is provided as List
         if (type(path)==list):
             if(len(path)==0):
-                del maze._tracePathList[0][0][agent]
+                #del maze._tracePathList[0][0][agent]
                 if maze._tracePathList[0][0]=={}:
                     del maze._tracePathList[0]
                     if len(maze._tracePathList)>0:

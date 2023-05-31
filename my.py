@@ -1,7 +1,7 @@
 from pyamaze import maze,agent,textLabel,COLOR
 from collections import deque
 
-def BFS(m,start=None):
+""" def BFS(m,start=None):
     if start is None:
         start=(m.rows,m.cols)
     frontier = deque()
@@ -36,10 +36,11 @@ def BFS(m,start=None):
     while cell!=start:
         fwdPath[bfsPath[cell]]=cell
         cell=bfsPath[cell]
-    return bSearch,bfsPath,fwdPath
+    return bSearch,bfsPath,fwdPath """
 
 
-compass = "NESW"
+compass = "NESW" # priority
+#compass = "WSEN"
 
 def my(m, agentWeight, start=None):
     if start is None:
@@ -51,20 +52,17 @@ def my(m, agentWeight, start=None):
     parentList = deque()
     parentList.append((-1,-1))
     currCell = start
-    root_count = 0
     agent_path = []
 
-    while root_count < 2:
+    count = 0
+
+    while True:
+
+        count += 1
 
         if currCell==m._goal:
+            mySearch.append(currCell)
             break
-
-        # Checking if agent came back to root
-        if currCell==start:
-            root_count += 1
-            if root_count > 10:
-                print("voltei para a raiz. não sei o que fazer")
-                break
 
         # If there are not children, go to parent
         currentChildren = getChildrenPoints(currCell, m.maze_map[currCell], parentList[0], explored)
@@ -73,7 +71,14 @@ def my(m, agentWeight, start=None):
             explored.append(currCell)
             mySearch.append(currCell)
             currCell = parentList.pop()
-            agent_path.pop()
+
+            if len(agent_path) != 0:
+                agent_path.pop()
+            else:
+                print(count)
+                print(len(agent_path))
+                print("verificar o que ocorre aqui")
+
             continue
 
         # Define the next step to the agent
@@ -183,16 +188,17 @@ def getRelativeNodeWeights(agent_path, count_children):
 
 
 
-colorList = [COLOR.red, COLOR.cyan, COLOR.green, COLOR.blue, COLOR.yellow, COLOR.black]
+colorList = [COLOR.red, COLOR.green, COLOR.blue, COLOR.yellow, COLOR.cyan, COLOR.black]
 
 
 if __name__=='__main__':
 
-    numOfLines = 15
-    numOfColumns = 15
+    numOfLines = 13
+    numOfColumns = 13
 
     m=maze(numOfLines,numOfColumns)
-    m.CreateMaze(loopPercent=10,theme='light')
+    m.CreateMaze(loopPercent=10,theme='light', loadMaze='test2.csv')
+    #m.CreateMaze(loopPercent=10,theme='light', saveMaze=True)
 
     """ bSearch,bfsPath,fwdPath=BFS(m)
     a=agent(m,footprints=True,color=COLOR.yellow,shape='square',filled=True)
@@ -200,22 +206,33 @@ if __name__=='__main__':
     a2=agent(m,footprints=True,color=COLOR.red,shape='square',filled=True)
     m.tracePaths([{a:bSearch}, {a2:bSearch2}],delay=100) """
 
-    numOfAgents = 3
+    # posicional vs unário
+    # seed -> gerar o mesmo valor aleatório
+
+    numOfAgents = 50
     division = 1.0 / numOfAgents
     paths = []
     for i in range(0, numOfAgents):
         start = i * division
         end = (i + 1) * division
         agentWeight = (start, end)
-        mySearch = my(m, agentWeight)
 
+        mySearch = my(m, agentWeight)
         agentColor = colorList[i % len(colorList)]
         a = agent(m,footprints=True,color=agentColor,shape='square',filled=True)
+
+        """ # test 3
+        mySearch = my(m, agentWeight, start=(7,7))
+        agentColor = colorList[i % len(colorList)]
+        a = agent(m,x=7,y=7,footprints=True,color=agentColor,shape='square',filled=True) """
 
         paths.append({a:mySearch})
 
 
-    m.tracePaths(paths, delay=100)
+    # only agent x
+    #m.tracePaths([paths[2]], kill=False, delay=100)
+
+    m.tracePaths(paths, kill=False, delay=300)
 
     m.run()
 
