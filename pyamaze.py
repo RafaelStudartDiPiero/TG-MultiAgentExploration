@@ -25,14 +25,36 @@ Modified by Arthur José de Sousa Rodrigues
 arthur2000jose@gmail.com
 """
 
-
-import time
-import random
-
 import random,datetime,csv,os
 from tkinter import *
 from enum import Enum
 from collections import deque
+
+# Auxiliary function to print agent color
+def getColorString(color):
+    if color == COLOR.red:
+        return "Vermelho"
+    elif color == COLOR.blue:
+        return "Azul"
+    elif color == COLOR.yellow:
+        return "Amarelo"
+    elif color == COLOR.cyan:
+        return "Ciano"
+    elif color == COLOR.black:
+        return "Preto"
+    
+# Auxiliary function to print the next direction
+def next_direction(current, next):
+    if current[0] != next[0]:
+        if current[0] < next[0]:
+            return "Sul"
+        else:
+            return "Norte"
+    else:
+        if current[1] < next[1]:
+            return "Leste"
+        else:
+            return "Oeste"
 
 class COLOR(Enum):
     '''
@@ -316,6 +338,11 @@ class maze:
         self._canvas=None
         self._agents=[]
         self.markCells=[]
+        
+
+
+        ##### teeesste
+        self.test = True
 
     @property
     def grid(self):
@@ -687,7 +714,7 @@ class maze:
             self._canvas.create_line(y, x + w, y + w, x + w,width=2,fill=theme.value[1])
 
     _tracePathList=[]
-    def _tracePathSingle(self,agent,path,kill,showMarked,delay):
+    def _tracePathSingle(self,agent,path,kill,showMarked,delay,wait_key):
         '''
         An interal method to help tracePath method for tracing a path by agent.
         '''
@@ -870,11 +897,54 @@ class maze:
                 p=path[1:]
         """
        
+        if wait_key == False:
+            # Recursão
+            self._win.after(delay, self._tracePathSingle, agent, path, kill, showMarked, delay, wait_key)
+        
+    def tracePaths(self,agentPaths,kill=False,delay=300,showMarked=False):
+        '''
+        A method to trace path by agent
+        You can provide more than one agent/path details
+        '''
+        amount_of_paths = len(agentPaths)
+        for i in range(amount_of_paths):
+            self._tracePathList.append((agentPaths[i],kill,delay))
+            #if maze._tracePathList[i][0]==agentPaths[i]: 
+            for agent,path in agentPaths[i].items():
+                if agent.goal!=(agent.x,agent.y) and len(path)!=0:
+                    self._tracePathSingle(agent,path,kill,showMarked,delay,wait_key=False)
 
-        # Recursão
-        self._win.after(delay, self._tracePathSingle,agent,path,kill,showMarked,delay)
+    def tracePaths_by_key_press(self,agentPaths,kill=False,delay=300,showMarked=False):
+        '''
+        A method to trace path by agent
+        You can provide more than one agent/path details
+        '''
+        amount_of_paths = len(agentPaths)
+        for i in range(amount_of_paths):
+            self._tracePathList.append((agentPaths[i],kill,delay))
 
-    def tracePath(self,agentPath,kill=False,delay=300,showMarked=False):
+        first_step = True
+        while True:
+            exit_flag = True
+            for i in range(amount_of_paths):
+                for agent,path in agentPaths[i].items():
+                    if agent.goal!=(agent.x,agent.y) and len(path)!=0:
+
+                        if first_step != True:
+                            print("Clique Enter para ver o próximo passo do agente ", i + 1, " (", getColorString(agent.color), "). Ele irá para o ", next_direction((agent.x, agent.y), path[0]), ".")
+                            input()
+
+                        self._tracePathSingle(agent,path,kill,showMarked,delay,wait_key=True)
+
+                        exit_flag = False
+
+            if exit_flag == True:
+                break
+
+            first_step = False
+
+
+    """ def tracePath(self,agentPath,kill=False,delay=300,showMarked=False):
         '''
         A method to trace path by agent
         You can provide more than one agent/path details
@@ -884,24 +954,16 @@ class maze:
         if maze._tracePathList[0][0]==agentPath: 
             for agent,path in agentPath.items():
                 if agent.goal!=(agent.x,agent.y) and len(path)!=0:
-                    self._tracePathSingle(agent,path,kill,showMarked,delay)
+                    self._tracePathSingle(agent,path,kill,showMarked,delay) """
 
-    def tracePaths(self,agentPaths,kill=False,delay=300,showMarked=False):
-        '''
-        A method to trace path by agent
-        You can provide more than one agent/path details
-        '''
-        size_of_paths = len(agentPaths)
-        for i in range(size_of_paths):
-            self._tracePathList.append((agentPaths[i],kill,delay))
-            if maze._tracePathList[i][0]==agentPaths[i]: 
-                for agent,path in agentPaths[i].items():
-                    if agent.goal!=(agent.x,agent.y) and len(path)!=0:
-                        self._tracePathSingle(agent,path,kill,showMarked,delay)
-                   
-        
     def run(self):
         '''
         Finally to run the Tkinter Main Loop
         '''
         self._win.mainloop()
+                   
+        """  
+        def key_press_handler(event, self, agent, path, kill, showMarked, delay):
+        print(event)
+        self._win.after(delay, self._tracePathSingle, agent, path, kill, showMarked, delay) 
+        """
