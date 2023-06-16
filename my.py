@@ -301,6 +301,9 @@ if __name__=='__main__':
         agentColor = colorList[i % len(colorList)]
         mySearch, effective_path = my(m, agentInterval)
 
+        if test == "test3.csv":
+            mySearch, effective_path = my(m, agentInterval, start=(7,7))
+
         print("AGENTE ", i + 1)
         print("Cor: ", getColorString(agentColor))
         print("Intervalo: ", getIntervalString(agentInterval))
@@ -309,9 +312,8 @@ if __name__=='__main__':
 
         a = agent(m,footprints=True,color=agentColor,shape='square',filled=True)
 
-        """ # test 3
-        mySearch = my(m, agentInterval, start=(7,7))
-        a = agent(m,x=7,y=7,footprints=True,color=agentColor,shape='square',filled=True) """
+        if test == "test3.csv":
+            a = agent(m,x=7,y=7,footprints=True,color=agentColor,shape='square',filled=True)
 
         paths.append({a:mySearch})
 
