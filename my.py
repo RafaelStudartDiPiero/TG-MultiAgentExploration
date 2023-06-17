@@ -266,7 +266,7 @@ if __name__=='__main__':
     numOfColumns = 3
 
     numOfAgents = 1
-    test = "t.csv"
+    test = "testdummy.csv"
 
     # Professor
     # python3 my.py 3 test1
