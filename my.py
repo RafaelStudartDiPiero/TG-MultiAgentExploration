@@ -73,10 +73,10 @@ def my(m, agentInterval, start=None):
             explored.append(currCell)
             mySearch.append(currCell)
             currCell = parentList.pop()
+            effective_path.pop()
 
             if len(agent_path) != 0:
                 agent_path.pop()
-                effective_path.pop()
             """ else:
                 print(count)
                 print(len(agent_path))
@@ -99,6 +99,8 @@ def my(m, agentInterval, start=None):
             currCell = (currCell[0]+1,currCell[1])     
         elif childCellPoint=='W':
             currCell = (currCell[0],currCell[1]-1)
+
+    print("agent_path: ", agent_path)
 
     return mySearch, effective_path
 
@@ -143,6 +145,10 @@ def defineAgentNextStep(agentInterval, count_children, agent_path):
     
     # Get the weight interval of each node
     relative_node_weights = getRelativeNodeWeights(agent_path, count_children)
+    """ print("agentInterval: ", agentInterval)
+    print("relative_node_weights: ", relative_node_weights)
+    print("agent_path: ", agent_path)
+    print("count_children: ", count_children) """
 
     # Return the first child that is able to obey the limits
     for i in range(0, count_children):
@@ -160,29 +166,32 @@ def defineAgentNextStep(agentInterval, count_children, agent_path):
 
 def getRelativeNodeWeights(agent_path, count_children):
 
-    # Calculating the previous interval according the agent path
+    # Calculating the previous node interval according the agent path
     path_size = len(agent_path)
-    interval = (0, 1)
+    node_interval = (0, 1)
     if path_size > 0:
-        chunk = 1 / agent_path[0][1]
-        interval = (agent_path[0][0] * chunk,  agent_path[0][0] * chunk + chunk)
+        if agent_path[0][0] != -1: # only if the first related node has more than one child
+            chunk = 1 / agent_path[0][1]
+            node_interval = (agent_path[0][0] * chunk,  agent_path[0][0] * chunk + chunk)
 
         for i in range(1, path_size):
             if agent_path[i][0] == -1:
                 continue
 
-            interval_size = interval[1] - interval[0]
-            chunk = interval_size / agent_path[i][1]
-            interval = (interval[0], interval[0] + chunk)
+            node_interval_size = node_interval[1] - node_interval[0]
+            chunk = node_interval_size / agent_path[i][1]
+            node_interval = (node_interval[0], node_interval[0] + chunk)
 
+    """ print("node_interval: ", node_interval) """
     # Calculating the weights of the next nodes
     weights = []
-    interval_size = interval[1] - interval[0]
-    chunk = interval_size / count_children
+    node_interval_size = node_interval[1] - node_interval[0]
+    chunk = node_interval_size / count_children
+    """ print("chunk: ", chunk) """
     start = 0
     end = 0
     for i in range(0, count_children):
-        start = interval[0] + chunk * i
+        start = node_interval[0] + chunk * i
         end = start + chunk
         weight = (start, end)
         weights.append(weight)
@@ -192,7 +201,7 @@ def getRelativeNodeWeights(agent_path, count_children):
 
 
 
-colorList = [COLOR.red, COLOR.blue, COLOR.yellow, COLOR.cyan, COLOR.black]
+colorList = [COLOR.red, COLOR.blue, COLOR.yellow, COLOR.orange, COLOR.pink, COLOR.cyan, COLOR.black]
 
 # Auxiliary function to print agent color
 def getColorString(color):
@@ -249,7 +258,12 @@ def getMixedRadixRepresentation(effective_path, maze):
             radix += 1
             directions.append('W')
 
+        """ print("directions: ", directions)
+        print("atual: ", effective_path[i])
+        print("próximo: ", effective_path[i+1])
+        print("next: ", next) """
         digit = directions.index(next)
+        #digit = 500
 
         if radix == 1:
             radix = "X"
@@ -321,7 +335,7 @@ if __name__=='__main__':
     # only agent x
     # m.tracePaths([paths[2]], kill=False, delay=100)
 
-    #m.tracePaths(paths, kill=False, delay=500)
-    m.tracePaths_by_key_press(paths, kill=False, delay=500)
+    #m.tracePaths(paths, kill=False, delay=200)
+    m.tracePaths_by_key_press(paths, kill=False)
 
     m.run()
