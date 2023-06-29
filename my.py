@@ -100,7 +100,7 @@ def my(m, agentInterval, start=None):
         elif childCellPoint=='W':
             currCell = (currCell[0],currCell[1]-1)
 
-    print("agent_path: ", agent_path)
+    #print("agent_path: ", agent_path)
 
     return mySearch, effective_path
 
@@ -180,9 +180,8 @@ def getRelativeNodeWeights(agent_path, count_children):
 
             node_interval_size = node_interval[1] - node_interval[0]
             chunk = node_interval_size / agent_path[i][1]
-            node_interval = (node_interval[0], node_interval[0] + chunk)
+            node_interval = (agent_path[i][0] * chunk,  agent_path[i][0] * chunk + chunk)
 
-    """ print("node_interval: ", node_interval) """
     # Calculating the weights of the next nodes
     weights = []
     node_interval_size = node_interval[1] - node_interval[0]
@@ -215,6 +214,10 @@ def getColorString(color):
         return "Ciano"
     elif color == COLOR.black:
         return "Preto"
+    elif color == COLOR.pink:
+        return "Rosa"
+    elif color == COLOR.orange:
+        return "Laranja"
 
 # Auxiliary function to print agent interval
 def getIntervalString(interval):
@@ -276,10 +279,10 @@ def getMixedRadixRepresentation(effective_path, maze):
 
 if __name__=='__main__':
 
-    numOfLines = 3
-    numOfColumns = 3
+    numOfLines = 4
+    numOfColumns = 4
 
-    numOfAgents = 1
+    numOfAgents = 5
     test = "testdummy.csv"
 
     # Professor
@@ -290,8 +293,8 @@ if __name__=='__main__':
 
 
     m=maze(numOfLines,numOfColumns)
-    m.CreateMaze(loopPercent=10,theme='light', loadMaze=test)
-    #m.CreateMaze(loopPercent=10,theme='light', saveMaze=True)
+    m.CreateMaze(theme='light', loadMaze=test)
+    #m.CreateMaze(loopPercent=50,theme='light', saveMaze=True)
     #m.CreateMaze(theme='light', saveMaze=True)
 
     """ bSearch,bfsPath,fwdPath=BFS(m)

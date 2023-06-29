@@ -42,6 +42,10 @@ def getColorString(color):
         return "Ciano"
     elif color == COLOR.black:
         return "Preto"
+    elif color == COLOR.pink:
+        return "Rosa"
+    elif color == COLOR.orange:
+        return "Laranja"
     
 # Auxiliary function to print the next direction
 def next_direction(current, next):
