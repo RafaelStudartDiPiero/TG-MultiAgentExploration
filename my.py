@@ -145,10 +145,10 @@ def defineAgentNextStep(agentInterval, count_children, agent_path):
     
     # Get the weight interval of each node
     relative_node_weights = getRelativeNodeWeights(agent_path, count_children)
-    """ print("agentInterval: ", agentInterval)
+    print("agentInterval: ", agentInterval)
     print("relative_node_weights: ", relative_node_weights)
     print("agent_path: ", agent_path)
-    print("count_children: ", count_children) """
+    print("count_children: ", count_children)
 
     # Return the first child that is able to obey the limits
     for i in range(0, count_children):
@@ -180,7 +180,7 @@ def getRelativeNodeWeights(agent_path, count_children):
 
             node_interval_size = node_interval[1] - node_interval[0]
             chunk = node_interval_size / agent_path[i][1]
-            node_interval = (agent_path[i][0] * chunk,  agent_path[i][0] * chunk + chunk)
+            node_interval = (node_interval[0] + agent_path[i][0] * chunk, node_interval[0] + agent_path[i][0] * chunk + chunk)
 
     # Calculating the weights of the next nodes
     weights = []
