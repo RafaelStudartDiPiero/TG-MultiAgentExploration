@@ -49,7 +49,7 @@ def my(m, agentInterval, start=None):
     explored = [start]
     mySearch=[]
 
-    parentList = deque()
+    parentList = []
     parentList.append((-1,-1))
     currCell = start
     agent_path = []
@@ -66,10 +66,10 @@ def my(m, agentInterval, start=None):
             effective_path.append(currCell)
             break
 
-        # If there are not children, go to parent
-        currentChildren = getChildrenPoints(currCell, m.maze_map[currCell], parentList[0], explored)
-        count_children = len(currentChildren)
-        if count_children == 0:
+        # If there are not visited children, go to parent
+        nonVisitedChildren, allChildren = getChildrenPoints(currCell, m.maze_map[currCell], parentList[-1], explored)
+        count_nonVisitedChildren = len(nonVisitedChildren)
+        if count_nonVisitedChildren == 0:
             explored.append(currCell)
             mySearch.append(currCell)
             currCell = parentList.pop()
@@ -85,8 +85,8 @@ def my(m, agentInterval, start=None):
             continue
 
         # Define the next step to the agent
-        next = defineAgentNextStep(agentInterval, count_children, agent_path)
-        childCellPoint = currentChildren[next]
+        next = defineAgentNextStep(agentInterval, agent_path, allChildren, nonVisitedChildren)
+        childCellPoint = allChildren[next]
         parentList.append(currCell)
         explored.append(currCell)
         mySearch.append(currCell)
@@ -106,63 +106,81 @@ def my(m, agentInterval, start=None):
 
 # Return children's cardinal points in preferential order 
 def getChildrenPoints(cellCoordinate, cellPoints, parent, explored):
-    children = []
+    allChildren = []
+    nonVisitedChildren = []
     for d in compass:
         if cellPoints[d] == True:
             if d=='N':
                 childCell = (cellCoordinate[0]-1,cellCoordinate[1])
-                if parent == childCell or childCell in explored:
+                if parent == childCell:
                     continue
-                else:
-                    children.append('N')
+                if childCell in explored:
+                    allChildren.append('N')
+                    continue
+
+                allChildren.append('N')
+                nonVisitedChildren.append('N')
             elif d=='E':
                 childCell = (cellCoordinate[0],cellCoordinate[1]+1)
-                if parent == childCell or childCell in explored:
+                if parent == childCell:
                     continue
-                else:
-                    children.append('E')
+                if childCell in explored:
+                    allChildren.append('E')
+                    continue
+
+                allChildren.append('E')
+                nonVisitedChildren.append('E')
             elif d=='S':
                 childCell = (cellCoordinate[0]+1,cellCoordinate[1])
-                if parent == childCell or childCell in explored:
+                if parent == childCell:
                     continue
-                else:
-                    children.append('S')
+                if childCell in explored:
+                    allChildren.append('S')
+                    continue
+
+                allChildren.append('S')
+                nonVisitedChildren.append('S')
             elif d=='W':
                 childCell = (cellCoordinate[0],cellCoordinate[1]-1)
-                if parent == childCell or childCell in explored:
+                if parent == childCell:
                     continue
-                else:
-                    children.append('W')
+                if childCell in explored:
+                    allChildren.append('W')
+                    continue
 
-    return children
+                allChildren.append('W')
+                nonVisitedChildren.append('W')
 
-def defineAgentNextStep(agentInterval, count_children, agent_path):
+    return nonVisitedChildren, allChildren
+
+def defineAgentNextStep(agentInterval, agent_path, allChildren, nonVisitedChildren):
+
+    totalNumberOfChildren = len(allChildren)
       
     # If there is only 1 child just go on
-    if count_children == 1:
+    if totalNumberOfChildren == 1:
         agent_path.append((-1, -1))
         return 0
     
     # Get the weight interval of each node
-    relative_node_weights = getRelativeNodeWeights(agent_path, count_children)
-    print("agentInterval: ", agentInterval)
+    relative_node_weights = getRelativeNodeWeights(agent_path, totalNumberOfChildren)
+    """ print("agentInterval: ", agentInterval)
     print("relative_node_weights: ", relative_node_weights)
     print("agent_path: ", agent_path)
-    print("count_children: ", count_children)
+    print("totalNumberOfChildren: ", totalNumberOfChildren) """
 
     # Return the first child that is able to obey the limits
-    for i in range(0, count_children):
-        if agentInterval[0] < relative_node_weights[i][1]:
-            agent_path.append((i, count_children))
+    for i in range(0, totalNumberOfChildren):
+        if (agentInterval[0] < relative_node_weights[i][1]) and (allChildren[i] in nonVisitedChildren):
+            agent_path.append((i, totalNumberOfChildren))
             return i
         
     # Big weight agent in a light weight path
-    #print("big weight agent in a light weight path")
-    return count_children - 1
-    
-    #ERROR
-    #print("ERROR - defineAgentNextStep")
-    #return None
+    # Go to any child that was not visited
+    for i in range(0, totalNumberOfChildren):
+        if allChildren[i] in nonVisitedChildren:
+            agent_path.append((i, totalNumberOfChildren))
+            return i
 
 def getRelativeNodeWeights(agent_path, count_children):
 
