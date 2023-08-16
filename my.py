@@ -41,13 +41,46 @@ import sys
     return bSearch,bfsPath,fwdPath """
 
 class MyAlgorithm:
-    def __init__(self, maze, agentInterval, start=None):
+    def __init__(self, maze, start=None):
         self.maze = maze
-        self.agentInterval = agentInterval
         self.start = start
         self.compass = "NESW" # it establishes the children's storage order
 
-    def run(self):
+    # Run the algorithm for all agents
+    def run(self, numOfAgents):
+        print("QUANTIDADE DE AGENTES: ", numOfAgents)
+        print()
+
+        division = 1.0 / numOfAgents
+        paths = []
+        for i in range(0, numOfAgents):
+            start = i * division
+            end = (i + 1) * division
+            agentInterval = (start, end)
+            agentColor = colorList[i % len(colorList)]
+            mySearch, effective_path = self.run_single_agent(agentInterval)
+
+            print("AGENTE ", i + 1)
+            print("Cor: ", self.getColorString(agentColor))
+            print("Intervalo: ", self.getIntervalString(agentInterval))
+            print("Caminho eficaz pela árvore (representação mixed radix): ", self.getMixedRadixRepresentation(effective_path, self.maze))
+            print()
+
+            a = agent(self.maze,footprints=True,color=agentColor,shape='square',filled=True)
+
+            paths.append({a:mySearch})
+
+
+        # show only agent i
+        # self.maze.tracePaths([paths[2]], kill=False, delay=100)
+
+        #self.maze.tracePaths(paths, kill=False, delay=500)
+        self.maze.tracePaths_by_key_press(paths, kill=False)
+
+        self.maze.run()
+
+    # Run the algorithm for a single agent
+    def run_single_agent(self, agentInterval):
         if self.start is None:
             self.start = (self.maze.rows,self.maze.cols)
 
@@ -84,7 +117,7 @@ class MyAlgorithm:
                 continue
 
             # Define the next step to the agent
-            next = self.defineAgentNextStep(self.agentInterval, agent_path, allChildren, nonVisitedChildren)
+            next = self.defineAgentNextStep(agentInterval, agent_path, allChildren, nonVisitedChildren)
             childCellPoint = allChildren[next]
             parentList.append(currCell)
             explored.append(currCell)
@@ -318,34 +351,7 @@ bSearch2,bfsPath2,fwdPath2=BFS(m,(5,4))
 a2=agent(m,footprints=True,color=COLOR.red,shape='square',filled=True)
 m.tracePaths([{a:bSearch}, {a2:bSearch2}],delay=100) """
 
-print("QUANTIDADE DE AGENTES: ", numOfAgents)
-print()
-
-division = 1.0 / numOfAgents
-paths = []
-for i in range(0, numOfAgents):
-    start = i * division
-    end = (i + 1) * division
-    agentInterval = (start, end)
-    agentColor = colorList[i % len(colorList)]
-    myAlgorithm = MyAlgorithm(m, agentInterval) 
-    mySearch, effective_path = myAlgorithm.run()
-
-    print("AGENTE ", i + 1)
-    print("Cor: ", myAlgorithm.getColorString(agentColor))
-    print("Intervalo: ", myAlgorithm.getIntervalString(agentInterval))
-    print("Caminho eficaz pela árvore (representação mixed radix): ", myAlgorithm.getMixedRadixRepresentation(effective_path, m))
-    print()
-
-    a = agent(m,footprints=True,color=agentColor,shape='square',filled=True)
-
-    paths.append({a:mySearch})
 
 
-# only agent x
-# m.tracePaths([paths[2]], kill=False, delay=100)
-
-#m.tracePaths(paths, kill=False, delay=2000)
-m.tracePaths_by_key_press(paths, kill=False)
-
-m.run()
+myAlgorithm = MyAlgorithm(m, start=None)
+myAlgorithm.run(numOfAgents)
