@@ -1,45 +1,7 @@
 from pyamaze import maze,agent,COLOR
 import sys
 import random
-
-# from collections import deque
-
-""" def BFS(m,start=None):
-    if start is None:
-        start=(m.rows,m.cols)
-    frontier = deque()
-    frontier.append(start)
-    bfsPath = {}
-    explored = [start]
-    bSearch=[]
-
-    while len(frontier)>0:
-        currCell=frontier.popleft()
-        if currCell==m._goal:
-            break
-        for d in 'ESNW':
-            if m.maze_map[currCell][d]==True:
-                if d=='E':
-                    childCell=(currCell[0],currCell[1]+1)
-                elif d=='W':
-                    childCell=(currCell[0],currCell[1]-1)
-                elif d=='S':
-                    childCell=(currCell[0]+1,currCell[1])
-                elif d=='N':
-                    childCell=(currCell[0]-1,currCell[1])
-                if childCell in explored:
-                    continue
-                frontier.append(childCell)
-                explored.append(childCell)
-                bfsPath[childCell] = currCell
-                bSearch.append(childCell)
-    # print(f'{bfsPath}')
-    fwdPath={}
-    cell=m._goal
-    while cell!=start:
-        fwdPath[bfsPath[cell]]=cell
-        cell=bfsPath[cell]
-    return bSearch,bfsPath,fwdPath """
+import csv
 
 class MyAlgorithm:
     def __init__(self, maze, numOfAgents, colorList, start=None):
@@ -326,26 +288,41 @@ class TarryGeneralization:
 
     # Run the algorithm
     def run(self):
-        print("GENERALIZATION OF TARRY'S ALGORITHM")
+        """ print("GENERALIZATION OF TARRY'S ALGORITHM")
         print("QUANTIDADE DE AGENTES: ", self.numOfAgents)
-        print()
+        print() """
 
         paths = []
-        agents_search = self.run_agents()
+        agents_search, fraction = self.run_agents()
+        pionner_steps = len(agents_search[0]) - 1 # Put the number of steps of the agent 1 and compare later
+        totalSteps = 0
 
         for i in range(0, len(agents_search)):
             agentColor = self.colorList[i % len(self.colorList)]
             a = agent(self.maze,footprints=True,color=agentColor,shape='square',filled=True)
             paths.append({a:agents_search[i]})
 
+            # Number of steps of the agent. Subtract 1 to consider that the first cell is not countable
+            agent_steps = len(agents_search[i]) - 1
+
+            # Count the total number of steps
+            totalSteps += agent_steps
+
+            # Get the number of the steps of the pionner
+            pionner_steps = agent_steps if pionner_steps > agent_steps else pionner_steps
+
 
         # show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
-        #self.maze.tracePaths(paths, kill=False, delay=500)
-        self.maze.tracePaths_by_key_press(paths, kill=False)
+        """ self.maze.tracePaths(paths, kill=False, delay=50)
+        #self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run()
+        self.maze.run() """
+
+        #print("Total steps: ", totalSteps)
+
+        return totalSteps, pionner_steps, fraction
 
     # Run the algorithm for all agents
     # The following steps come from the article "Multi-Agent Maze Exploration" - Kivelevitch and Cohen 2010
@@ -353,6 +330,11 @@ class TarryGeneralization:
 
         # Matrix of the search of each agent
         agents_search = []
+
+        # Matrix of the effective of each agent
+        # It will be trully computed only in the PHASE 1 of the algorithm
+        # In PHASE 2 it is useful only to know the effective path of the pionner agent
+        effective_path = []
 
         # Matrix of the explored cells by each agent 
         agents_exploredCells = []
@@ -365,20 +347,39 @@ class TarryGeneralization:
 
         # Array of the explored cells
         exploredCells = []
+        exploredCells.append(self.start)
 
         # Array of dead-end cells
         deadEndCells = []
 
+        # Array of booleans that indicates if an agent found the goal
+        foundTheGoal = []
+
+        # Matrix of the Last Common Location (LCL) of each agent related to the others
+        lcl = []
+
+
         for i in range(0, self.numOfAgents):
             agents_search.append([self.start])
+            effective_path.append([self.start])
             agents_exploredCells.append([self.start])
             agents_currentCell.append(self.start)
             agents_parents.append([(-1,-1)])
-            exploredCells.append(self.start)
+            foundTheGoal.append(False)
+            lcl.append([])
 
-        # Run algorithm until find the goal
-        searchingForTheGoal = True
-        while searchingForTheGoal:
+            for j in range(0, self.numOfAgents):
+                lcl[i].append(self.start)
+
+        
+        # Pay attention: this algorithm is divided in two phases. In the first phase, the agents
+        # follow 6 steps until some agent finds the goal. If some agent finds the goal, the second
+        # phase will start. In the second phase, the agents that doesn't find the goal, will go to
+        # the Last Common Location (LCL) with the pionner agent, and then the agents will follow the
+        # goal path
+
+        # PHASE 1
+        while True not in foundTheGoal:
 
             # During each loop all the agents follow the steps below
             # Step 1: The agent should move to cells that have not been traveled by any agent
@@ -388,6 +389,10 @@ class TarryGeneralization:
             # Step 5: All the steps should be logged by the agent in its history
             # Step 6: When retreating, mark the cells retreated from as “dead end”
             for i in range(0, self.numOfAgents):
+
+                # If the agent found the goal, go to the next agent
+                if foundTheGoal[i] == True:
+                    continue
 
                 # Get cell children
                 currentCell = agents_currentCell[i]
@@ -420,6 +425,9 @@ class TarryGeneralization:
                     if agents_currentCell[i] not in agents_exploredCells[i]:
                         agents_exploredCells[i].append(agents_currentCell[i])
 
+                    # Update agent's effective path
+                    effective_path[i].append(agents_currentCell[i])
+
                 # If there is no cell that has not been visted by an agent, the agent should prefer to move to a cell that has not been visted by it
                 elif len(visited) > 0:
                     agent_nonVisited = []
@@ -437,6 +445,9 @@ class TarryGeneralization:
                     # Update the array of the explored cells by the agent
                     agents_exploredCells[i].append(agents_currentCell[i])
 
+                    # Update agent's effective path
+                    effective_path[i].append(agents_currentCell[i])
+
 
                 # No children - dead-end
                 else:
@@ -444,16 +455,53 @@ class TarryGeneralization:
 
                     # Go to parent
                     agents_currentCell[i] = agents_parents[i].pop()
+                    effective_path[i].pop()
 
                 # Update agent search path
                 agents_search[i].append(agents_currentCell[i])
 
+                # Update the Last Common Location (LCL) matrix if it is necessary
+                for j in range(0, self.numOfAgents):
+                    if i == j:
+                        continue
+
+                    if agents_currentCell[i] in effective_path[j]:
+                        lcl[i][j] = agents_currentCell[i]
+                        lcl[j][i] = agents_currentCell[i]
+
                 # Check if the agent found the goal
                 if agents_currentCell[i] == self.maze._goal:
-                    searchingForTheGoal = False
+                    foundTheGoal[i] = True
                     break
 
-        return agents_search
+        # PHASE 2
+        # Get the pionner index
+        pionner = foundTheGoal.index(True)
+
+        # From the article: "Given the path of the agent that was the 
+        # first to find the exit, the pioneer, each agent has to find the last location
+        # from its own-logged history that matches a location on the path
+        # of the pioneer. This location is denoted Last Common Location (LCL)"
+        for i in range(0, self.numOfAgents):
+            if i == pionner:
+                continue
+
+            # Move agent until the last common location with the pionner agent
+            comeback_index = -2
+            while agents_search[i][-1] != lcl[pionner][i]:
+                # Come back unitl the LCL
+                agents_search[i].append(effective_path[i][comeback_index])
+                comeback_index -= 1
+
+            # Add the path from the last common location until the goal
+            lcl_index = effective_path[pionner].index(lcl[pionner][i])
+            split_index = lcl_index + 1
+            agents_search[i] += effective_path[pionner][split_index:]
+
+        # Get the explored fraction of the maze
+        fraction = len(exploredCells) / (self.maze.rows * self.maze.cols)
+
+        return agents_search, fraction
     
     # Return cell children 
     def getChildren(self, cellCoordinate, cellPoints, parent):
@@ -489,33 +537,80 @@ class TarryGeneralization:
         return children
 
 
-
-
+# List of colors of the agents
 colorList = [COLOR.red, COLOR.blue, COLOR.yellow, COLOR.orange, COLOR.pink, COLOR.cyan, COLOR.black]
-numOfLines = 4
-numOfColumns = 4
-numOfAgents = 3
-test = "testdummy.csv"
 
-# Exemplo de execução com descrição passo a passo dos agentes
-# python3 my.py 3 test1
+# Size of the maze
+numOfLines = 10
+numOfColumns = 10
+
+# Number of agents
+#numOfAgents = 8
+
+# It will be used in the case of loading a specific maze
+specificMaze = "somemaze.csv"
+
+# In the case of loading a specific maze with pointed out number of agents. Example: python3 my.py 3 test1
 if len(sys.argv) == 3:
     numOfAgents = int(sys.argv[1])
-    test = sys.argv[2] + ".csv"
+    specificMaze = sys.argv[2] + ".csv"
+
+header = []
+steps_row = []
+pionner_steps_row = []
+
+for i in range(1, 41):
+
+    numOfAgents = i
+    header.append(numOfAgents)
+
+    pionner_stepsCount = 0
+    stepsCount = 0
+    fractionCount = 0
+    iterations = 250
+
+    for j in range(0, iterations):
+
+        # Create a instance of a maze
+        m=maze(numOfLines,numOfColumns)
+
+        # Create a maze
+        m.CreateMaze(loopPercent=0,theme='light')
+        #m.CreateMaze(theme='light', loadMaze=specificMaze)
+        #m.CreateMaze(loopPercent=0,theme='light', saveMaze=True)
 
 
-m=maze(numOfLines,numOfColumns)
-m.CreateMaze(theme='light', loadMaze=test)
-#m.CreateMaze(loopPercent=50,theme='light', saveMaze=True)
-#m.CreateMaze(theme='light', saveMaze=True)
+        """ myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
+        myAlgorithm.run() """
+
+        tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
+        steps, pionner_steps, fraction = tarryGeneralization.run()
+
+        stepsCount += steps
+        pionner_stepsCount += pionner_steps
+        fractionCount += fraction
+
+    averageOfSteps = stepsCount / numOfAgents / iterations
+    averageOfStepsOfThePionner = pionner_stepsCount / iterations
+    averageOfFraction = fractionCount / iterations
+    print(numOfAgents, " agents -> average number of steps: ", averageOfSteps)
+    print(numOfAgents, " agents -> average number of pionner's steps: ", averageOfStepsOfThePionner)
+    print(numOfAgents, " agents -> average number of explored fraction: ", averageOfFraction)
+
+    steps_row.append(averageOfSteps)
+    pionner_steps_row.append(averageOfStepsOfThePionner)
+
+with  open("tarry_1to40agents_250iterations", "w") as f:
+    writer = csv.writer(f)
+
+    writer.writerow(header)
+    writer.writerow(steps_row)
+    writer.writerow(pionner_steps_row)
 
 
 
-""" myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
-myAlgorithm.run() """
 
-tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
-tarryGeneralization.run()
+
 
 
 
