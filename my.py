@@ -2,6 +2,7 @@ from pyamaze import maze,agent,COLOR
 import sys
 import random
 import csv
+import statistics
 
 class MyAlgorithm:
     def __init__(self, maze, numOfAgents, colorList, start=None):
@@ -16,37 +17,55 @@ class MyAlgorithm:
 
     # Run the algorithm
     def run(self):
-        print("MY ALGORITHM - TRABALHO DE GRADUAÇÃO")
+        """ print("MY ALGORITHM - TRABALHO DE GRADUAÇÃO")
         print("QUANTIDADE DE AGENTES: ", self.numOfAgents)
-        print()
+        print() """
 
         division = 1.0 / self.numOfAgents
         paths = []
+        explored = []
+        pionner_steps = sys.maxsize
+        totalSteps = 0
         for i in range(0, self.numOfAgents):
             start = i * division
             end = (i + 1) * division
             agentInterval = (start, end)
             agentColor = self.colorList[i % len(self.colorList)]
-            mySearch, effective_path = self.run_single_agent(agentInterval)
+            mySearch, effective_path, explored_cells = self.run_single_agent(agentInterval)
+            self.concatenate_new_elements(explored, explored_cells)
 
-            print("AGENTE ", i + 1)
+            """ print("AGENTE ", i + 1)
             print("Cor: ", self.getColorString(agentColor))
             print("Intervalo: ", self.getIntervalString(agentInterval))
             print("Caminho eficaz pela árvore (representação mixed radix): ", self.getMixedRadixRepresentation(effective_path, self.maze))
-            print()
+            print() """
 
             a = agent(self.maze,footprints=True,color=agentColor,shape='square',filled=True)
 
             paths.append({a:mySearch})
 
+            # Number of steps of the agent. Subtract 1 to consider that the first cell is not countable
+            agent_steps = len(mySearch) - 1
+
+            # Count the total number of steps
+            totalSteps += agent_steps
+
+            # Get the number of the steps of the pionner
+            pionner_steps = agent_steps if pionner_steps > agent_steps else pionner_steps
+
 
         # show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
-        #self.maze.tracePaths(paths, kill=False, delay=500)
-        self.maze.tracePaths_by_key_press(paths, kill=False)
+        """ self.maze.tracePaths(paths, kill=False, delay=100)
+        #self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run()
+        self.maze.run() """
+
+        # Get the explored fraction of the maze
+        fraction = len(explored) / (self.maze.rows * self.maze.cols)
+
+        return totalSteps, pionner_steps, fraction
 
     # Run the algorithm for a single agent
     def run_single_agent(self, agentInterval):
@@ -66,11 +85,13 @@ class MyAlgorithm:
                 effective_path.append(currCell)
                 break
 
-            # If there are not visited children, go to parent
+            # If there are not non-visited children, go to parent
             nonVisitedChildren, allChildren = self.getChildrenPoints(currCell, self.maze.maze_map[currCell], parentList[-1], explored)
             count_nonVisitedChildren = len(nonVisitedChildren)
             if count_nonVisitedChildren == 0:
-                explored.append(currCell)
+                if currCell not in explored:
+                    explored.append(currCell)
+
                 mySearch.append(currCell)
                 currCell = parentList.pop()
                 effective_path.pop()
@@ -81,8 +102,11 @@ class MyAlgorithm:
             # Define the next step to the agent
             next = self.defineAgentNextStep(agentInterval, agent_path, allChildren, nonVisitedChildren)
             childCellPoint = allChildren[next]
+
+            if currCell not in explored:
+                explored.append(currCell)
+
             parentList.append(currCell)
-            explored.append(currCell)
             mySearch.append(currCell)
             effective_path.append(currCell)
             if childCellPoint=='N':
@@ -94,7 +118,7 @@ class MyAlgorithm:
             elif childCellPoint=='W':
                 currCell = (currCell[0],currCell[1]-1)
 
-        return mySearch, effective_path
+        return mySearch, effective_path, explored
 
     # Return children's cardinal points in preferential order 
     def getChildrenPoints(self, cellCoordinate, cellPoints, parent, explored):
@@ -275,6 +299,12 @@ class MyAlgorithm:
 
         return mixedRadix
     
+    # Auxiliary function to concatenate to add only new elements to array
+    def concatenate_new_elements(self, main, vector):
+        for e in vector:
+            if e not in main:
+                main.append(e)
+    
 
 class TarryGeneralization:
     def __init__(self, maze, numOfAgents, colorList, start=None):
@@ -294,7 +324,8 @@ class TarryGeneralization:
 
         paths = []
         agents_search, fraction = self.run_agents()
-        pionner_steps = len(agents_search[0]) - 1 # Put the number of steps of the agent 1 and compare later
+        pionner_steps = sys.maxsize
+        last_steps = 0
         totalSteps = 0
 
         for i in range(0, len(agents_search)):
@@ -311,6 +342,9 @@ class TarryGeneralization:
             # Get the number of the steps of the pionner
             pionner_steps = agent_steps if pionner_steps > agent_steps else pionner_steps
 
+            # Get the number of the steps of the last agent that found the goal
+            last_steps = agent_steps if last_steps < agent_steps else last_steps
+
 
         # show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
@@ -320,9 +354,7 @@ class TarryGeneralization:
 
         self.maze.run() """
 
-        #print("Total steps: ", totalSteps)
-
-        return totalSteps, pionner_steps, fraction
+        return totalSteps, pionner_steps, fraction, last_steps
 
     # Run the algorithm for all agents
     # The following steps come from the article "Multi-Agent Maze Exploration" - Kivelevitch and Cohen 2010
@@ -558,6 +590,11 @@ if len(sys.argv) == 3:
 header = []
 steps_row = []
 pionner_steps_row = []
+fraction_row = []
+stdev_row = []
+
+# Only for Tarry's algorithm
+steps_from_first_to_last_row = []
 
 for i in range(1, 41):
 
@@ -568,6 +605,10 @@ for i in range(1, 41):
     stepsCount = 0
     fractionCount = 0
     iterations = 250
+    steps_array = []
+
+    # Only for Tarry's algorithm
+    steps_from_first_to_lastCount = 0
 
     for j in range(0, iterations):
 
@@ -580,33 +621,51 @@ for i in range(1, 41):
         #m.CreateMaze(loopPercent=0,theme='light', saveMaze=True)
 
 
-        """ myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
-        myAlgorithm.run() """
+        myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
+        steps, pionner_steps, fraction = myAlgorithm.run()
 
-        tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction = tarryGeneralization.run()
+        """ tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
+        steps, pionner_steps, fraction, last_steps = tarryGeneralization.run() """
+
+        steps_array.append(steps / numOfAgents) 
 
         stepsCount += steps
         pionner_stepsCount += pionner_steps
         fractionCount += fraction
 
+        """ # Only for Tarry's algorithm
+        steps_from_first_to_lastCount += last_steps - pionner_steps """
+
+    """ # Only for Tarry's algorithm
+    averageOfStepsFromFirstToLast = steps_from_first_to_lastCount / iterations
+    steps_from_first_to_last_row.append(averageOfStepsFromFirstToLast)
+    print(numOfAgents, " agents -> average steps from first to last: ", averageOfStepsFromFirstToLast) """
+
     averageOfSteps = stepsCount / numOfAgents / iterations
     averageOfStepsOfThePionner = pionner_stepsCount / iterations
     averageOfFraction = fractionCount / iterations
+    stdev = statistics.stdev(steps_array)
     print(numOfAgents, " agents -> average number of steps: ", averageOfSteps)
     print(numOfAgents, " agents -> average number of pionner's steps: ", averageOfStepsOfThePionner)
     print(numOfAgents, " agents -> average number of explored fraction: ", averageOfFraction)
+    print(numOfAgents, " agents -> stdev: ", stdev)
 
     steps_row.append(averageOfSteps)
     pionner_steps_row.append(averageOfStepsOfThePionner)
+    fraction_row.append(averageOfFraction)
+    stdev_row.append(stdev)
 
-with  open("tarry_1to40agents_250iterations", "w") as f:
+with open("my_1to40agents_250iterations_10x10", "w") as f:
     writer = csv.writer(f)
 
     writer.writerow(header)
     writer.writerow(steps_row)
     writer.writerow(pionner_steps_row)
+    writer.writerow(fraction_row)
+    writer.writerow(stdev_row)
 
+    # Only for Tarry's algorithm
+    #writer.writerow(steps_from_first_to_last_row)
 
 
 
