@@ -655,7 +655,7 @@ for i in range(1, 41):
     fraction_row.append(averageOfFraction)
     stdev_row.append(stdev)
 
-with open("my_1to40agents_250iterations_10x10", "w") as f:
+with open("my_1to40agents_250iterations_10x10.csv", "w") as f:
     writer = csv.writer(f)
 
     writer.writerow(header)
