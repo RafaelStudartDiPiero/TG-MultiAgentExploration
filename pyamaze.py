@@ -639,8 +639,9 @@ class maze:
         self._drawMaze(self.theme)
         agent(self,*self._goal,shape='square',filled=True,color=COLOR.green)
         if saveMaze:
-            dt_string = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
-            with open(f'maze--{dt_string}.csv','w',newline='') as f:
+            #dt_string = datetime.datetime.now().strftime("%Y-%m-%d--%H-%M-%S")
+            #with open(f'maze--{dt_string}.csv','w',newline='') as f:
+            with open(f'{saveMaze}.csv','w',newline='') as f:
                 writer=csv.writer(f)
                 writer.writerow(['  cell  ','E','W','N','S'])
                 for k,v in self.maze_map.items():
