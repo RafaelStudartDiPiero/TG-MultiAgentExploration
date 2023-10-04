@@ -77,10 +77,10 @@ class MyAlgorithm:
         # Show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
-        """ #self.maze.tracePaths(paths, kill=False, delay=100)
+        #self.maze.tracePaths(paths, kill=False, delay=100)
         self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run() """
+        self.maze.run()
 
         return totalSteps, pionner_steps, fraction, fraction_pionner
 
@@ -210,6 +210,8 @@ class MyAlgorithm:
 
         return nonVisitedChildren, allChildren
 
+    # If there is child to visit, this function will decide what child to visit
+    # This function doesn't work if there is no child to visit
     def defineAgentNextStep(self, agentInterval, agent_path, allChildren, nonVisitedChildren, currCell, agentIndex):
 
         totalNumberOfChildren = len(allChildren)
@@ -226,15 +228,27 @@ class MyAlgorithm:
         print("agent_path: ", agent_path)
         print("totalNumberOfChildren: ", totalNumberOfChildren) """
 
-        # Following steps:
-        # - If the agent find a node that is not outside from the agent's interval, it goes to this node
-        # - If the agent find a node that is outside from the agent's interval, it goes to parent
-        # - If the parent is the root of the tree, and there is no child that fills the agent's interval,
-        # it has finished its interval, and it will do a dummy DFS
+        # MELHORAR ESTE PASSO A PASSO
+        # Following steps if there is more than 1 child and if the agent has not finished its interval:
+        # - If the agent finds a child that intersects the agent's interval, it goes to this node if the agent didn't visit the node
+        # - If the agent finds a child that intersects the agent's interval but this node was visited, the agent will check the next
+        # child, coming back to the first step
+        # - If the agent find a child that doesn't intersect the agent's interval, there is two possibilities:
+        #     - if the child's interval is on the left of the agent's interval, it will check the next child, coming
+        #     back to the first step
+        #     - if the child's interval is on the right of the agent's interval, surely the agent finished its interval,
+        #     and it will do a dummy DFS
+        # - If no child fills the agent's requirement, the agent will go to the parent
 
         if self.filledInterval[agentIndex] == False:
             # Return the first child that is able to obey the limits
             for i in range(0, totalNumberOfChildren):
+
+                # If the current child's interval is on the right of the agent's interval, surely the agent finished its interval
+                if agentInterval[1] < relative_node_weights[i][0]:
+                    self.filledInterval[agentIndex] = True
+                    break
+
                 # nodeIsInsideAgentInterval = agentInterval[0] < relative_node_weights[i][1]
                 nodeIsInsideAgentInterval = agentInterval[0] < relative_node_weights[i][1] and agentInterval[1] > relative_node_weights[i][0]
                 nodeWasNotVisistedByTheAgent = allChildren[i] in nonVisitedChildren
@@ -243,18 +257,19 @@ class MyAlgorithm:
                     agent_path.append((i, totalNumberOfChildren))
                     return i
 
-            # No node that fills the requirement was found, so go to parent
+            # If the agent is in the root and it doesn't find a node that fills the requirement, it finished its interval
             if currCell == self.start:
                 self.filledInterval[agentIndex] = True
 
-            return -1
-        else:   
-            # If there is no child that is able to obey the limits,
-            # go to any child that was not visited (DFS)
-            for i in range(0, totalNumberOfChildren):
-                if allChildren[i] in nonVisitedChildren:
-                    agent_path.append((i, totalNumberOfChildren))
-                    return i
+            # If the agent doesn't finish its interval and no node that fills the requirement was found, it goes to parent
+            if self.filledInterval[agentIndex] == False:
+                return -1
+                    
+        # The agent surely finished its interval, and it will do a dummy 
+        for i in range(0, totalNumberOfChildren):
+            if allChildren[i] in nonVisitedChildren:
+                agent_path.append((i, totalNumberOfChildren))
+                return i
 
     def getRelativeNodeWeights(self, agent_path, count_children):
 
@@ -657,7 +672,7 @@ steps_from_first_to_last_row = []
 # Only for my algorithm
 fraction_pionner_row = []
 
-for i in range(1, 31):
+for i in range(4, 5):
 
     numOfAgents = i
     header.append(numOfAgents)
@@ -665,7 +680,7 @@ for i in range(1, 31):
     pionner_stepsCount = 0
     stepsCount = 0
     fractionCount = 0
-    iterations = 250
+    iterations = 1
     steps_array = []
 
     # Only for Tarry's algorithm
@@ -680,10 +695,9 @@ for i in range(1, 31):
         m=maze(numOfLines,numOfColumns)
 
         # Create a maze
-        m.CreateMaze(theme='light', loadMaze='mazes/twenty_by_twenty/maze_20x20__' + str(j+1) + '.csv')
+        #m.CreateMaze(theme='light', loadMaze='mazes/twenty_by_twenty/maze_20x20__' + str(j+1) + '.csv')
+        m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
         #m.CreateMaze(loopPercent=0,theme='light')
-        #m.CreateMaze(theme='light', loadMaze=specificMaze)
-        #m.CreateMaze(theme='light', loadMaze=specificMaze)
         #m.CreateMaze(loopPercent=0,theme='light', saveMaze=True)
 
 
@@ -710,7 +724,7 @@ for i in range(1, 31):
     steps_from_first_to_last_row.append(averageOfStepsFromFirstToLast)
     print(numOfAgents, " agents -> average steps from first to last: ", averageOfStepsFromFirstToLast) """
 
-    # Only for my algorithm
+    """ # Only for my algorithm
     averageFractionPionner = fraction_pionner_count / iterations
     fraction_pionner_row.append(averageFractionPionner)
     print(numOfAgents, " agents -> average of explored fraction until pionner find the goal: ", averageFractionPionner)
@@ -727,9 +741,9 @@ for i in range(1, 31):
     steps_row.append(averageOfSteps)
     pionner_steps_row.append(averageOfStepsOfThePionner)
     fraction_row.append(averageOfFraction)
-    stdev_row.append(stdev)
+    stdev_row.append(stdev) """
 
-with open("my_1to30agents_250iterations_20x20.csv", "w") as f:
+""" with open("my_1to30agents_250iterations_20x20.csv", "w") as f:
     writer = csv.writer(f)
 
     writer.writerow(header)
@@ -742,7 +756,7 @@ with open("my_1to30agents_250iterations_20x20.csv", "w") as f:
     #writer.writerow(steps_from_first_to_last_row)
 
     # Only for my algorithm
-    writer.writerow(fraction_pionner_row)
+    writer.writerow(fraction_pionner_row) """
 
 
 
