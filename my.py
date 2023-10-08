@@ -77,10 +77,10 @@ class MyAlgorithm:
         # Show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
-        #self.maze.tracePaths(paths, kill=False, delay=100)
+        """ #self.maze.tracePaths(paths, kill=False, delay=100)
         self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run()
+        self.maze.run() """
 
         return totalSteps, pionner_steps, fraction, fraction_pionner
 
@@ -672,7 +672,7 @@ steps_from_first_to_last_row = []
 # Only for my algorithm
 fraction_pionner_row = []
 
-for i in range(4, 5):
+for i in range(1, 31):
 
     numOfAgents = i
     header.append(numOfAgents)
@@ -680,7 +680,7 @@ for i in range(4, 5):
     pionner_stepsCount = 0
     stepsCount = 0
     fractionCount = 0
-    iterations = 1
+    iterations = 250
     steps_array = []
 
     # Only for Tarry's algorithm
@@ -695,8 +695,8 @@ for i in range(4, 5):
         m=maze(numOfLines,numOfColumns)
 
         # Create a maze
-        #m.CreateMaze(theme='light', loadMaze='mazes/twenty_by_twenty/maze_20x20__' + str(j+1) + '.csv')
-        m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
+        m.CreateMaze(theme='light', loadMaze='mazes/twenty_by_twenty/maze_20x20__' + str(j+1) + '.csv')
+        #m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
         #m.CreateMaze(loopPercent=0,theme='light')
         #m.CreateMaze(loopPercent=0,theme='light', saveMaze=True)
 
@@ -724,7 +724,7 @@ for i in range(4, 5):
     steps_from_first_to_last_row.append(averageOfStepsFromFirstToLast)
     print(numOfAgents, " agents -> average steps from first to last: ", averageOfStepsFromFirstToLast) """
 
-    """ # Only for my algorithm
+    # Only for my algorithm
     averageFractionPionner = fraction_pionner_count / iterations
     fraction_pionner_row.append(averageFractionPionner)
     print(numOfAgents, " agents -> average of explored fraction until pionner find the goal: ", averageFractionPionner)
@@ -741,9 +741,9 @@ for i in range(4, 5):
     steps_row.append(averageOfSteps)
     pionner_steps_row.append(averageOfStepsOfThePionner)
     fraction_row.append(averageOfFraction)
-    stdev_row.append(stdev) """
+    stdev_row.append(stdev)
 
-""" with open("my_1to30agents_250iterations_20x20.csv", "w") as f:
+with open("my_1to30agents_250iterations_20x20_v2.csv", "w") as f:
     writer = csv.writer(f)
 
     writer.writerow(header)
@@ -756,7 +756,7 @@ for i in range(4, 5):
     #writer.writerow(steps_from_first_to_last_row)
 
     # Only for my algorithm
-    writer.writerow(fraction_pionner_row) """
+    writer.writerow(fraction_pionner_row)
 
 
 
