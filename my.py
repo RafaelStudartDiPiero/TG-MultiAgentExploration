@@ -274,6 +274,7 @@ class MyAlgorithm:
     def getRelativeNodeWeights(self, agent_path, count_children):
 
         # Calculating the previous node interval according the agent path
+        # It is the way that we can calculate values related to a number less than 1 in a mixed radix
         path_size = len(agent_path)
         node_interval = (0, 1)
         if path_size > 0:
@@ -672,7 +673,7 @@ steps_from_first_to_last_row = []
 # Only for my algorithm
 fraction_pionner_row = []
 
-for i in range(1, 31):
+for i in range(1, 41):
 
     numOfAgents = i
     header.append(numOfAgents)
@@ -695,14 +696,16 @@ for i in range(1, 31):
         m=maze(numOfLines,numOfColumns)
 
         # Create a maze
-        m.CreateMaze(theme='light', loadMaze='mazes/twenty_by_twenty/maze_20x20__' + str(j+1) + '.csv')
+        m.CreateMaze(theme='light', loadMaze='mazes/30_by_30/maze_30x30__' + str(j+1) + '.csv')
         #m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
         #m.CreateMaze(loopPercent=0,theme='light')
         #m.CreateMaze(loopPercent=0,theme='light', saveMaze=True)
 
-
         myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
         steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run()
+
+        # Free up memory
+        m._win.destroy()
 
         """ tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
         steps, pionner_steps, fraction, last_steps = tarryGeneralization.run() """
@@ -743,7 +746,7 @@ for i in range(1, 31):
     fraction_row.append(averageOfFraction)
     stdev_row.append(stdev)
 
-with open("my_1to30agents_250iterations_20x20_v2.csv", "w") as f:
+with open("my_1to40agents_250iterations_20x20_v2.csv", "w") as f:
     writer = csv.writer(f)
 
     writer.writerow(header)
