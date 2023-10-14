@@ -701,14 +701,14 @@ for i in range(1, 41):
         #m.CreateMaze(loopPercent=0,theme='light')
         #m.CreateMaze(loopPercent=0,theme='light', saveMaze=True)
 
-        myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run()
+        """ myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
+        steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run() """
+
+        tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
+        steps, pionner_steps, fraction, last_steps = tarryGeneralization.run()
 
         # Free up memory
         m._win.destroy()
-
-        """ tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction, last_steps = tarryGeneralization.run() """
 
         steps_array.append(steps / numOfAgents)
 
@@ -717,20 +717,20 @@ for i in range(1, 41):
         fractionCount += fraction
 
         # Only for Tarry's algorithm
-        #steps_from_first_to_lastCount += last_steps - pionner_steps
+        steps_from_first_to_lastCount += last_steps - pionner_steps
 
         # Only for my algorithm
-        fraction_pionner_count += fraction_pionner
+        #fraction_pionner_count += fraction_pionner
 
     # Only for Tarry's algorithm
-    """ averageOfStepsFromFirstToLast = steps_from_first_to_lastCount / iterations
+    averageOfStepsFromFirstToLast = steps_from_first_to_lastCount / iterations
     steps_from_first_to_last_row.append(averageOfStepsFromFirstToLast)
-    print(numOfAgents, " agents -> average steps from first to last: ", averageOfStepsFromFirstToLast) """
+    print(numOfAgents, " agents -> average steps from first to last: ", averageOfStepsFromFirstToLast)
 
     # Only for my algorithm
-    averageFractionPionner = fraction_pionner_count / iterations
+    """ averageFractionPionner = fraction_pionner_count / iterations
     fraction_pionner_row.append(averageFractionPionner)
-    print(numOfAgents, " agents -> average of explored fraction until pionner find the goal: ", averageFractionPionner)
+    print(numOfAgents, " agents -> average of explored fraction until pionner find the goal: ", averageFractionPionner) """
 
     averageOfSteps = stepsCount / numOfAgents / iterations
     averageOfStepsOfThePionner = pionner_stepsCount / iterations
@@ -746,7 +746,7 @@ for i in range(1, 41):
     fraction_row.append(averageOfFraction)
     stdev_row.append(stdev)
 
-with open("my_1to40agents_250iterations_20x20_v2.csv", "w") as f:
+with open("tarry_1to40agents_250iterations_30x30.csv", "w") as f:
     writer = csv.writer(f)
 
     writer.writerow(header)
@@ -756,10 +756,10 @@ with open("my_1to40agents_250iterations_20x20_v2.csv", "w") as f:
     writer.writerow(stdev_row)
 
     # Only for Tarry's algorithm
-    #writer.writerow(steps_from_first_to_last_row)
+    writer.writerow(steps_from_first_to_last_row)
 
     # Only for my algorithm
-    writer.writerow(fraction_pionner_row)
+    #writer.writerow(fraction_pionner_row)
 
 
 
