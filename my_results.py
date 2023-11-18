@@ -19,7 +19,7 @@ tarry_steps_from_first_to_last_row = rows[5]
 
 
 rows = []
-with open("my_1to40agents_250iterations_40x40.csv", "r") as f:
+with open("my_1to40agents_250iterations_10x10.csv", "r") as f:
     csvreader = csv.reader(f)
 
     for row in csvreader:
@@ -37,7 +37,7 @@ my_fraction_pioneer = [i*100 for i in my_fraction_pioneer]
 
 
 rows = []
-with open("my_1to40agents_250iterations_40x40_v2.csv", "r") as f:
+with open("my_1to40agents_250iterations_10x10_v2.csv", "r") as f:
     csvreader = csv.reader(f)
 
     for row in csvreader:
@@ -63,30 +63,30 @@ my_v2_fraction_pioneer = [i*100 for i in my_v2_fraction_pioneer]
 #plt.plot(header, my_pioneer_steps_row, 'bd-', label = "Our (1I): Pioneer's average of steps")
 # --- plt.plot(header, my_stdev_row, 'bx-', label = "Our (1I): STDEV - Average of steps")
 # --- plt.plot(header, my_fraction_row, 'b*-', label = "Our (1I): Fraction of maze explored")
-plt.plot(header, my_fraction_pioneer, 'b^-', label = "Our (1I): Fraction of maze explored when pioneer reaches target")
+#plt.plot(header, my_fraction_pioneer, 'b^-', label = "Our (1I): Fraction of maze explored when pioneer reaches target")
 
 # --- plt.plot(header, my_v2_steps_row, 'r.-',label = "Our (2I): Average of steps")
 #plt.plot(header, my_v2_pioneer_steps_row, 'rd-', label = "Our (2I): Pioneer's average of steps")
 # --- plt.plot(header, my_v2_stdev_row, 'rx-', label = "Our (2I): STDEV - Average of steps")
 # --- plt.plot(header, my_v2_fraction_row, 'r*-', label = "Our (2I): Fraction of maze explored")
-plt.plot(header, my_v2_fraction_pioneer, 'r^-', label = "Our (2I): Fraction of maze explored when pioneer reaches target")
+#plt.plot(header, my_v2_fraction_pioneer, 'r^-', label = "Our (2I): Fraction of maze explored when pioneer reaches target")
 
 # --- plt.plot(header, tarry_steps_row, 'g.-',label = "Tarry: Average of steps")
 #plt.plot(header, tarry_pioneer_steps_row, 'gd-', label = "Tarry: Pioneer's average of steps")
 # --- plt.plot(header, tarry_stdev_row, 'gx-', label = "Tarry: STDEV - Average of steps")
 # --- plt.plot(header, tarry_fraction_row, 'g*-', label = "Tarry: Fraction of maze explored")
-plt.plot(header, tarry_fraction_row, 'g^-', label = "Tarry: Fraction of maze explored when pioneer reaches target")
+#plt.plot(header, tarry_fraction_row, 'g^-', label = "Tarry: Fraction of maze explored when pioneer reaches target")
 
 #plt.plot(header, my_steps_row, 'b.-',label = "1I: Average of steps")
 #plt.plot(header, my_pioneer_steps_row, 'bd-', label = "1I: Pioneer's average of steps")
 #plt.plot(header, my_stdev_row, 'bx-', label = "1I: STDEV - Average of steps")
-#plt.plot(header, my_fraction_row, 'b*-', label = "1I: Fraction of maze explored")
-#plt.plot(header, my_fraction_pioneer, 'b^-', label = "1I: Fraction of maze explored when pioneer reaches target")
+plt.plot(header, my_fraction_row, 'b*-', label = "1I: Fraction of maze explored")
+plt.plot(header, my_fraction_pioneer, 'b^-', label = "1I: Fraction of maze explored when pioneer reaches target")
 #plt.plot(header, my_v2_steps_row, 'r.-',label = "2I: Average of steps")
 #plt.plot(header, my_v2_pioneer_steps_row, 'rd-', label = "2I: Pioneer's average of steps")
 #plt.plot(header, my_v2_stdev_row, 'rx-', label = "2I: STDEV - Average of steps")
-#plt.plot(header, my_v2_fraction_row, 'r*-', label = "2I: Fraction of maze explored")
-#plt.plot(header, my_v2_fraction_pioneer, 'r^-', label = "2I: Fraction of maze explored when pioneer reaches target")
+plt.plot(header, my_v2_fraction_row, 'r*-', label = "2I: Fraction of maze explored")
+plt.plot(header, my_v2_fraction_pioneer, 'r^-', label = "2I: Fraction of maze explored when pioneer reaches target")
 
 """ plt.plot(header, tarry_steps_row, label = "TARRY: Average of steps")
 plt.plot(header, my_steps_row, label = "TG: Average of steps")
@@ -116,17 +116,17 @@ plt.plot(header, tarry_steps_from_first_to_last_row, label = "TARRY: Average Ste
 
 
 plt.xlabel('No. of agents')
-plt.ylabel('No. of steps')
+#plt.ylabel('No. of steps')
 plt.ylabel('Fraction of maze explored (%)')
-#plt.title('Our algorithm - 40-by-40 maze')
-plt.title('Our algorithm vs. Tarry\'s algorithm - 40-by-40 maze')
-#plt.title('Our algorithm - 1 interval vs. 2 intervals - 10-by-10 maze')
+#plt.title('Our algorithm - 10-by-10 maze')
+#plt.title('Our algorithm vs. Tarry\'s algorithm - 10-by-10 maze')
+plt.title('Our algorithm - 1 interval vs. 2 intervals - 10-by-10 maze')
 
 plt.grid()
 plt.tight_layout()
-plt.legend()
+#plt.legend()
 #plt.legend(loc='upper center', bbox_to_anchor=(1.4, 0.7))
-plt.savefig('our_algorithm_vs_tarry_40x40_fraction.svg',format="svg",bbox_inches='tight')
+plt.savefig('our_algorithm_1I_vs_2I_10x10_fraction.pdf',format="pdf",bbox_inches='tight')
 plt.show()
 
 """ # 1 interval vs 2 intervals - fraction
