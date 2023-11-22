@@ -1,8 +1,8 @@
+# Paper: https://github.com/ArthurJose2000/TG/blob/main/Relat%C3%B3rios/TG/relatorio/tese.pdf
+
 from pyamaze import maze,agent,COLOR
 import sys
 import random
-import csv
-import statistics
 
 class MyAlgorithm:
     def __init__(self, maze, numOfAgents, colorList, start=None):
@@ -30,6 +30,8 @@ class MyAlgorithm:
             end = (i + 1) * division
             agentInterval = (start, end)
             agentColor = self.colorList[i % len(self.colorList)]
+
+            # Run the algorithm for each agent
             mySearch, effective_path, explored_cells, foundTheGoal = self.run_single_agent(agentInterval, i)
             self.concatenate_new_elements(explored, explored_cells)
 
@@ -48,9 +50,6 @@ class MyAlgorithm:
             if foundTheGoal == True:
                 pionner_steps = agent_steps if pionner_steps > agent_steps else pionner_steps
 
-        if pionner_steps == sys.maxsize:
-            print("ERRO")
-
         # Get the explored fraction of the maze
         fraction = len(explored) / (self.maze.rows * self.maze.cols)
 
@@ -68,10 +67,10 @@ class MyAlgorithm:
         # Show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
-        """ #self.maze.tracePaths(paths, kill=False, delay=100)
+        #self.maze.tracePaths(paths, kill=False, delay=100)
         self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run() """
+        self.maze.run()
 
         return totalSteps, pionner_steps, fraction, fraction_pionner
 
@@ -397,10 +396,10 @@ class TarryGeneralization:
         # Show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
-        """ #self.maze.tracePaths(paths, kill=False, delay=50)
+        #self.maze.tracePaths(paths, kill=False, delay=50)
         self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run() """
+        self.maze.run()
 
         return totalSteps, pionner_steps, fraction, last_steps
 
@@ -621,119 +620,28 @@ class TarryGeneralization:
 colorList = [COLOR.red, COLOR.blue, COLOR.yellow, COLOR.orange, COLOR.pink, COLOR.cyan, COLOR.black]
 
 # Size of the maze
-numOfLines = 4
-numOfColumns = 4
+numOfLines = 10
+numOfColumns = 10
 
 # Number of agents
-numOfAgents = 5
+numOfAgents = 3
 
-# It will be used in the case of loading a specific maze
-specificMaze = "somemaze.csv"
+# Create a instance of a maze
+m=maze(numOfLines,numOfColumns)
 
-# In the case of loading a specific maze with pointed out number of agents. Example: python3 my.py 3 test1
-if len(sys.argv) == 3:
-    numOfAgents = int(sys.argv[1])
-    specificMaze = sys.argv[2] + ".csv"
+# Create a maze
+#m.CreateMaze(theme='light', loadMaze='mazes/10_by_10/maze_10x10__' + str(j+1) + '.csv')
+#m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
+m.CreateMaze(loopPercent=0,theme='light')
+#m.CreateMaze(loopPercent=100,theme='light', saveMaze='testperfect_4x4')
 
-header = []
-steps_row = []
-pionner_steps_row = []
-fraction_row = []
-stdev_row = []
+""" myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
+steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run() """
 
-# Only for Tarry's algorithm
-steps_from_first_to_last_row = []
+tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
+steps, pionner_steps, fraction, last_steps = tarryGeneralization.run()
+    
 
-# Only for my algorithm
-fraction_pionner_row = []
-
-for i in range(1, 41):
-
-    numOfAgents = i
-    header.append(numOfAgents)
-
-    pionner_stepsCount = 0
-    stepsCount = 0
-    fractionCount = 0
-    iterations = 250
-    steps_array = []
-
-    # Only for Tarry's algorithm
-    steps_from_first_to_lastCount = 0
-
-    # Only for my algorithm
-    fraction_pionner_count = 0
-
-    for j in range(0, iterations):
-
-        # Create a instance of a maze
-        m=maze(numOfLines,numOfColumns)
-
-        # Create a maze
-        m.CreateMaze(theme='light', loadMaze='mazes/10_by_10/maze_10x10__' + str(j+1) + '.csv')
-        #m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
-        #m.CreateMaze(loopPercent=0,theme='light')
-        #m.CreateMaze(loopPercent=100,theme='light', saveMaze='testperfect_4x4')
-
-        myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run()
-
-        """ tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction, last_steps = tarryGeneralization.run() """
-
-        # Free up memory
-        m._win.destroy()
-
-        steps_array.append(steps / numOfAgents)
-
-        stepsCount += steps
-        pionner_stepsCount += pionner_steps
-        fractionCount += fraction
-
-        # Only for Tarry's algorithm
-        #steps_from_first_to_lastCount += last_steps - pionner_steps
-
-        # Only for my algorithm
-        fraction_pionner_count += fraction_pionner
-
-    # Only for Tarry's algorithm
-    """ averageOfStepsFromFirstToLast = steps_from_first_to_lastCount / iterations
-    steps_from_first_to_last_row.append(averageOfStepsFromFirstToLast)
-    print(numOfAgents, " agents -> average steps from first to last: ", averageOfStepsFromFirstToLast) """
-
-    # Only for my algorithm
-    averageFractionPionner = fraction_pionner_count / iterations
-    fraction_pionner_row.append(averageFractionPionner)
-    print(numOfAgents, " agents -> average of explored fraction until pionner find the goal: ", averageFractionPionner)
-
-    averageOfSteps = stepsCount / numOfAgents / iterations
-    averageOfStepsOfThePionner = pionner_stepsCount / iterations
-    averageOfFraction = fractionCount / iterations
-    stdev = statistics.stdev(steps_array)
-    print(numOfAgents, " agents -> average number of steps: ", averageOfSteps)
-    print(numOfAgents, " agents -> average number of pionner's steps: ", averageOfStepsOfThePionner)
-    print(numOfAgents, " agents -> average of explored fraction: ", averageOfFraction)
-    print(numOfAgents, " agents -> stdev: ", stdev)
-
-    steps_row.append(averageOfSteps)
-    pionner_steps_row.append(averageOfStepsOfThePionner)
-    fraction_row.append(averageOfFraction)
-    stdev_row.append(stdev)
-
-with open("my_1to40agents_250iterations_10x10_new.csv", "w") as f:
-    writer = csv.writer(f)
-
-    writer.writerow(header)
-    writer.writerow(steps_row)
-    writer.writerow(pionner_steps_row)
-    writer.writerow(fraction_row)
-    writer.writerow(stdev_row)
-
-    # Only for Tarry's algorithm
-    #writer.writerow(steps_from_first_to_last_row)
-
-    # Only for my algorithm
-    writer.writerow(fraction_pionner_row)
 
 
 
