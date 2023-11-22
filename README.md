@@ -1,10 +1,4 @@
-# Graduation work
+# Algorithm related to bachelor's thesis
 ## Multi-agent graph exploration without communication
 
-Ongoing...
-
-## To run an example
-_python3 my.py 3 test1_
-
-Thanks for @MAN1986 for provide the code base 
-
+## Paper: https://github.com/ArthurJose2000/TG/blob/main/Relat%C3%B3rios/TG/relatorio/tese.pdf
