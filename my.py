@@ -18,9 +18,6 @@ class MyAlgorithm:
 
     # Run the algorithm
     def run(self):
-        """ print("MY ALGORITHM - TRABALHO DE GRADUAÇÃO")
-        print("QUANTIDADE DE AGENTES: ", self.numOfAgents)
-        print() """
 
         division = 1.0 / self.numOfAgents
         paths = []
@@ -35,12 +32,6 @@ class MyAlgorithm:
             agentColor = self.colorList[i % len(self.colorList)]
             mySearch, effective_path, explored_cells, foundTheGoal = self.run_single_agent(agentInterval, i)
             self.concatenate_new_elements(explored, explored_cells)
-
-            """ print("AGENTE ", i + 1)
-            print("Cor: ", self.getColorString(agentColor))
-            print("Intervalo: ", self.getIntervalString(agentInterval))
-            print("Caminho eficaz pela árvore (representação mixed radix): ", self.getMixedRadixRepresentation(effective_path, self.maze))
-            print() """
 
             a = agent(self.maze,footprints=True,color=agentColor,shape='square',filled=True)
 
@@ -223,22 +214,7 @@ class MyAlgorithm:
         
         # Get the weight interval of each child
         relative_node_weights = self.getRelativeNodeWeights(agent_path, totalNumberOfChildren)
-        """ print("agentInterval: ", agentInterval)
-        print("relative_node_weights: ", relative_node_weights)
-        print("agent_path: ", agent_path)
-        print("totalNumberOfChildren: ", totalNumberOfChildren) """
 
-        # MELHORAR ESTE PASSO A PASSO
-        # Following steps if there is more than 1 child and if the agent has not finished its interval:
-        # - If the agent finds a child that intersects the agent's interval, it goes to this node if the agent didn't visit the node
-        # - If the agent finds a child that intersects the agent's interval but this node was visited, the agent will check the next
-        # child, coming back to the first step
-        # - If the agent find a child that doesn't intersect the agent's interval, there is two possibilities:
-        #     - if the child's interval is on the left of the agent's interval, it will check the next child, coming
-        #     back to the first step
-        #     - if the child's interval is on the right of the agent's interval, surely the agent finished its interval,
-        #     and it will do a dummy DFS
-        # - If no child fills the agent's requirement, the agent will go to the parent
 
         if self.filledInterval[agentIndex] == False:
             # Return the first child that is able to obey the limits
@@ -249,7 +225,6 @@ class MyAlgorithm:
                     self.filledInterval[agentIndex] = True
                     break
 
-                # nodeIsInsideAgentInterval = agentInterval[0] < relative_node_weights[i][1]
                 nodeIsInsideAgentInterval = agentInterval[0] < relative_node_weights[i][1] and agentInterval[1] > relative_node_weights[i][0]
                 nodeWasNotVisistedByTheAgent = allChildren[i] in nonVisitedChildren
 
@@ -259,6 +234,7 @@ class MyAlgorithm:
 
             # If the agent is in the root and it doesn't find a node that fills the requirement, it finished its interval
             # It occurs when the agent come back to root but it has already been visited the root's children
+            # In the context of this Bachelor's thesis, the agent will stop
             if currCell == self.start:
                 self.filledInterval[agentIndex] = True
 
@@ -266,7 +242,7 @@ class MyAlgorithm:
             if self.filledInterval[agentIndex] == False:
                 return -1
                     
-        # The agent surely finished its interval, and it will do a dummy 
+        # The agent surely finished its interval, and it will do a dummy DFS
         for i in range(0, totalNumberOfChildren):
             if allChildren[i] in nonVisitedChildren:
                 agent_path.append((i, totalNumberOfChildren))
@@ -393,9 +369,6 @@ class TarryGeneralization:
 
     # Run the algorithm
     def run(self):
-        """ print("GENERALIZATION OF TARRY'S ALGORITHM")
-        print("QUANTIDADE DE AGENTES: ", self.numOfAgents)
-        print() """
 
         paths = []
         agents_search, fraction = self.run_agents()
