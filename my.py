@@ -1,6 +1,7 @@
-from pyamaze import maze, agent, COLOR
-import sys
 import random
+import sys
+
+from pyamaze import COLOR, agent
 
 
 class MyAlgorithm:
@@ -677,44 +678,3 @@ class TarryGeneralization:
                     children.append(childCell)
 
         return children
-
-
-# List of colors of the agents
-colorList = [
-    COLOR.red,
-    COLOR.blue,
-    COLOR.yellow,
-    COLOR.orange,
-    COLOR.pink,
-    COLOR.cyan,
-    COLOR.black,
-]
-
-# Size of the maze
-numOfLines = 10
-numOfColumns = 10
-
-# Number of agents
-numOfAgents = 3
-
-# Create a instance of a maze
-m = maze(numOfLines, numOfColumns)
-
-# Create a maze
-# m.CreateMaze(theme='light', loadMaze='mazes/10_by_10/maze_10x10__' + str(j+1) + '.csv')
-# m.CreateMaze(theme='light', loadMaze='testperfect3.csv')
-m.CreateMaze(loopPercent=0, theme="light")
-# m.CreateMaze(loopPercent=100,theme='light', saveMaze='testperfect_4x4')
-
-""" myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
-steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run() """
-
-tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
-steps, pionner_steps, fraction, last_steps = tarryGeneralization.run()
-
-
-""" bSearch,bfsPath,fwdPath=BFS(m)
-a=agent(m,footprints=True,color=COLOR.yellow,shape='square',filled=True)
-bSearch2,bfsPath2,fwdPath2=BFS(m,(5,4))
-a2=agent(m,footprints=True,color=COLOR.red,shape='square',filled=True)
-m.tracePaths([{a:bSearch}, {a2:bSearch2}],delay=100) """
