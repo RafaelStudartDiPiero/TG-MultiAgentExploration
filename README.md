@@ -17,7 +17,7 @@ You can pass specific arguments to define parameters, like:
 
 As an example, you could run:
 
-```python3 demo.py --algorithm tarry --agents 5 --maze test1.csv ```
+```python3 demo.py --agents 5 --graph test1.csv ```
 
 And you have a demo using the Tarry Generalization Algoritm, five agents and in the maze salved in the test1.csv.
 
