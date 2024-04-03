@@ -1,7 +1,7 @@
 import argparse
 
-from graph_utils import construct_graph, load_graph
-from simulation import Simulation
+from simulation.graph_utils import construct_graph, load_graph
+from simulation.simulation import Simulation
 
 
 def parse_arguments():
@@ -39,4 +39,5 @@ if __name__ == "__main__":
         graph=graph,
     )
 
-    simulation.simulate()
+    result = simulation.simulate(shoud_print=True)
+    print(result)

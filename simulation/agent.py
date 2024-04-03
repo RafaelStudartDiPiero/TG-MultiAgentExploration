@@ -3,7 +3,7 @@ from typing import List, Optional, Tuple
 
 import networkx as nx
 
-from graph import Node
+from simulation.graph import Node
 
 
 class Algorithm(Enum):

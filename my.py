@@ -77,9 +77,9 @@ class MyAlgorithm:
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
 
         # self.maze.tracePaths(paths, kill=False, delay=100)
-        self.maze.tracePaths_by_key_press(paths, kill=False)
+        # self.maze.tracePaths_by_key_press(paths, kill=False)
 
-        self.maze.run()
+        # self.maze.run()
 
         return totalSteps, pionner_steps, fraction, fraction_pionner
 
