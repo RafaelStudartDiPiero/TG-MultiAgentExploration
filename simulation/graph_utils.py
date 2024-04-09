@@ -49,38 +49,52 @@ def convert_maze(file_path: str) -> Tuple[nx.Graph, int, int]:
             south = bool(int(cell["S"]))
             edges = []
 
-            if east:
-                east_cell = f"{i},{j+1}"
-                edges.append((cell_id, east_cell))
-            if west:
-                west_cell = f"{i},{j-1}"
-                edges.append((cell_id, west_cell))
             if north:
                 north_cell = f"{i-1},{j}"
                 edges.append((cell_id, north_cell))
+            if east:
+                east_cell = f"{i},{j+1}"
+                edges.append((cell_id, east_cell))
             if south:
                 south_cell = f"{i+1},{j}"
                 edges.append((cell_id, south_cell))
+            if west:
+                west_cell = f"{i},{j-1}"
+                edges.append((cell_id, west_cell))
 
             maze_graph.add_node(cell_id)
             if len(edges) > 0:
                 maze_graph.add_edges_from(edges)
+    maze_graph.nodes["1,1"]["finish"] = True
+    maze_graph.nodes["1,1"]["color"] = "green"
+
+    maze_graph.nodes[f"{rows},{columns}"]["color"] = "red"
 
     return maze_graph, rows, columns
 
 
 def display_maze(maze_graph: nx.Graph, rows: int, columns: int):
+    # Grid Positions
     pos = {
         node_id: (int(node_id.split(",")[1]), rows - int(node_id.split(",")[0]))
         for node_id in maze_graph.nodes()
     }
+
+    # Node Colors
+    node_colors = []
+    for node_id in maze_graph.nodes():
+        if "color" in maze_graph.nodes[node_id]:
+            node_colors.append(maze_graph.nodes[node_id]["color"])
+        else:
+            node_colors.append("lightblue")
+
     # Draw the maze graph using NetworkX and matplotlib with grid layout
     nx.draw(
         maze_graph,
         pos,
         with_labels=True,
         node_size=500,
-        node_color="lightblue",
+        node_color=node_colors,
         font_size=8,
     )
     plt.title("Maze Graph (Grid Layout)")
