@@ -1,11 +1,11 @@
 import argparse
 
-from my import MyAlgorithm, TarryGeneralization
-from pyamaze import COLOR, maze
+from simulation.graph_utils import construct_graph, load_graph, convert_maze
+from simulation.simulation import Simulation
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Maze exploration algorithm.")
+    parser = argparse.ArgumentParser(description="Graph exploration algorithm.")
     parser.add_argument(
         "--algorithm",
         type=str,
@@ -16,10 +16,10 @@ def parse_arguments():
         "--agents", type=int, default=3, help="Number of agents (default: 3)"
     )
     parser.add_argument(
-        "--maze",
+        "--graph",
         type=str,
         default=None,
-        help="File path to saved maze",
+        help="File path to saved graph",
     )
     return parser.parse_args()
 
@@ -27,39 +27,14 @@ def parse_arguments():
 if __name__ == "__main__":
     # Args
     args = parse_arguments()
-
-    # Agent Colors
-    colorList = [
-        COLOR.red,
-        COLOR.blue,
-        COLOR.yellow,
-        COLOR.orange,
-        COLOR.pink,
-        COLOR.cyan,
-        COLOR.black,
-    ]
-
-    # Size of the maze
-    numOfLines = 10
-    numOfColumns = 10
-
-    # Number of agents
-    numOfAgents = args.agents
-
-    # Create a instance of a maze
-    m = maze(numOfLines, numOfColumns)
     
-    if args.maze is not None:
-        m.CreateMaze(loopPercent=0, theme="light", loadMaze=args.maze)
-    else:
-        m.CreateMaze(loopPercent=0, theme="light")
+    graph,rows, columns = convert_maze(args.graph)
 
-    # Algoritm Decision
-    if args.algorithm == "self":
-        # Implemented Algorithm
-        myAlgorithm = MyAlgorithm(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction, fraction_pionner = myAlgorithm.run()
-    elif args.algorithm == "tarry":
-        # Tarry Generalization
-        tarryGeneralization = TarryGeneralization(m, numOfAgents, colorList, start=None)
-        steps, pionner_steps, fraction, last_steps = tarryGeneralization.run()
+    simulation = Simulation(
+        algorithm=args.algorithm,
+        n_agents=args.agents,
+        graph=graph,
+        starting_node_id=f"{rows},{columns}"
+    )
+
+    simulation.simulate(shoud_print=True)
