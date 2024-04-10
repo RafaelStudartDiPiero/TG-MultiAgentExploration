@@ -19,14 +19,14 @@ class Color(Enum):
     its footprint
     """
 
-    black = ("black", "dim gray")
-    red = ("red3", "tomato")
-    cyan = ("cyan4", "cyan4")
-    green = ("green4", "pale green")
-    blue = ("DeepSkyBlue4", "DeepSkyBlue2")
-    yellow = ("yellow2", "yellow1")
-    orange = ("#f27f0c", "#f7ad19")
-    pink = ("#e11584", "#f699cd")
+    black = ("black", "dimgray")
+    red = ("red", "indianred")
+    cyan = ("cyan", "darkcyan")
+    green = ("green", "forestgreen")
+    blue = ("blue", "royalblue")
+    yellow = ("yellow", "goldenrod")
+    orange = ("orange", "darkorange")
+    pink = ("magenta", "orchid")
 
 
 class Agent:
