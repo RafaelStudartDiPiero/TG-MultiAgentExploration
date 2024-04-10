@@ -34,7 +34,8 @@ if __name__ == "__main__":
         algorithm=args.algorithm,
         n_agents=args.agents,
         graph=graph,
-        starting_node_id=f"{rows},{columns}"
+        starting_node_id=f"{rows},{columns}",
+        is_maze=True,
     )
 
     simulation.simulate(shoud_print=True)

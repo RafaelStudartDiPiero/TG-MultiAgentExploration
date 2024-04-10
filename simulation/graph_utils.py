@@ -73,7 +73,7 @@ def convert_maze(file_path: str) -> Tuple[nx.Graph, int, int]:
     return maze_graph, rows, columns
 
 
-def display_maze(maze_graph: nx.Graph, rows: int, columns: int):
+def display_maze(maze_graph: nx.Graph, rows: int, columns: int, ax=None):
     # Grid Positions
     pos = {
         node_id: (int(node_id.split(",")[1]), rows - int(node_id.split(",")[0]))
@@ -88,6 +88,9 @@ def display_maze(maze_graph: nx.Graph, rows: int, columns: int):
         else:
             node_colors.append("lightblue")
 
+    if ax is not None:
+        ax.clear()
+
     # Draw the maze graph using NetworkX and matplotlib with grid layout
     nx.draw(
         maze_graph,
@@ -96,6 +99,7 @@ def display_maze(maze_graph: nx.Graph, rows: int, columns: int):
         node_size=500,
         node_color=node_colors,
         font_size=8,
+        ax=ax,
     )
     plt.title("Maze Graph (Grid Layout)")
     plt.show()

@@ -1,18 +1,19 @@
 from typing import List, Optional
 
+import matplotlib.pyplot as plt
 import networkx as nx
 
-from my import MyAlgorithm
 from simulation.agent import Agent, Algorithm, Color, Node
+from simulation.graph_utils import display_maze
 from simulation.utils import concatenate_new_elements
 
 defaultAgentColorList = [
     Color.red,
     Color.blue,
-    Color.yellow,
-    Color.orange,
-    Color.pink,
     Color.cyan,
+    Color.pink,
+    Color.orange,
+    Color.yellow,
     Color.black,
 ]
 
@@ -24,10 +25,12 @@ class Simulation:
         n_agents: int,
         graph: nx.Graph,
         starting_node_id: str,
+        is_maze: Optional[bool] = False,
     ) -> None:
         self.n_agents = n_agents
         self.algorithm = algorithm
         self.graph = graph
+        self.is_maze = is_maze if is_maze is not None else False
         self.agents: List[Agent] = []
         self.division = division = 1.0 / self.n_agents
 
@@ -114,4 +117,69 @@ class Simulation:
 
         # Print Result
         if shoud_print is not None and shoud_print:
-            print("PRINTING MISSING")
+            plt.ion()
+            fig, ax = plt.subplots()
+            if self.is_maze:
+                display_maze(self.graph, 6, 6, ax=ax)
+
+            # Initialize dictionary to keep track of current step for each agent
+            agent_step_indices = {agent.id: 0 for agent in self.agents}
+            remaining_agents = [
+                agent for agent in self.agents
+            ]  # List of agent IDs with remaining steps
+            current_agent_index = 0
+
+            # Function to check if any agent has remaining steps
+            def any_remaining_steps():
+                return any(
+                    agent_step_indices[agent.id]
+                    < len(self.paths[agent.id][agent.id]) - 1
+                    for agent in remaining_agents
+                )
+
+            # Loop until all agents have completed their steps
+            while any_remaining_steps():
+                # Wait for key press before moving the next agent
+                input("Press Enter to move the next agent...")
+
+                # Move the next available agent
+                agent = remaining_agents[current_agent_index]
+                if (
+                    agent_step_indices[agent.id]
+                    < len(self.paths[agent.id][agent.id]) - 1
+                ):
+                    agent_step_indices[agent.id] += 1
+                    # Print the current step for the agent
+                    step_node = self.paths[agent.id][agent.id][
+                        agent_step_indices[agent.id]
+                    ]
+                    previous_step_node = self.paths[agent.id][agent.id][
+                        agent_step_indices[agent.id] - 1
+                    ]
+                    print(
+                        f"Agent {agent.id} step {agent_step_indices[agent.id]}: {step_node}"
+                    )
+                    self.graph.nodes[step_node]["color"] = agent.color.value[0]
+                    self.graph.nodes[previous_step_node]["color"] = agent.color.value[1]
+                    if self.is_maze:
+                        display_maze(self.graph, 6, 6, ax=ax)
+                        plt.pause(0.1)
+                else:
+                    remaining_agents.remove(
+                        agent
+                    )  # Remove agent ID if it has completed its steps
+
+                if (
+                    agent_step_indices[agent.id]
+                    == len(self.paths[agent.id][agent.id]) - 1
+                ):
+                    remaining_agents.remove(
+                        agent
+                    )  # Remove agent ID if it has completed its steps
+
+                if len(remaining_agents) == 0:
+                    break
+                current_agent_index = (current_agent_index + 1) % len(remaining_agents)
+
+            # Simulation complete
+            print("Simulation complete.")
