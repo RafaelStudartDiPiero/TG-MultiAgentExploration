@@ -1,6 +1,6 @@
 import argparse
 
-from simulation.graph_utils import construct_graph, load_graph, convert_maze
+from simulation.graph_utils import convert_maze
 from simulation.simulation import Simulation
 
 
