@@ -4,21 +4,19 @@ from typing import Tuple
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from pyamaze import maze
+
+# def construct_graph(n_lines: int, n_columns: int):
+#     # TODO Change this to use nx
+#     m = maze(n_lines, n_columns)
+#     m.CreateMaze(loopPercent=0, theme="light")
+#     return m
 
 
-def construct_graph(n_lines: int, n_columns: int):
-    # TODO Change this to use nx
-    m = maze(n_lines, n_columns)
-    m.CreateMaze(loopPercent=0, theme="light")
-    return m
-
-
-def load_graph(n_lines: int, n_columns: int, file_path: str):
-    # TODO Change this to use nx
-    m = maze(n_lines, n_columns)
-    m.CreateMaze(loopPercent=0, theme="light", loadMaze=file_path)
-    return m
+# def load_graph(n_lines: int, n_columns: int, file_path: str):
+#     # TODO Change this to use nx
+#     m = maze(n_lines, n_columns)
+#     m.CreateMaze(loopPercent=0, theme="light", loadMaze=file_path)
+#     return m
 
 
 def convert_maze(file_path: str) -> Tuple[nx.Graph, int, int]:

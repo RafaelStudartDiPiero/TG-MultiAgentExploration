@@ -74,6 +74,7 @@ class Simulation:
         self.effective_paths = []
         self.explored_paths = []
         self.goals_found = []
+        self.visited_paths = []
         self.total_steps = 0
         self.fraction_explored = 0
         self.fraction_pionner = 0
@@ -84,11 +85,19 @@ class Simulation:
         for agent in self.agents:
             search, effective_path, explored_path, found_goal = agent.move(self.graph)
 
+            search = agent.search
+            effective_path = agent.effective_path
+            explored_path = agent.explored
+            found_goal = agent.finished
+            visited_path = agent.visited_path
+
             self.paths.append({agent.id: search})
+
             self.agent_searches.append(search)
             self.effective_paths.append(effective_path)
             concatenate_new_elements(self.explored_paths, explored_path)
             self.goals_found.append(found_goal)
+            self.visited_paths.append(visited_path)
 
             agent_steps = len(search) - 1
             self.total_steps += agent_steps

@@ -52,6 +52,7 @@ class Agent:
         self.visited_path = []
         self.explored = []
         self.search = []
+        self.parent_list = []
         self.current_node_id = None
         self.filled_interval = False
 
@@ -71,10 +72,10 @@ class Agent:
         self.explored = [self.starting_node.id]
         self.search = []
         self.current_node_id = self.starting_node.id
+        self.parent_list = []
 
-        parent_list = []
         # Starting parent with invalid nodes
-        parent_list.append("-1,-1")
+        self.parent_list.append("-1,-1")
 
         while True:
             node_data = graph.nodes[self.current_node_id]
@@ -91,7 +92,8 @@ class Agent:
                 [
                     neighbor
                     for neighbor in graph.neighbors(self.current_node_id)
-                    if neighbor not in self.explored and neighbor != parent_list[-1]
+                    if neighbor not in self.explored
+                    and neighbor != self.parent_list[-1]
                 ],
                 self.current_node_id,
             )
@@ -101,7 +103,7 @@ class Agent:
                 [
                     neighbor
                     for neighbor in graph.neighbors(self.current_node_id)
-                    if neighbor != parent_list[-1]
+                    if neighbor != self.parent_list[-1]
                 ],
                 self.current_node_id,
             )
@@ -118,7 +120,7 @@ class Agent:
                 if self.current_node_id == self.starting_node.id:
                     break
 
-                self.current_node_id = parent_list.pop()
+                self.current_node_id = self.parent_list.pop()
                 self.effective_path.pop()
                 self.visited_path.pop()
 
@@ -139,7 +141,7 @@ class Agent:
                 self.search.append(self.current_node_id)
 
                 if self.current_node_id != self.starting_node.id:
-                    self.current_node_id = parent_list.pop()
+                    self.current_node_id = self.parent_list.pop()
                     self.effective_path.pop()
                     self.visited_path.pop()
                 continue
@@ -147,7 +149,7 @@ class Agent:
             if self.current_node_id not in self.explored:
                 self.explored.append(self.current_node_id)
 
-            parent_list.append(self.current_node_id)
+            self.parent_list.append(self.current_node_id)
             self.search.append(self.current_node_id)
             self.effective_path.append(self.current_node_id)
             self.current_node_id = next_neighbor_id

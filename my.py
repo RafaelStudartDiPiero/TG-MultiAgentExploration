@@ -1,8 +1,6 @@
 import random
 import sys
 
-from pyamaze import COLOR, agent
-
 
 class MyAlgorithm:
     def __init__(self, maze, numOfAgents, colorList, start=None):
