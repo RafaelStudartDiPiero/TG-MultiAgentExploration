@@ -4,7 +4,7 @@ import matplotlib.pyplot as plt
 import networkx as nx
 
 from simulation.agent import Agent, Algorithm, Color, Node
-from simulation.graph_utils import display_maze
+from simulation.graph_utils import display_graph, display_maze
 from simulation.utils import concatenate_new_elements
 
 defaultAgentColorList = [
@@ -33,6 +33,7 @@ class Simulation:
         self.is_maze = is_maze if is_maze is not None else False
         self.agents: List[Agent] = []
         self.division = division = 1.0 / self.n_agents
+        self.starting_node_id = starting_node_id
 
         starting_node = self.graph.nodes[starting_node_id]
         starting_node_color = (
@@ -79,12 +80,15 @@ class Simulation:
         self.fraction_explored = 0
         self.fraction_pionner = 0
 
-    def simulate(self, shoud_print: Optional[bool]) -> None:
+    def simulate(
+        self, shoud_print: Optional[bool], should_print_trees: Optional[bool]
+    ) -> None:
 
         # Path for each agent
         for agent in self.agents:
             search, effective_path, explored_path, found_goal = agent.move(self.graph)
-
+            # print(agent.search)
+            # print(agent.visited_path)
             search = agent.search
             effective_path = agent.effective_path
             explored_path = agent.explored
@@ -130,6 +134,8 @@ class Simulation:
             fig, ax = plt.subplots()
             if self.is_maze:
                 display_maze(self.graph, 6, 6, ax=ax)
+            else:
+                display_graph(self.graph, self.starting_node_id)
 
             # Initialize dictionary to keep track of current step for each agent
             agent_step_indices = {agent.id: 0 for agent in self.agents}
@@ -173,6 +179,9 @@ class Simulation:
                     if self.is_maze:
                         display_maze(self.graph, 6, 6, ax=ax)
                         plt.pause(0.1)
+                    else:
+                        display_graph(self.graph, self.starting_node_id, ax=ax)
+                        plt.pause(0.1)
                 else:
                     remaining_agents.remove(
                         agent
@@ -192,3 +201,8 @@ class Simulation:
 
             # Simulation complete
             print("Simulation complete.")
+
+        # Print Tree
+        if should_print_trees is not None and should_print_trees:
+            for agent in self.agents:
+                agent.print_tree()

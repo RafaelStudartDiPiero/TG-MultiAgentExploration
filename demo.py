@@ -1,6 +1,6 @@
 import argparse
 
-from simulation.graph_utils import convert_maze
+from simulation.graph_utils import convert_maze, load_graph
 from simulation.simulation import Simulation
 
 
@@ -27,15 +27,22 @@ def parse_arguments():
 if __name__ == "__main__":
     # Args
     args = parse_arguments()
-    
-    graph,rows, columns = convert_maze(args.graph)
+
+    if args.graph.endswith(".graphml"):
+        graph = load_graph(args.graph)
+        starting_node_id = "1"
+        is_maze = False
+    else:
+        graph, rows, columns = convert_maze(args.graph)
+        starting_node_id = f"{rows},{columns}"
+        is_maze = True
 
     simulation = Simulation(
         algorithm=args.algorithm,
         n_agents=args.agents,
         graph=graph,
-        starting_node_id=f"{rows},{columns}",
-        is_maze=True,
+        starting_node_id=starting_node_id,
+        is_maze=is_maze,
     )
 
-    simulation.simulate(shoud_print=True)
+    simulation.simulate(shoud_print=True, should_print_trees=True)
