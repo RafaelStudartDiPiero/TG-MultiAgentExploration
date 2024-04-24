@@ -1,22 +1,13 @@
 import csv
-from typing import Tuple
+from typing import Tuple, Optional
 
 import matplotlib.pyplot as plt
 import networkx as nx
+from networkx.drawing.nx_pydot import graphviz_layout
 
 
-# def construct_graph(n_lines: int, n_columns: int):
-#     # TODO Change this to use nx
-#     m = maze(n_lines, n_columns)
-#     m.CreateMaze(loopPercent=0, theme="light")
-#     return m
-
-
-# def load_graph(n_lines: int, n_columns: int, file_path: str):
-#     # TODO Change this to use nx
-#     m = maze(n_lines, n_columns)
-#     m.CreateMaze(loopPercent=0, theme="light", loadMaze=file_path)
-#     return m
+def load_graph(file_path) -> nx.Graph:
+    return nx.read_graphml(file_path)
 
 
 def convert_maze(file_path: str) -> Tuple[nx.Graph, int, int]:
@@ -71,6 +62,57 @@ def convert_maze(file_path: str) -> Tuple[nx.Graph, int, int]:
     return maze_graph, rows, columns
 
 
+def preprocess_node_ids(graph: nx.Graph):
+    """Replace commas with spaces in all node IDs of the graph."""
+    for node_id in graph.nodes():
+        new_node_id = node_id.replace(",", " ")
+        if new_node_id != node_id:
+            # Update the node ID if it was modified
+            graph = nx.relabel_nodes(graph, {node_id: new_node_id})
+    return graph
+
+
+def display_graph(
+    graph: nx.Graph,
+    root_id: str,
+    ax=None,
+    square=Optional[bool],
+):
+    # Node Colors
+    node_colors = []
+    for node_id in graph.nodes():
+        if "color" in graph.nodes[node_id]:
+            node_colors.append(graph.nodes[node_id]["color"])
+        else:
+            node_colors.append("lightblue")
+
+    if ax is not None:
+        ax.clear()
+
+    pos = graphviz_layout(graph, prog="dot", root=root_id)  # Display as Tree
+
+    # Create a labels dictionary to include node attributes in labels
+    if square:
+        labels = {
+            node_id: f"{node_id}\n{graph.nodes[node_id].get('index')[0] if graph.nodes[node_id].get('index') else ''}\n{graph.nodes[node_id].get('radix')[0] if graph.nodes[node_id].get('radix') else ''}"
+            for node_id in graph.nodes()
+        }
+
+    nx.draw(
+        graph,
+        pos,
+        with_labels=True,
+        labels=labels if square else None,
+        node_size=500,
+        node_color=node_colors,
+        font_size=6,
+        ax=ax,
+        node_shape="s" if square else None,
+    )
+    plt.title("Tree")
+    plt.show()
+
+
 def display_maze(maze_graph: nx.Graph, rows: int, columns: int, ax=None):
     # Grid Positions
     pos = {
@@ -99,5 +141,23 @@ def display_maze(maze_graph: nx.Graph, rows: int, columns: int, ax=None):
         font_size=8,
         ax=ax,
     )
-    plt.title("Maze Graph (Grid Layout)")
+    plt.title("Maze Graph")
     plt.show()
+
+
+def add_edge_to_graph(
+    origin_node_id: str,
+    dest_node_id: str,
+    graph: nx.Graph,
+    index: Tuple[str, str],
+    radix: Tuple[str, str],
+) -> nx.Graph:
+    # Checking if the id already exists
+    if graph.has_node(dest_node_id):
+        # Rename older node id
+        graph = nx.relabel_nodes(graph, {dest_node_id: f"{dest_node_id}_0"})
+
+    graph.add_edge(origin_node_id, dest_node_id)
+    graph.nodes[dest_node_id]["index"] = index
+    graph.nodes[dest_node_id]["radix"] = radix
+    return graph

@@ -12,13 +12,13 @@ def test_simple_maze_simulation():
         starting_node_id=f"{rows},{columns}",
     )
 
-    simulation.simulate(shoud_print=False)
+    simulation.simulate(shoud_print=False, should_print_trees=False)
 
     # Metrics Test
-    assert simulation.total_steps == 70
+    assert simulation.total_steps == 74
     assert simulation.pionner_steps == 16
-    assert simulation.fraction_explored - 0.722222 < 0.1
-    assert simulation.fraction_pionner - 0.72222 < 0.1
+    assert simulation.fraction_explored - 0.83333 < 0.0001
+    assert simulation.fraction_pionner - 0.80555 < 0.0001
 
     # Path Test - Agent 1
     assert simulation.agent_searches[0] == [
@@ -92,6 +92,10 @@ def test_simple_maze_simulation():
         "6,4",
         "6,3",
         "5,3",
+        "5,2",
+        "5,1",
+        "4,1",
+        "4,2",
         "4,3",
         "3,3",
         "3,4",
@@ -119,6 +123,10 @@ def test_simple_maze_simulation():
         "6,4",
         "6,3",
         "5,3",
+        "5,2",
+        "5,1",
+        "4,1",
+        "4,2",
         "4,3",
         "3,3",
         "3,4",
@@ -143,11 +151,15 @@ def test_simple_maze_simulation():
         (-1, -1),
         (-1, -1),
         (-1, -1),
+        (-1, -1),
+        (-1, -1),
+        (0, 2),
         (1, 2),
         (-1, -1),
         (0, 2),
-        (0, 2),
-        (0, 2),
+        (-1, -1),
+        (1, 2),
+        (-1, -1),
         (-1, -1),
         (0, 2),
         (-1, -1),
