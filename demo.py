@@ -45,4 +45,8 @@ if __name__ == "__main__":
         is_maze=is_maze,
     )
 
-    simulation.simulate(shoud_print=True, should_print_trees=True)
+    simulation.simulate(shoud_print=False, should_print_trees=True)
+    
+    print(simulation.agent_searches[2])
+    print(simulation.effective_paths[2])
+    print(simulation.visited_paths[2])

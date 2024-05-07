@@ -21,6 +21,12 @@ As an example, you could run:
 
 ```python3 demo.py --agents 3 --graph full_tree_test.graphml```
 
+```python3 demo.py --agents 3 --graph test2.csv```
+
+```python3 demo.py --agents 3 --graph testimperfect.csv```
+
+```python3 demo.py --agents 3 --graph testperfect.csv```
+
 ## Multi-agent graph exploration without communication
 
 A in-depth analysis of the algoritm can be found here:

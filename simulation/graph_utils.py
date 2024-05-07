@@ -72,11 +72,31 @@ def preprocess_node_ids(graph: nx.Graph):
     return graph
 
 
+def get_node_label(graph: nx.Graph, node_id: str) -> str:
+    label = f"{node_id}"
+    if graph.nodes[node_id].get("status"):
+        if (
+            graph.nodes[node_id].get("status") == "DFS"
+            or graph.nodes[node_id].get("status") == "DFS-BT"
+        ):
+            label += f"\n{graph.nodes[node_id].get('status')}"
+            return label
+        else:
+            if graph.nodes[node_id].get("index"):
+                label += f"\n{graph.nodes[node_id].get('index')[0]}"
+            if graph.nodes[node_id].get("radix"):
+                label += f"\n{graph.nodes[node_id].get('radix')[0]}"
+            if graph.nodes[node_id].get("status"):
+                label += f"\n{graph.nodes[node_id].get('status')}"
+    return label
+
+
 def display_graph(
     graph: nx.Graph,
     root_id: str,
     ax=None,
     square=Optional[bool],
+    title=None,
 ):
     # Node Colors
     node_colors = []
@@ -93,23 +113,20 @@ def display_graph(
 
     # Create a labels dictionary to include node attributes in labels
     if square:
-        labels = {
-            node_id: f"{node_id}\n{graph.nodes[node_id].get('index')[0] if graph.nodes[node_id].get('index') else ''}\n{graph.nodes[node_id].get('radix')[0] if graph.nodes[node_id].get('radix') else ''}"
-            for node_id in graph.nodes()
-        }
+        labels = {node_id: get_node_label(graph, node_id) for node_id in graph.nodes()}
 
-    nx.draw(
+    nx.draw_networkx(
         graph,
         pos,
         with_labels=True,
         labels=labels if square else None,
-        node_size=500,
+        node_size=1000,
         node_color=node_colors,
-        font_size=6,
+        font_size=8,
         ax=ax,
         node_shape="s" if square else None,
     )
-    plt.title("Tree")
+    plt.title(title if title is not None else "Tree")
     plt.show()
 
 
@@ -151,6 +168,7 @@ def add_edge_to_graph(
     graph: nx.Graph,
     index: Tuple[str, str],
     radix: Tuple[str, str],
+    status: str,
 ) -> nx.Graph:
     # Checking if the id already exists
     if graph.has_node(dest_node_id):
@@ -160,4 +178,5 @@ def add_edge_to_graph(
     graph.add_edge(origin_node_id, dest_node_id)
     graph.nodes[dest_node_id]["index"] = index
     graph.nodes[dest_node_id]["radix"] = radix
+    graph.nodes[dest_node_id]["status"] = status
     return graph
