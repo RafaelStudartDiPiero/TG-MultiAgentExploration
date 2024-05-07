@@ -205,4 +205,4 @@ class Simulation:
         # Print Tree
         if should_print_trees is not None and should_print_trees:
             for agent in self.agents:
-                agent.print_tree()
+                agent.print_tree(title=f"Agent ({agent.interval[0]:.3f},{agent.interval[1]:.3f})")

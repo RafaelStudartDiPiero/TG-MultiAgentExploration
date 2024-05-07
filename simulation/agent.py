@@ -68,8 +68,8 @@ class Agent:
         self.current_node_id = None
         # Check if the agent has already filled it's interval
         self.filled_interval = False
-        # Status of the agent search
-        self.status = "LOOKING_START"
+        # Agent Step Count
+        self.step_count = 0
 
         # Start Graph
         self.starting_node = starting_node
@@ -83,7 +83,7 @@ class Agent:
         self.finished = False
         self.effective_path = []
         self.visited_path = []
-        self.explored = [self.starting_node.id]
+        self.explored = []
         self.search = []
         self.current_node_id = self.starting_node.id
         self.parent_list = []
@@ -187,6 +187,11 @@ class Agent:
         all_neighbors: List[str],
         non_visited_neighbors: List[str],
     ) -> str:
+        # Early return for filled interval
+        if self.filled_interval:
+            next_step = self.define_next_dfs_step(all_neighbors, non_visited_neighbors)
+            return next_step
+
         total_number_of_neighbors = len(all_neighbors)
 
         # If there is only one children, go for it
@@ -196,48 +201,57 @@ class Agent:
             if (
                 self.known_tree.nodes.get(all_neighbors[0]) is not None
                 and self.known_tree.nodes.get(all_neighbors[0]).get("radix") is not None
-                and self.parent_list[-1] != "-1,-1"
             ):
                 # Checking if backtrack node is valid
-                node_interval = self.known_tree.nodes[all_neighbors[0]]["radix"]
-                node_interval = (float(node_interval[0]), float(node_interval[1]))
+                backtrack = False
+                for edges in self.known_tree.neighbors(all_neighbors[0]):
+                    if edges == self.current_node_id:
+                        backtrack = True
+                        break
+
+                if backtrack:
+                    node_interval = self.known_tree.nodes[all_neighbors[0]]["radix"]
+                    node_interval = (float(node_interval[0]), float(node_interval[1]))
+                else:
+                    node_interval = self.known_tree.nodes[self.current_node_id].get(
+                        "radix"
+                    )
+                    node_interval = (float(node_interval[0]), float(node_interval[1]))
+
                 single_node_is_inside_agent_interval = (
                     self.interval[0] < node_interval[1]
                     and self.interval[1] > node_interval[0]
                 )
-                if single_node_is_inside_agent_interval:
-                    # Checking if backtrack or new path
-                    backtrack = False
-                    for edges in self.known_tree.neighbors(all_neighbors[0]):
-                        if edges == self.current_node_id:
-                            backtrack = True
-                            break
 
+                if single_node_is_inside_agent_interval:
                     if backtrack:
-                        if self.id == 0:
-                            print("backtrack")
-                            print(self.current_node_id)
-                            print(all_neighbors[0])
                         # If backtrack, maintain radix, index and path, just move
                         node_index = self.known_tree.nodes[all_neighbors[0]]["index"]
                         choice = (int(node_index[0]), int(node_index[1]))
                         self.visited_path.append(choice)
+                        self.known_tree.nodes[all_neighbors[0]]["status"] = "Int-BT"
                         return all_neighbors[0]
 
                     # If new path, add new info
                     self.visited_path.append((-1, -1))
-                    radix_current = self.known_tree.nodes[self.current_node_id].get(
-                        "radix"
-                    )
                     self.known_tree = add_edge_to_graph(
                         self.current_node_id,
                         all_neighbors[0],
                         self.known_tree,
                         ("X", "X"),
-                        radix_current,
+                        node_interval,
+                        "Int",
                     )
                     return all_neighbors[0]
-                return "-1"
+                if self.parent_list[-1] != "-1,-1":
+                    # If no more options and not in root, go back
+                    return "-1"
+                # If no more options and in root, filled your interval
+                self.filled_interval = True
+                node_index = self.known_tree.nodes[all_neighbors[0]]["index"]
+                choice = (int(node_index[0]), int(node_index[1]))
+                self.visited_path.append(choice)
+                return all_neighbors[0]
 
             # Appending no choice made
             self.visited_path.append((-1, -1))
@@ -249,6 +263,7 @@ class Agent:
                 self.known_tree,
                 ("X", "X"),
                 radix_current,
+                "Int",
             )
             return all_neighbors[0]
 
@@ -268,11 +283,12 @@ class Agent:
                     str(relative_node_weights[index][0]),
                     str(relative_node_weights[index][1]),
                 ),
+                "Int",
             )
 
         # If your interval isn't filled, use logic
         if self.filled_interval == False:
-            # Each each children for condition
+            # Check each each children for condition
             for i in range(total_number_of_neighbors):
 
                 # If the current child's interval is on the right of the agent's interval, surely the agent finished its interval
@@ -304,6 +320,76 @@ class Agent:
                 return "-1"
 
         # The agent surely finished its interval, and it will do a dummy DFS
+        next_step = self.define_next_dfs_step(all_neighbors, non_visited_neighbors)
+        return next_step
+
+    def define_next_dfs_step(
+        self,
+        all_neighbors: List[str],
+        non_visited_neighbors: List[str],
+    ) -> str:
+        total_number_of_neighbors = len(all_neighbors)
+
+        if total_number_of_neighbors == 1:
+            # Check if node in tree:
+            if (
+                self.known_tree.nodes.get(all_neighbors[0]) is not None
+                and self.known_tree.nodes.get(all_neighbors[0]).get("radix") is not None
+            ):
+                backtrack = False
+                for edges in self.known_tree.neighbors(all_neighbors[0]):
+                    if edges == self.current_node_id:
+                        backtrack = True
+                        break
+
+                if backtrack:
+                    node_index = self.known_tree.nodes[all_neighbors[0]]["index"]
+                    choice = (int(node_index[0]), int(node_index[1]))
+                    self.visited_path.append(choice)
+                    self.known_tree.nodes[all_neighbors[0]]["status"] = "DFS-BT"
+                    return all_neighbors[0]
+                else:
+                    self.visited_path.append((-1, -1))
+                    radix_current = self.known_tree.nodes[self.current_node_id].get(
+                        "radix"
+                    )
+                    self.known_tree = add_edge_to_graph(
+                        self.current_node_id,
+                        all_neighbors[0],
+                        self.known_tree,
+                        ("X", "X"),
+                        radix_current,
+                        "DFS",
+                    )
+                    return all_neighbors[0]
+            else:
+                # Appending no choice made
+                self.visited_path.append((-1, -1))
+                # Adding Radix and Index to Known Graph
+                radix_current = self.known_tree.nodes[self.current_node_id].get("radix")
+                self.known_tree = add_edge_to_graph(
+                    self.current_node_id,
+                    all_neighbors[0],
+                    self.known_tree,
+                    ("X", "X"),
+                    radix_current,
+                    "DFS",
+                )
+                return all_neighbors[0]
+
+        for index, neighbor in enumerate(all_neighbors):
+            self.known_tree = add_edge_to_graph(
+                self.current_node_id,
+                neighbor,
+                self.known_tree,
+                (str(index), str(total_number_of_neighbors)),
+                (
+                    "X",
+                    "X",
+                ),
+                "DFS",
+            )
+
         for i in range(total_number_of_neighbors):
             if all_neighbors[i] in non_visited_neighbors:
                 self.visited_path.append((i, total_number_of_neighbors))
@@ -355,7 +441,7 @@ class Agent:
         if self.algorithm == Algorithm.SELF.value:
             return self.moving_algorithm(graph=graph)
 
-    def print_tree(self):
+    def print_tree(self, title: Optional[str]):
         self.known_tree = preprocess_node_ids(self.known_tree)
         root_id_cleaned = self.starting_node.id.replace(",", " ")
-        display_graph(self.known_tree, root_id_cleaned, None, True)
+        display_graph(self.known_tree, root_id_cleaned, None, True, title)
