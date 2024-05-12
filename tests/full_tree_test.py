@@ -6,7 +6,7 @@ def test_full_tree_simulation():
     graph = load_graph("full_tree_test.graphml")
 
     simulation = Simulation(
-        algorithm=Algorithm.SELF.value,
+        algorithm=Algorithm.SELF,
         n_agents=3,
         graph=graph,
         starting_node_id="1",

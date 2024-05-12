@@ -1,15 +1,15 @@
 import argparse
 
 from simulation.graph_utils import convert_maze, load_graph
-from simulation.simulation import Simulation
+from simulation.simulation import Simulation, Algorithm
 
 
 def parse_arguments():
     parser = argparse.ArgumentParser(description="Graph exploration algorithm.")
     parser.add_argument(
         "--algorithm",
-        type=str,
-        default="self",
+        type=Algorithm,
+        default=Algorithm.SELF,
         help="Which algorithm should be used",
     )
     parser.add_argument(
@@ -46,7 +46,3 @@ if __name__ == "__main__":
     )
 
     simulation.simulate(shoud_print=False, should_print_trees=True)
-    
-    print(simulation.agent_searches[2])
-    print(simulation.effective_paths[2])
-    print(simulation.visited_paths[2])

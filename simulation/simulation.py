@@ -86,9 +86,8 @@ class Simulation:
 
         # Path for each agent
         for agent in self.agents:
-            search, effective_path, explored_path, found_goal = agent.move(self.graph)
-            # print(agent.search)
-            # print(agent.visited_path)
+            agent.move(self.graph)
+
             search = agent.search
             effective_path = agent.effective_path
             explored_path = agent.explored
