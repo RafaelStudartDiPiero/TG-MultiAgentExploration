@@ -2,11 +2,11 @@ from simulation.graph_utils import convert_maze
 from simulation.simulation import Algorithm, Simulation
 
 
-def test_simple_maze_simulation():
+def test_simple_maze2_simulation():
     graph, rows, columns = convert_maze("test2.csv")
 
     simulation = Simulation(
-        algorithm=Algorithm.SELF.value,
+        algorithm=Algorithm.SELF,
         n_agents=3,
         graph=graph,
         starting_node_id=f"{rows},{columns}",
@@ -15,10 +15,10 @@ def test_simple_maze_simulation():
     simulation.simulate(shoud_print=False, should_print_trees=False)
 
     # # Metrics Test
-    # assert simulation.total_steps == 74
-    # assert simulation.pionner_steps == 16
-    # assert simulation.fraction_explored - 0.83333 < 0.0001
-    # assert simulation.fraction_pionner - 0.80555 < 0.0001
+    assert simulation.total_steps == 69
+    assert simulation.pionner_steps == 26
+    assert simulation.fraction_explored - 0.83333 < 0.0001
+    assert simulation.fraction_pionner - 0.8611111 < 0.0001
 
     # # Path Test - Agent 1
     assert simulation.agent_searches[0] == [
@@ -201,94 +201,24 @@ def test_simple_maze_simulation():
     ]
 
     # Path Test - Agent 3
-    # assert simulation.agent_searches[2] == [
-    #     "6,6",
-    #     "6,5",
-    #     "5,5",
-    #     "6,5",
-    #     "6,4",
-    #     "6,3",
-    #     "6,2",
-    #     "5,2",
-    #     "5,1",
-    #     "4,1",
-    #     "3,1",
-    #     "2,1",
-    #     "3,1",
-    #     "4,1",
-    #     "5,1",
-    #     "6,1",
-    #     "5,1",
-    #     "5,2",
-    #     "6,2",
-    #     "6,3",
-    #     "6,4",
-    #     "6,5",
-    #     "6,6",
-    #     "5,6",
-    #     "4,6",
-    #     "3,6",
-    #     "2,6",
-    #     "1,6",
-    #     "1,5",
-    #     "1,4",
-    #     "2,4",
-    #     "3,4",
-    #     "3,5",
-    #     "2,5",
-    #     "3,5",
-    #     "3,4",
-    #     "3,3",
-    #     "2,3",
-    #     "1,3",
-    #     "2,3",
-    #     "3,3",
-    #     "3,4",
-    #     "2,4",
-    #     "1,4",
-    #     "1,5",
-    #     "1,6",
-    #     "2,6",
-    #     "3,6",
-    #     "4,6",
-    #     "4,5",
-    #     "4,4",
-    #     "5,4",
-    #     "5,3",
-    #     "4,3",
-    #     "4,2",
-    #     "3,2",
-    #     "2,2",
-    #     "1,2",
-    #     "1,1",
-    # ]
-    # assert simulation.effective_paths[2] == [
-    #     "6,6",
-    #     "5,6",
-    #     "4,6",
-    #     "4,5",
-    #     "4,4",
-    #     "5,4",
-    #     "5,3",
-    #     "4,3",
-    #     "4,2",
-    #     "3,2",
-    #     "2,2",
-    #     "1,2",
-    #     "1,1",
-    # ]
-    # assert simulation.goals_found[2] == True
-    # assert simulation.visited_paths[2] == [
-    #     (0, 2),
-    #     (-1, -1),
-    #     (1, 2),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    #     (-1, -1),
-    # ]
+    assert simulation.agent_searches[2] == [
+        "6,6",
+        "6,5",
+        "6,4",
+        "6,3",
+        "6,2",
+        "6,1",
+        "5,1",
+        "5,2",
+        "5,1",
+        "6,1",
+        "6,2",
+        "6,3",
+        "6,4",
+        "6,5",
+        "6,6",
+        "6,6",
+    ]
+    assert simulation.effective_paths[2] == []
+    assert simulation.goals_found[2] == False
+    assert simulation.visited_paths[2] == []

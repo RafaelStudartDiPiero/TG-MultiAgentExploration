@@ -6,7 +6,7 @@ def test_simple_maze_simulation():
     graph, rows, columns = convert_maze("test1.csv")
 
     simulation = Simulation(
-        algorithm=Algorithm.SELF.value,
+        algorithm=Algorithm.SELF,
         n_agents=3,
         graph=graph,
         starting_node_id=f"{rows},{columns}",
