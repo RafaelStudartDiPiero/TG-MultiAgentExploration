@@ -101,11 +101,11 @@ class Agent:
                 self.status == AgentStatus.SEARCHING_INTERVAL
                 or self.status == AgentStatus.IN_INTERVAL
             ):
-                print(f"This agent {self.id} search failed. Trying DFS")
+                # print(f"This agent {self.id} search failed. Trying DFS")
                 self.status = AgentStatus.DFS
                 return
             if self.status == AgentStatus.DFS:
-                print(f"Agent {self.id} DFS failed, stopping.")
+                # print(f"Agent {self.id} DFS failed, stopping.")
                 self.status = AgentStatus.STOPPED
                 return
 
@@ -120,11 +120,11 @@ class Agent:
             self.status = AgentStatus.SEARCHING_INTERVAL
 
         if self.status == AgentStatus.FINISHED:
-            print(f"Agent {self.id} has already finished")
+            # print(f"Agent {self.id} has already finished")
             return
 
         if self.status == AgentStatus.STOPPED:
-            print(f"Agent {self.id} stopped before finishing")
+            # print(f"Agent {self.id} stopped before finishing")
             return
 
         # Check the data of the current node and add it to the known graph
@@ -292,7 +292,7 @@ class Agent:
             return "-1"
 
         # If interval was filled, start DFS
-        print(f"This agent {self.id} search failed. Trying DFS")
+        # print(f"This agent {self.id} search failed. Trying DFS")
         self.status = AgentStatus.DFS
         return self.define_next_dfs_step(non_visited_neighbors)
 

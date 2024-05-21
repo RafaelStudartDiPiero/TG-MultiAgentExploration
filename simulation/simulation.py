@@ -32,7 +32,7 @@ class Simulation:
         self.graph = graph
         self.is_maze = is_maze if is_maze is not None else False
         self.agents: List[Agent] = []
-        self.division = division = 1.0 / self.n_agents
+        self.division = division = 1.0 / self.n_agents if self.n_agents > 0 else 0
         self.starting_node_id = starting_node_id
 
         starting_node = self.graph.nodes[starting_node_id]
@@ -62,7 +62,7 @@ class Simulation:
                 Agent(
                     id=i,
                     algorithm=self.algorithm,
-                    color=defaultAgentColorList[i],
+                    color=defaultAgentColorList[i % len(defaultAgentColorList)],
                     starting_node=node,
                     interval=agentInterval,
                 )
@@ -83,6 +83,9 @@ class Simulation:
     def simulate(
         self, shoud_print: Optional[bool], should_print_trees: Optional[bool]
     ) -> None:
+        
+        if self.n_agents == 0:
+            return
 
         # Path for each agent
         for agent in self.agents:
@@ -204,4 +207,6 @@ class Simulation:
         # Print Tree
         if should_print_trees is not None and should_print_trees:
             for agent in self.agents:
-                agent.print_tree(title=f"Agent ({agent.interval[0]:.3f},{agent.interval[1]:.3f})")
+                agent.print_tree(
+                    title=f"Agent ({agent.interval[0]:.3f},{agent.interval[1]:.3f})"
+                )
