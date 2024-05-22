@@ -9,6 +9,7 @@ from simulation.graph_utils import display_graph, preprocess_node_ids, add_edge_
 
 class Algorithm(Enum):
     SELF = "self"
+    TWO_INTERVAL = "two_interval"
     TERRY = "terry"
 
 
@@ -16,6 +17,8 @@ class AgentStatus(Enum):
     STARTED = "STARTING"
     SEARCHING_INTERVAL = "SEARCHING_INTERVAL"
     IN_INTERVAL = "IN_INTERVAL"
+    SECOND_INTERVAL_SEARCHING = "SECOND_INTERVAL_SEARCHING"
+    IN_SECOND_INTERVAL = "IN_SECOND_INTERVAL"
     DFS = "DFS"
     FINISHED = "FINISHED"
     STOPPED = "STOPPED"
@@ -57,6 +60,13 @@ class Agent:
         self.color = color
         # Interval defines the interval of radix values this agent will tranverse
         self.interval = interval
+        # Backup Interval defines the interval used for the two interval algorithm
+        chunk = self.interval[1] - self.interval[0]
+        self.backup_interval = (
+            (0, chunk)
+            if self.interval[1] == 1
+            else (self.interval[1], self.interval[1] + chunk)
+        )
         # Status defines the current status of the agent
         self.status = AgentStatus.STARTED
 
@@ -85,6 +95,8 @@ class Agent:
         self.current_node_id = starting_node_id
         # Check if the agent has already filled it's interval
         self.filled_interval = False
+        # Check if the agent has filled it's backup interval in TWO Interval
+        self.filled_backup_interval = False
         # Agent Step Count
         self.step_count = 0
 
@@ -100,8 +112,20 @@ class Agent:
             if (
                 self.status == AgentStatus.SEARCHING_INTERVAL
                 or self.status == AgentStatus.IN_INTERVAL
-            ):
+            ) and self.algorithm != Algorithm.TWO_INTERVAL:
                 # print(f"This agent {self.id} search failed. Trying DFS")
+                self.status = AgentStatus.DFS
+                return
+            if (
+                self.status == AgentStatus.SEARCHING_INTERVAL
+                or self.status == AgentStatus.IN_INTERVAL
+            ) and self.algorithm == Algorithm.TWO_INTERVAL:
+                self.status = AgentStatus.SECOND_INTERVAL_SEARCHING
+                return
+            if (
+                self.status == AgentStatus.IN_SECOND_INTERVAL
+                or self.status == AgentStatus.SECOND_INTERVAL_SEARCHING
+            ) and self.algorithm == Algorithm.TWO_INTERVAL:
                 self.status = AgentStatus.DFS
                 return
             if self.status == AgentStatus.DFS:
@@ -184,7 +208,15 @@ class Agent:
         non_visited_neighbors: List[str],
     ) -> str:
         # Next Step during DFS
-        if self.status == AgentStatus.DFS or self.filled_interval:
+        if (
+            self.status == AgentStatus.DFS
+            or (self.filled_interval and self.algorithm == Algorithm.SELF)
+            or (
+                self.filled_interval
+                and self.filled_backup_interval
+                and self.algorithm == Algorithm.TWO_INTERVAL
+            )
+        ):
             next_step = self.define_next_dfs_step(non_visited_neighbors)
             return next_step
 
@@ -193,6 +225,15 @@ class Agent:
             or self.status == AgentStatus.IN_INTERVAL
         ):
             next_step = self.define_next_self_step(non_visited_neighbors)
+            return next_step
+
+        if self.algorithm == Algorithm.TWO_INTERVAL and (
+            self.status == AgentStatus.SEARCHING_INTERVAL
+            or self.status == AgentStatus.IN_INTERVAL
+            or self.status == AgentStatus.SECOND_INTERVAL_SEARCHING
+            or self.status == AgentStatus.IN_SECOND_INTERVAL
+        ):
+            next_step = self.define_next_two_interval_step(non_visited_neighbors)
             return next_step
 
     def define_next_dfs_step(
@@ -292,6 +333,124 @@ class Agent:
             return "-1"
 
         # If interval was filled, start DFS
+        # print(f"This agent {self.id} search failed. Trying DFS")
+        self.status = AgentStatus.DFS
+        return self.define_next_dfs_step(non_visited_neighbors)
+
+    def define_next_two_interval_step(
+        self,
+        non_visited_neighbors: List[str],
+    ) -> str:
+        neighbors_weights = self.get_neighbors_weights(non_visited_neighbors)
+        self.add_neighbors_to_tree(non_visited_neighbors, neighbors_weights)
+        total_number_of_neighbors = len(non_visited_neighbors)
+
+        if not self.filled_interval:
+            # Decide next step based on interval
+            for index, neighbor in enumerate(non_visited_neighbors):
+                neighbor_interval = neighbors_weights[index]
+
+                # If the current child's interval is on the right of the agent's interval, surely the agent finished its interval
+                if self.interval[1] <= neighbor_interval[0]:
+
+                    self.filled_interval = True
+                    self.status = AgentStatus.SECOND_INTERVAL_SEARCHING
+                    break
+
+                neighbor_is_inside_agent_interval = (
+                    self.interval[0] < neighbor_interval[1]
+                    and self.interval[1] > neighbor_interval[0]
+                )
+
+                if neighbor_is_inside_agent_interval:
+                    neighbor_is_backtrack = neighbor_interval[2]
+                    if neighbor_is_backtrack:
+                        node_index = self.known_tree.nodes[neighbor]["index"]
+                        choice = (int(node_index[0]), int(node_index[1]))
+                        self.visited_path.append(choice)
+                    else:
+                        if total_number_of_neighbors == 1:
+                            self.visited_path.append((-1, -1))
+                        else:
+                            self.visited_path.append((index, total_number_of_neighbors))
+                    return neighbor
+
+            # If the agent is in the root and it doesn't find a node that fills the requirement, it finished its interval
+            # It occurs when the agent come back to root but it has already been visited the root's children
+            # In the context of this Bachelor's thesis, the agent will start a second interval
+            if self.current_node_id == self.starting_node.id:
+                self.filled_interval = True
+                self.status = AgentStatus.SECOND_INTERVAL_SEARCHING
+
+            # If didn't fill interval yet, step back
+            if not self.filled_interval:
+                return "-1"
+
+        # Searching Start of Next Interval
+        if (
+            self.filled_interval
+            and self.status == AgentStatus.SECOND_INTERVAL_SEARCHING
+        ):
+            # The last agent should start the second interval in the root
+            if self.interval[1] == 1 and self.current_node_id != self.starting_node.id:
+                return "-1"
+
+            # Decide next step based on backup interval
+            for index, neighbor in enumerate(non_visited_neighbors):
+                neighbor_interval = neighbors_weights[index]
+                if self.backup_interval[1] <= neighbor_interval[1]:
+                    self.status = AgentStatus.IN_SECOND_INTERVAL
+                    break
+
+            # If didn't find start of new interval, step back
+            if self.status == AgentStatus.SECOND_INTERVAL_SEARCHING:
+                return "-1"
+
+        # In backup interval
+        if (
+            not self.filled_backup_interval
+            and self.status == AgentStatus.IN_SECOND_INTERVAL
+        ):
+            non_visited_neighbors.reverse()
+            neighbors_weights.reverse()
+            # Decide next step based on backup interval
+            for index, neighbor in enumerate(non_visited_neighbors):
+                neighbor_interval = neighbors_weights[index]
+
+                # If the current child's interval is on the left of the agent's interval, surely the agent finished its interval
+                if self.backup_interval[0] >= neighbor_interval[1]:
+                    self.filled_backup_interval = True
+                    break
+
+                neighbor_is_inside_agent_interval = (
+                    self.backup_interval[0] < neighbor_interval[1]
+                    and self.backup_interval[1] > neighbor_interval[0]
+                )
+
+                if neighbor_is_inside_agent_interval:
+                    neighbor_is_backtrack = neighbor_interval[2]
+                    if neighbor_is_backtrack:
+                        node_index = self.known_tree.nodes[neighbor]["index"]
+                        choice = (int(node_index[0]), int(node_index[1]))
+                        self.visited_path.append(choice)
+                    else:
+                        if total_number_of_neighbors == 1:
+                            self.visited_path.append((-1, -1))
+                        else:
+                            self.visited_path.append((index, total_number_of_neighbors))
+                    return neighbor
+
+            # If the agent is in the root and it doesn't find a node that fills the requirement, it finished its backup interval
+            # It occurs when the agent come back to root but it has already been visited the root's children
+            # In the context of this Bachelor's thesis, the agent will start a DFS
+            if self.current_node_id == self.starting_node.id:
+                self.filled_backup_interval = True
+
+            # If didn't fill the backup interval yet, step back
+            if not self.filled_backup_interval:
+                return "-1"
+
+        # If interval and backup were filled, start DFS
         # print(f"This agent {self.id} search failed. Trying DFS")
         self.status = AgentStatus.DFS
         return self.define_next_dfs_step(non_visited_neighbors)

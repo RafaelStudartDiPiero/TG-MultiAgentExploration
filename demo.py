@@ -45,4 +45,4 @@ if __name__ == "__main__":
         is_maze=is_maze,
     )
 
-    simulation.simulate(shoud_print=False, should_print_trees=True)
+    simulation.simulate(shoud_print=False, should_print_trees=False)
