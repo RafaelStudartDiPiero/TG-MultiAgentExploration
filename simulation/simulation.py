@@ -83,7 +83,7 @@ class Simulation:
     def simulate(
         self, shoud_print: Optional[bool], should_print_trees: Optional[bool]
     ) -> None:
-        
+
         if self.n_agents == 0:
             return
 

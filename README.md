@@ -27,6 +27,8 @@ As an example, you could run:
 
 ```python3 demo.py --agents 3 --graph testperfect.csv```
 
+```python3 demo.py --agents 3 --graph test1.csv --algorithm two_interval```
+
 ## Multi-agent graph exploration without communication
 
 A in-depth analysis of the algoritm can be found here:
