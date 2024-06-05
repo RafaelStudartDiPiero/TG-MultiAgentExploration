@@ -3,7 +3,7 @@ from typing import List, Optional
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from simulation.agent import Agent, Algorithm, Color, Node
+from simulation.agent import Agent, AgentStatus, Algorithm, Color, Node
 from simulation.graph_utils import display_graph, display_maze
 from simulation.utils import concatenate_new_elements
 
@@ -34,6 +34,11 @@ class Simulation:
         self.agents: List[Agent] = []
         self.division = division = 1.0 / self.n_agents if self.n_agents > 0 else 0
         self.starting_node_id = starting_node_id
+        self.agents_stopped = []
+
+        # Tarry Algorithm
+        # Matrix of the Last Common Location (LCL) of each agent related to the others
+        self.lcl = []
 
         starting_node = self.graph.nodes[starting_node_id]
         starting_node_color = (
@@ -67,9 +72,13 @@ class Simulation:
                     interval=agentInterval,
                 )
             )
+            self.agents_stopped.append(False)
+            self.lcl.append([])
+            for j in range(0, self.n_agents):
+                self.lcl[i].append(self.starting_node_id)
 
         # Metrics
-        self.pionner_steps = None
+        self.pioneer_steps = None
         self.paths = []
         self.agent_searches = []
         self.effective_paths = []
@@ -78,7 +87,7 @@ class Simulation:
         self.visited_paths = []
         self.total_steps = 0
         self.fraction_explored = 0
-        self.fraction_pionner = 0
+        self.fraction_pioneer = 0
 
     def simulate(
         self, shoud_print: Optional[bool], should_print_trees: Optional[bool]
@@ -88,12 +97,45 @@ class Simulation:
             return
 
         # Path for each agent
-        for agent in self.agents:
-            agent.move(self.graph)
+        pioneer = None
+        pioneer_effective_path = None
+        while False in self.agents_stopped:
+            for agent in self.agents:
+                if (
+                    agent.status == AgentStatus.FINISHED
+                    or agent.status == AgentStatus.STOPPED
+                ):
+                    continue
+                agent.move_one_step(
+                    graph=self.graph,
+                    pioneer=pioneer,
+                    pioneer_effective_path=pioneer_effective_path,
+                    lcl=self.lcl,
+                )
 
+                if self.algorithm == Algorithm.TARRY:
+                    # Update the Last Common Location (LCL) matrix if it is necessary
+                    for j in range(0, self.n_agents):
+                        if j == agent.id:
+                            continue
+
+                        if agent.current_node_id in self.agents[j].effective_path:
+                            self.lcl[agent.id][j] = agent.current_node_id
+                            self.lcl[j][agent.id] = agent.current_node_id
+
+                if (
+                    agent.status == AgentStatus.FINISHED
+                    or agent.status == AgentStatus.STOPPED
+                ):
+                    self.agents_stopped[agent.id] = True
+                    if agent.finished and pioneer is None:
+                        pioneer = agent.id
+                        pioneer_effective_path = agent.effective_path
+
+        for agent in self.agents:
             search = agent.search
             effective_path = agent.effective_path
-            explored_path = agent.explored
+            explored_path = agent.visited
             found_goal = agent.finished
             visited_path = agent.visited_path
 
@@ -108,27 +150,27 @@ class Simulation:
             agent_steps = len(search) - 1
             self.total_steps += agent_steps
 
-            # Get the number of the steps of the pionner
+            # Get the number of the steps of the pioneer
             if found_goal == True:
-                if self.pionner_steps is None:
-                    self.pionner_steps = agent_steps
-                elif self.pionner_steps > agent_steps:
-                    self.pionner_steps = agent_steps
+                if self.pioneer_steps is None:
+                    self.pioneer_steps = agent_steps
+                elif self.pioneer_steps > agent_steps:
+                    self.pioneer_steps = agent_steps
 
         # Calculate Fraction Metrics
         self.fraction_explored = len(self.explored_paths) / (
             self.graph.number_of_nodes()
         )
 
-        # Calculate the fraction of the maze explored until the pionner find the goal
+        # Calculate the fraction of the maze explored until the pioneer find the goal
         cells = []
         for i in range(self.n_agents):
-            aux = self.agent_searches[i][0 : self.pionner_steps]
+            aux = self.agent_searches[i][0 : self.pioneer_steps]
 
             for e in aux:
                 if e not in cells:
                     cells.append(e)
-        self.fraction_pionner = len(cells) / (self.graph.number_of_nodes())
+        self.fraction_pioneer = len(cells) / (self.graph.number_of_nodes())
 
         # Print Result
         if shoud_print is not None and shoud_print:

@@ -16,9 +16,9 @@ def test_imperfect_maze_simulation():
 
     # Metrics Test
     assert simulation.total_steps == 46
-    assert simulation.pionner_steps == 10
-    assert simulation.fraction_explored - 0.9375 < 0.0001
-    assert simulation.fraction_pionner - 0.80555 < 0.0001
+    assert simulation.pioneer_steps == 10
+    assert simulation.fraction_explored - 1 < 0.0001
+    assert simulation.fraction_pioneer - 0.80555 < 0.0001
 
     # Path Test - Agent 1
     assert simulation.agent_searches[0] == [

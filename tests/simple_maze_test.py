@@ -16,9 +16,9 @@ def test_simple_maze_simulation():
 
     # Metrics Test
     assert simulation.total_steps == 74
-    assert simulation.pionner_steps == 16
-    assert simulation.fraction_explored - 0.83333 < 0.0001
-    assert simulation.fraction_pionner - 0.80555 < 0.0001
+    assert simulation.pioneer_steps == 16
+    assert simulation.fraction_explored - 0.8611111 < 0.0001
+    assert simulation.fraction_pioneer - 0.80555 < 0.0001
 
     # Path Test - Agent 1
     assert simulation.agent_searches[0] == [

@@ -17,9 +17,9 @@ def test_full_tree_simulation():
 
     # Metrics Test
     # assert simulation.total_steps == 43
-    # assert simulation.pionner_steps == 3
+    # assert simulation.pioneer_steps == 3
     # assert abs(simulation.fraction_explored - 0.78947) < 0.0001
-    # assert abs(simulation.fraction_pionner - 0.31578) < 0.0001
+    # assert abs(simulation.fraction_pioneer - 0.31578) < 0.0001
 
     # # Path Test - Agent 1
     # assert simulation.agent_searches[0] == [

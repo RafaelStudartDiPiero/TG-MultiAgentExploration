@@ -1,4 +1,5 @@
 from enum import Enum
+from random import randint
 from typing import List, Optional, Tuple
 
 import networkx as nx
@@ -10,7 +11,7 @@ from simulation.graph_utils import display_graph, preprocess_node_ids, add_edge_
 class Algorithm(Enum):
     SELF = "self"
     TWO_INTERVAL = "two_interval"
-    TERRY = "terry"
+    TARRY = "tarry"
 
 
 class AgentStatus(Enum):
@@ -22,6 +23,9 @@ class AgentStatus(Enum):
     DFS = "DFS"
     FINISHED = "FINISHED"
     STOPPED = "STOPPED"
+    TERRY_FIRST_PHASE = "TERRY_FIRST_PHASE"
+    TERRY_SECOND_PHASE = "TERRY_SECOND_PHASE"
+    TERRY_FOLLOW_pioneer = "TERRY_FOLLOW_pioneer"
 
 
 class Color(Enum):
@@ -85,6 +89,8 @@ class Agent:
         self.effective_path = []
         # The radix representation of the path
         self.visited_path = []
+        # The visited nodes
+        self.visited = []
         # The explored nodes
         self.explored = []
         # All nodes visited
@@ -139,9 +145,18 @@ class Agent:
         self.visited_path.pop()
         return
 
-    def move_one_step(self, graph: nx.Graph):
+    def move_one_step(
+        self,
+        graph: nx.Graph,
+        pioneer: Optional[int],
+        pioneer_effective_path: Optional[List[str]],
+        lcl: Optional[List[List[str]]],
+    ):
         if self.status == AgentStatus.STARTED:
-            self.status = AgentStatus.SEARCHING_INTERVAL
+            if self.algorithm == Algorithm.TARRY:
+                self.status = AgentStatus.TERRY_FIRST_PHASE
+            else:
+                self.status = AgentStatus.SEARCHING_INTERVAL
 
         if self.status == AgentStatus.FINISHED:
             # print(f"Agent {self.id} has already finished")
@@ -153,8 +168,12 @@ class Agent:
 
         # Check the data of the current node and add it to the known graph
         node_data = graph.nodes[self.current_node_id]
+        graph.nodes[self.current_node_id]["visited"] = True
         self.known_tree.nodes[self.current_node_id]["visited"] = True
         self.known_tree.nodes[self.current_node_id]["color"] = self.color.value[1]
+
+        if self.current_node_id not in self.visited:
+            self.visited.append(self.current_node_id)
 
         # Checking if the current node is the finish
         if node_data.get("finish"):
@@ -182,7 +201,11 @@ class Agent:
         count_non_visited_neighbors = len(non_visited_neighbors)
 
         # No more neighbors to visit, go back
-        if count_non_visited_neighbors == 0:
+        if count_non_visited_neighbors == 0 and (
+            self.algorithm != Algorithm.TARRY
+            and self.status != AgentStatus.TERRY_FOLLOW_pioneer
+        ):
+            graph.nodes[self.current_node_id]["deadEnd"] = True
             self.step_back()
             return
 
@@ -190,10 +213,15 @@ class Agent:
         # Defining next neighbor( Returning -1 should go back)
         next_neighbor_id = self.define_agent_next_step(
             non_visited_neighbors=non_visited_neighbors,
+            graph=graph,
+            pioneer=pioneer,
+            pioneer_effective_path=pioneer_effective_path,
+            lcl=lcl,
         )
 
         # No valid neighbor to next step
         if next_neighbor_id == "-1":
+            graph.nodes[self.current_node_id]["deadEnd"] = True
             self.step_back()
             return
 
@@ -201,11 +229,26 @@ class Agent:
         self.search.append(self.current_node_id)
         self.effective_path.append(self.current_node_id)
         self.current_node_id = next_neighbor_id
+
+        # Checking if the next step is the finish
+        graph.nodes[self.current_node_id]["visited"] = True
+        node_data = graph.nodes[self.current_node_id]
+        if node_data.get("finish"):
+            # If the current node is the finish, end the search
+            self.search.append(self.current_node_id)
+            self.effective_path.append(self.current_node_id)
+            self.finished = True
+            self.status = AgentStatus.FINISHED
+            return
         return
 
     def define_agent_next_step(
         self,
         non_visited_neighbors: List[str],
+        graph: nx.Graph,
+        pioneer: Optional[int],
+        pioneer_effective_path: Optional[List[str]],
+        lcl: Optional[List[List[str]]],
     ) -> str:
         # Next Step during DFS
         if (
@@ -218,6 +261,18 @@ class Agent:
             )
         ):
             next_step = self.define_next_dfs_step(non_visited_neighbors)
+            return next_step
+
+        if self.status == AgentStatus.TERRY_SECOND_PHASE or (
+            pioneer is not None and self.algorithm == Algorithm.TARRY
+        ):
+            next_step = self.define_next_second_phase_terry_step(
+                non_visited_neighbors=non_visited_neighbors,
+                graph=graph,
+                pioneer=pioneer,
+                pioneer_effective_path=pioneer_effective_path,
+                lcl=lcl,
+            )
             return next_step
 
         if self.algorithm == Algorithm.SELF and (
@@ -234,6 +289,14 @@ class Agent:
             or self.status == AgentStatus.IN_SECOND_INTERVAL
         ):
             next_step = self.define_next_two_interval_step(non_visited_neighbors)
+            return next_step
+
+        if self.algorithm == Algorithm.TARRY and (
+            self.status == AgentStatus.TERRY_FIRST_PHASE
+        ):
+            next_step = self.define_next_first_phase_terry_step(
+                non_visited_neighbors, graph
+            )
             return next_step
 
     def define_next_dfs_step(
@@ -454,6 +517,110 @@ class Agent:
         # print(f"This agent {self.id} search failed. Trying DFS")
         self.status = AgentStatus.DFS
         return self.define_next_dfs_step(non_visited_neighbors)
+
+    def define_next_first_phase_terry_step(
+        self,
+        non_visited_neighbors: List[str],
+        graph: nx.Graph,
+    ) -> str:
+        # Add neighbors to tree
+        for index, neighbor in enumerate(non_visited_neighbors):
+            # Check if the neighbor is already in tree and is a backtrack
+            node_in_tree = (
+                self.known_tree.nodes.get(neighbor) is not None
+                and self.known_tree.nodes.get(neighbor).get("radix") is not None
+            )
+            neighbor_is_backtrack = False
+            if node_in_tree:
+                for edges in self.known_tree.neighbors(neighbor):
+                    if edges == self.current_node_id:
+                        neighbor_is_backtrack = True
+                        break
+            if neighbor_is_backtrack:
+                # No need to add, just update
+                self.known_tree.nodes[neighbor]["status"] = "TARRY-PH1-BT"
+            else:
+                self.known_tree = add_edge_to_graph(
+                    self.current_node_id,
+                    neighbor,
+                    self.known_tree,
+                    ("X", "X"),
+                    ("X", "X"),
+                    "TARRY-PH1",
+                )
+
+        new_neighbors = []
+        already_visited_neighbors = []
+
+        for neighbor in non_visited_neighbors:
+            if graph.nodes.get(neighbor) is not None:
+                if graph.nodes.get(neighbor).get("deadEnd") != True:
+                    if graph.nodes.get(neighbor).get("visited"):
+                        already_visited_neighbors.append(neighbor)
+                    else:
+                        new_neighbors.append(neighbor)
+
+        if len(new_neighbors) > 0:
+            self.visited_path.append((-1, -1))
+            if len(new_neighbors) == 1:
+                return new_neighbors[0]
+            return new_neighbors[randint(0, len(new_neighbors) - 1)]
+        elif len(already_visited_neighbors) > 0:
+            self.visited_path.append((-1, -1))
+            if len(already_visited_neighbors) == 1:
+                return already_visited_neighbors[0]
+            return already_visited_neighbors[
+                randint(0, len(already_visited_neighbors) - 1)
+            ]
+        else:
+            return "-1"
+
+    def define_next_second_phase_terry_step(
+        self,
+        non_visited_neighbors: List[str],
+        graph: nx.Graph,
+        pioneer: Optional[int],
+        pioneer_effective_path: Optional[List[str]],
+        lcl: Optional[List[List[str]]],
+    ) -> str:
+        # Add neighbors to tree
+        for index, neighbor in enumerate(non_visited_neighbors):
+            # Check if the neighbor is already in tree and is a backtrack
+            node_in_tree = (
+                self.known_tree.nodes.get(neighbor) is not None
+                and self.known_tree.nodes.get(neighbor).get("radix") is not None
+            )
+            neighbor_is_backtrack = False
+            if node_in_tree:
+                for edges in self.known_tree.neighbors(neighbor):
+                    if edges == self.current_node_id:
+                        neighbor_is_backtrack = True
+                        break
+            if neighbor_is_backtrack:
+                # No need to add, just update
+                self.known_tree.nodes[neighbor]["status"] = "TARRY-PH1-BT"
+            else:
+                self.known_tree = add_edge_to_graph(
+                    self.current_node_id,
+                    neighbor,
+                    self.known_tree,
+                    ("X", "X"),
+                    ("X", "X"),
+                    "TARRY-PH1",
+                )
+
+        if self.status == AgentStatus.TERRY_FIRST_PHASE:
+            self.status = AgentStatus.TERRY_SECOND_PHASE
+
+        if self.status == AgentStatus.TERRY_SECOND_PHASE:
+            if self.current_node_id != lcl[pioneer][self.id]:
+                return "-1"
+            else:
+                self.status = AgentStatus.TERRY_FOLLOW_pioneer
+
+        current_node_index = pioneer_effective_path.index(self.current_node_id)
+        self.visited_path.append((-1, -1))
+        return pioneer_effective_path[current_node_index + 1]
 
     def get_neighbors_weights(
         self,

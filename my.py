@@ -21,7 +21,7 @@ class MyAlgorithm:
         paths = []
         explored = []
         agents_search = []
-        pionner_steps = sys.maxsize
+        pioneer_steps = sys.maxsize
         totalSteps = 0
         for i in range(0, self.numOfAgents):
             start = i * division
@@ -52,24 +52,24 @@ class MyAlgorithm:
             # Count the total number of steps
             totalSteps += agent_steps
 
-            # Get the number of the steps of the pionner
+            # Get the number of the steps of the pioneer
             if foundTheGoal == True:
-                pionner_steps = (
-                    agent_steps if pionner_steps > agent_steps else pionner_steps
+                pioneer_steps = (
+                    agent_steps if pioneer_steps > agent_steps else pioneer_steps
                 )
 
         # Get the explored fraction of the maze
         fraction = len(explored) / (self.maze.rows * self.maze.cols)
 
-        # Calculate the fraction of the maze explored until the pionner find the goal
+        # Calculate the fraction of the maze explored until the pioneer find the goal
         cells = []
         for i in range(self.numOfAgents):
-            aux = agents_search[i][0:pionner_steps]
+            aux = agents_search[i][0:pioneer_steps]
 
             for e in aux:
                 if e not in cells:
                     cells.append(e)
-        fraction_pionner = len(cells) / (self.maze.rows * self.maze.cols)
+        fraction_pioneer = len(cells) / (self.maze.rows * self.maze.cols)
 
         # Show only agent i
         # self.maze.tracePaths([paths[2]], kill=False, delay=100)
@@ -79,7 +79,7 @@ class MyAlgorithm:
 
         # self.maze.run()
 
-        return totalSteps, pionner_steps, fraction, fraction_pionner
+        return totalSteps, pioneer_steps, fraction, fraction_pioneer
 
     # Run the algorithm for a single agent
     def run_single_agent(self, agentInterval, agentIndex):
