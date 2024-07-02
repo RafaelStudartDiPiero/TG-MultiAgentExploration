@@ -31,6 +31,33 @@ As an example, you could run:
 
 ```python3 demo.py --agents 3 --graph test1.csv --algorithm tarry```
 
+## Generating Results
+
+After making sure the simulation works, you can automatically generate results for multiple sets of graphs. This can take a long time.
+
+You can pass specific arguments to define parameters, like:
+
+```--algorithm``` : Defines which algorithm should be used. Can be "self", "two_interval" or "tarry". The default value is self.
+
+```--base_path``` : Defines the path to the directory where all graphs as stored.
+
+```--graph_size_path``` : Defines specific size directory to use (e.g., '10_by_10', '20_by_20'). If not provided, all sizes found will be used.
+
+```--max_agents``` : Defines the maximum number of users to be simulated.
+
+```--plot```: Defines if the plot should be generated.
+
+As an example, you could run:
+
+```python3 results.py --base_path mazes  --algorithm self --graph_size_path 10_by_10 --max_agents 40 --plot true```
+
+```python3 results.py --base_path mazes --algorithm two_interval --max_agents 40 --plot true```
+
+```python3 results.py --base_path mazes --algorithm tarry --max_agents 40 --plot true```
+
+```python3 results.py --base_path mazes --max_agents 40```
+
+
 ## Multi-agent graph exploration without communication
 
 A in-depth analysis of the algoritm can be found here:
