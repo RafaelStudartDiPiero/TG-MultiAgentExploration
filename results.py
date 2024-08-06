@@ -62,282 +62,6 @@ def calculate_stats(data):
     return avg, std_dev
 
 
-def plot_compare_explorations(algorithm, graph_size):
-    if algorithm == Algorithm.TWO_INTERVAL:
-        try:
-            with open(
-                f"results/data/{graph_size}_{Algorithm.SELF.value}_result.pkl", "rb"
-            ) as f:
-                self_results = pickle.load(f)
-            with open(
-                f"results/data/{graph_size}_{Algorithm.TWO_INTERVAL.value}_result.pkl",
-                "rb",
-            ) as f:
-                two_interval_results = pickle.load(f)
-
-            agents = [result["agents"] for result in self_results]
-            i1_avg_steps = [result["avg_steps"] for result in self_results]
-            i1_std_steps = [result["std_steps"] for result in self_results]
-            i1_avg_pioneer_steps = [
-                result["avg_pioneer_steps"] for result in self_results
-            ]
-            i2_avg_steps = [result["avg_steps"] for result in two_interval_results]
-            i2_std_steps = [result["std_steps"] for result in two_interval_results]
-            i2_avg_pioneer_steps = [
-                result["avg_pioneer_steps"] for result in two_interval_results
-            ]
-            # Create the line plots
-            plt.figure(figsize=(10, 6))
-            # Plotting 1 interval
-            (line1,) = plt.plot(
-                agents,
-                i1_avg_steps,
-                label="1I: Average Steps",
-                marker=".",
-                color="blue",
-            )
-            (line2,) = plt.plot(
-                agents,
-                i1_avg_pioneer_steps,
-                label="1I: Average Pioneer Steps",
-                marker="d",
-                color="blue",
-            )
-            (line3,) = plt.plot(
-                agents,
-                i1_std_steps,
-                label="1I: Standard Deviation - Average Steps",
-                linestyle="--",
-                marker="s",
-                color="blue",
-            )
-            # Plotting 1 interval
-            (line4,) = plt.plot(
-                agents, i2_avg_steps, label="2I: Average Steps", marker=".", color="red"
-            )
-            (line5,) = plt.plot(
-                agents,
-                i2_avg_pioneer_steps,
-                label="2I: Average Pioneer Steps",
-                marker="d",
-                color="red",
-            )
-            (line6,) = plt.plot(
-                agents,
-                i2_std_steps,
-                label="2I: Standard Deviation - Average Steps",
-                linestyle="--",
-                marker="s",
-                color="red",
-            )
-            # Adding labels and legend
-            plt.xlabel("Number of Agents")
-            plt.ylabel("Steps")
-            plt.title(
-                "Average Steps, Standard Deviation, and Pioneer Steps vs. Number of Agents"
-            )
-            # Display the plot
-            plt.grid(True)
-            plt.tight_layout()
-            # Save the plot as SVG
-            file_path = f"results/plot/steps_std_pioneer_vs_agents_{graph_size}_self_vs_two_interval.svg"
-            plt.savefig(file_path, format="svg")
-            fig_legend = plt.figure(figsize=(4, 2))
-            legend = fig_legend.legend(
-                handles=[line1, line2, line3, line4, line5, line6], loc="center", ncol=1
-            )
-            fig_legend.canvas.draw()
-            # Save the legend as SVG
-            legend_file_path = f"results/plot/legend_steps_std_pioneer_vs_agents__self_vs_two_interval.svg"
-            fig_legend.savefig(legend_file_path, format="svg")
-            plt.close()
-            # Graph Fraction
-            i1_avg_fraction = [result["avg_fraction"] for result in self_results]
-            i1_avg_fraction_pioneer = [
-                result["avg_fraction_pioneer"] for result in self_results
-            ]
-            i2_avg_fraction = [
-                result["avg_fraction"] for result in two_interval_results
-            ]
-            i2_avg_fraction_pioneer = [
-                result["avg_fraction_pioneer"] for result in two_interval_results
-            ]
-            # Create the line plots
-            plt.figure(figsize=(10, 6))
-            # Plotting average fraction
-            (line1,) = plt.plot(
-                agents,
-                i1_avg_fraction,
-                label="1I: Fraction of Maze Explored",
-                marker=".",
-                color="blue",
-            )
-            (line2,) = plt.plot(
-                agents,
-                i1_avg_fraction_pioneer,
-                label="1I: Fraction of Maze Explored when pioneer arrives",
-                linestyle="--",
-                marker="o",
-                color="blue",
-            )
-            (line3,) = plt.plot(
-                agents,
-                i2_avg_fraction,
-                label="2I: Fraction of Maze Explored",
-                marker=".",
-                color="red",
-            )
-            (line4,) = plt.plot(
-                agents,
-                i2_avg_fraction_pioneer,
-                label="2I: Fraction of Maze Explored when pioneer arrives",
-                linestyle="--",
-                marker="o",
-                color="red",
-            )
-            # Adding labels and legend
-            plt.xlabel("Number of Agents")
-            plt.ylabel("Fraction of Maze Explored(%)")
-            plt.title("Maze Explored Fraction vs. Number of Agents")
-            # Display the plot
-            plt.grid(True)
-            plt.tight_layout()
-            # Save the plot as SVG
-            file_path = f"results/plot/fraction_vs_agents_{graph_size}__self_vs_two_interval.svg"
-            plt.savefig(file_path, format="svg")
-            # Create a separate figure for the legend
-            fig_legend = plt.figure(figsize=(4, 2))
-            legend = fig_legend.legend(
-                handles=[line1, line2, line3, line4], loc="center", ncol=1
-            )
-            fig_legend.canvas.draw()
-            # Save the legend as SVG
-            legend_file_path = (
-                f"results/plot/legend_fraction_vs_agents__self_vs_two_interval.svg"
-            )
-            fig_legend.savefig(legend_file_path, format="svg")
-            plt.close()
-        except Exception as e:
-            print(f"Something went wrong when making mixed plots for two interval {e=}")
-            return
-    if algorithm == Algorithm.TARRY:
-        try:
-            with open(
-                f"results/data/{graph_size}_{Algorithm.SELF.value}_result.pkl", "rb"
-            ) as f:
-                self_results = pickle.load(f)
-            with open(
-                f"results/data/{graph_size}_{Algorithm.TWO_INTERVAL.value}_result.pkl",
-                "rb",
-            ) as f:
-                two_interval_results = pickle.load(f)
-            with open(
-                f"results/data/{graph_size}_{Algorithm.TARRY.value}_result.pkl", "rb"
-            ) as f:
-                tarry_results = pickle.load(f)
-            agents = [result["agents"] for result in self_results]
-            i1_avg_pioneer_steps = [
-                result["avg_pioneer_steps"] for result in self_results
-            ]
-            i2_avg_pioneer_steps = [
-                result["avg_pioneer_steps"] for result in two_interval_results
-            ]
-            tarry_avg_pioneer_steps = [
-                result["avg_pioneer_steps"] for result in tarry_results
-            ]
-            # Create the line plots
-            plt.figure(figsize=(10, 6))
-            # Plotting 1 interval
-            (line1,) = plt.plot(
-                agents,
-                i1_avg_pioneer_steps,
-                label="1I: Average Pioneer Steps",
-                marker="d",
-                color="blue",
-            )
-            # Plotting 2 interval
-            (line2,) = plt.plot(
-                agents,
-                i2_avg_pioneer_steps,
-                label="2I: Average Pioneer Steps",
-                marker="d",
-                color="red",
-            )
-            # Plotting Tarry
-            (line3,) = plt.plot(
-                agents,
-                tarry_avg_pioneer_steps,
-                label="Tarry: Average Pioneer Steps",
-                marker="d",
-                color="green",
-            )
-            # Adding labels and legend
-            plt.xlabel("Number of Agents")
-            plt.ylabel("Steps")
-            plt.title("Pioneer Steps vs. Number of Agents")
-            plt.legend()
-            # Display the plot
-            plt.grid(True)
-            plt.tight_layout()
-            # Save the plot as SVG
-            file_path = f"results/plot/steps_std_pioneer_vs_agents_{graph_size}__tarry_vs_two_i_vs_self.svg"
-            plt.savefig(file_path, format="svg")
-            plt.close()
-            # Graph Fraction
-            i1_avg_fraction_pioneer = [
-                result["avg_fraction_pioneer"] for result in self_results
-            ]
-            i2_avg_fraction_pioneer = [
-                result["avg_fraction_pioneer"] for result in two_interval_results
-            ]
-            tarry_avg_fraction_pioneer = [
-                result["avg_fraction_pioneer"] for result in tarry_results
-            ]
-            # Create the line plots
-            plt.figure(figsize=(10, 6))
-            # Plotting average fraction
-            (line1,) = plt.plot(
-                agents,
-                i1_avg_fraction_pioneer,
-                label="1I: Fraction of Maze Explored when pioneer arrives",
-                linestyle="--",
-                marker="o",
-                color="blue",
-            )
-            (line2,) = plt.plot(
-                agents,
-                i2_avg_fraction_pioneer,
-                label="2I: Fraction of Maze Explored when pioneer arrives",
-                linestyle="--",
-                marker="o",
-                color="red",
-            )
-            (line3,) = plt.plot(
-                agents,
-                tarry_avg_fraction_pioneer,
-                label="Tarry: Fraction of Maze Explored when pioneer arrives",
-                linestyle="--",
-                marker="o",
-                color="green",
-            )
-            # Adding labels and legend
-            plt.xlabel("Number of Agents")
-            plt.ylabel("Fraction of Maze Explored(%)")
-            plt.title("Maze Explored Fraction vs. Number of Agents")
-            plt.legend()
-            # Display the plot
-            plt.grid(True)
-            plt.tight_layout()
-            # Save the plot as SVG
-            file_path = f"results/plot/fraction_vs_agents_{graph_size}_tarry_vs_two_i_vs_self.svg"
-            plt.savefig(file_path, format="svg")
-            plt.close()
-        except Exception as e:
-            print(f"Something went wrong when making mixed plots for tarry {e=}")
-            return
-    return
-
-
 def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents, plot):
     if graph_size_path is None:
         # If graph_size_path is not provided, get all subdirectories in base_path
@@ -429,13 +153,23 @@ def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents
                 )
             # Loading results for each graph_size into a pickle that can be found later
             general_results.append(results)
+
+            # Define the algorithm-specific directory
+            algorithm_data_dir = os.path.join("results/data", chosen_algorithm.value)
+            os.makedirs(algorithm_data_dir, exist_ok=True)
             with open(
-                f"results/data/{graph_size}_{chosen_algorithm.value}_result.pkl", "wb"
+                os.path.join(algorithm_data_dir, f"{graph_size}_result.pkl"), "wb"
             ) as f:
                 pickle.dump(results, f)
 
             # Generating and saving plots
             if plot:
+                # Define the algorithm-specific directory
+                algorithm_plot_dir = os.path.join(
+                    "results/plot", chosen_algorithm.value
+                )
+                os.makedirs(algorithm_plot_dir, exist_ok=True)
+
                 agents = [result["agents"] for result in results]
                 avg_steps = [result["avg_steps"] for result in results]
                 std_steps = [result["std_steps"] for result in results]
@@ -475,8 +209,8 @@ def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents
                 plt.tight_layout()
                 # Saving Plot
                 file_path = os.path.join(
-                    "results/plot",
-                    f"steps_std_pioneer_vs_agents_{graph_size}_{chosen_algorithm.value}.svg",
+                    algorithm_plot_dir,
+                    f"steps_std_pioneer_vs_agents_{graph_size}.svg",
                 )
                 plt.savefig(file_path, format="svg")
                 # Close the plot to free up memory
@@ -518,13 +252,13 @@ def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents
                 plt.grid(True)
                 plt.tight_layout()
                 # Save the plot as SVG
-                file_path = f"results/plot/fraction_vs_agents_{graph_size}_{chosen_algorithm.value}.svg"
+                file_path = os.path.join(
+                    algorithm_plot_dir,
+                    f"fraction_vs_agents_{graph_size}.svg",
+                )
                 plt.savefig(file_path, format="svg")
                 # Close the plot to free up memory
                 plt.close()
-
-                # After results for this algorithm, mix results to get better plots.
-                plot_compare_explorations(chosen_algorithm, graph_size)
 
     return results
 

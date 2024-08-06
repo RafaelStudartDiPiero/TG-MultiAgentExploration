@@ -12,6 +12,8 @@ class Algorithm(Enum):
     SELF = "self"
     TWO_INTERVAL = "two_interval"
     TARRY = "tarry"
+    TARRY_INTERVAL_PRIORITY = "tarry_interval_priority"
+    TARRY_INTERVAL_TIE_BREAKER = "tarry_interval_tie_breaker"
 
 
 class AgentStatus(Enum):
@@ -23,9 +25,10 @@ class AgentStatus(Enum):
     DFS = "DFS"
     FINISHED = "FINISHED"
     STOPPED = "STOPPED"
-    TERRY_FIRST_PHASE = "TERRY_FIRST_PHASE"
-    TERRY_SECOND_PHASE = "TERRY_SECOND_PHASE"
-    TERRY_FOLLOW_pioneer = "TERRY_FOLLOW_pioneer"
+    TARRY_FIRST_PHASE = "TARRY_FIRST_PHASE"
+    TARRY_WAITING_PIONEER = "TARRY_WAITING_PIONEER"
+    TARRY_SECOND_PHASE = "TARRY_SECOND_PHASE"
+    TARRY_FOLLOW_PIONEER = "TARRY_FOLLOW_PIONEER"
 
 
 class Color(Enum):
@@ -134,6 +137,13 @@ class Agent:
             ) and self.algorithm == Algorithm.TWO_INTERVAL:
                 self.status = AgentStatus.DFS
                 return
+            if (self.status == AgentStatus.TARRY_FIRST_PHASE) and (
+                self.algorithm == Algorithm.TARRY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+            ):
+                self.status = AgentStatus.TARRY_WAITING_PIONEER
+                return
             if self.status == AgentStatus.DFS:
                 # print(f"Agent {self.id} DFS failed, stopping.")
                 self.status = AgentStatus.STOPPED
@@ -153,8 +163,12 @@ class Agent:
         lcl: Optional[List[List[str]]],
     ):
         if self.status == AgentStatus.STARTED:
-            if self.algorithm == Algorithm.TARRY:
-                self.status = AgentStatus.TERRY_FIRST_PHASE
+            if (
+                self.algorithm == Algorithm.TARRY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+            ):
+                self.status = AgentStatus.TARRY_FIRST_PHASE
             else:
                 self.status = AgentStatus.SEARCHING_INTERVAL
 
@@ -165,6 +179,12 @@ class Agent:
         if self.status == AgentStatus.STOPPED:
             # print(f"Agent {self.id} stopped before finishing")
             return
+
+        if self.status == AgentStatus.TARRY_WAITING_PIONEER:
+            if pioneer is None:
+                # print(f"Agent {self.id} is waiting for the pioneer to find the goal.")
+                return
+            self.status = AgentStatus.TARRY_FOLLOW_PIONEER
 
         # Check the data of the current node and add it to the known graph
         node_data = graph.nodes[self.current_node_id]
@@ -201,9 +221,16 @@ class Agent:
         count_non_visited_neighbors = len(non_visited_neighbors)
 
         # No more neighbors to visit, go back
-        if count_non_visited_neighbors == 0 and (
-            self.algorithm != Algorithm.TARRY
-            and self.status != AgentStatus.TERRY_FOLLOW_pioneer
+        if count_non_visited_neighbors == 0 and not (
+            (
+                self.algorithm == Algorithm.TARRY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+            )
+            and (
+                self.status == AgentStatus.TARRY_FOLLOW_PIONEER
+                or self.status == AgentStatus.TARRY_SECOND_PHASE
+            )
         ):
             graph.nodes[self.current_node_id]["deadEnd"] = True
             self.step_back()
@@ -263,10 +290,20 @@ class Agent:
             next_step = self.define_next_dfs_step(non_visited_neighbors)
             return next_step
 
-        if self.status == AgentStatus.TERRY_SECOND_PHASE or (
-            pioneer is not None and self.algorithm == Algorithm.TARRY
+        # Next Step Step Back or Follow Pionner for Tarry
+        if (
+            self.status == AgentStatus.TARRY_SECOND_PHASE
+            or self.status == AgentStatus.TARRY_FOLLOW_PIONEER
+            or (
+                pioneer is not None
+                and (
+                    self.algorithm == Algorithm.TARRY
+                    or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+                    or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                )
+            )
         ):
-            next_step = self.define_next_second_phase_terry_step(
+            next_step = self.define_next_second_phase_tarry_step(
                 non_visited_neighbors=non_visited_neighbors,
                 graph=graph,
                 pioneer=pioneer,
@@ -275,6 +312,7 @@ class Agent:
             )
             return next_step
 
+        # Next Step for Our Algorithm
         if self.algorithm == Algorithm.SELF and (
             self.status == AgentStatus.SEARCHING_INTERVAL
             or self.status == AgentStatus.IN_INTERVAL
@@ -282,6 +320,7 @@ class Agent:
             next_step = self.define_next_self_step(non_visited_neighbors)
             return next_step
 
+        # Next Step for Our Algorithm Two Interval Variant
         if self.algorithm == Algorithm.TWO_INTERVAL and (
             self.status == AgentStatus.SEARCHING_INTERVAL
             or self.status == AgentStatus.IN_INTERVAL
@@ -291,10 +330,29 @@ class Agent:
             next_step = self.define_next_two_interval_step(non_visited_neighbors)
             return next_step
 
+        # Next Step for Tarry - First Phase
         if self.algorithm == Algorithm.TARRY and (
-            self.status == AgentStatus.TERRY_FIRST_PHASE
+            self.status == AgentStatus.TARRY_FIRST_PHASE
         ):
-            next_step = self.define_next_first_phase_terry_step(
+            next_step = self.define_next_first_phase_tarry_step(
+                non_visited_neighbors, graph
+            )
+            return next_step
+
+        # Next Step for Tarry - First Phase Priority Variant
+        if self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY and (
+            self.status == AgentStatus.TARRY_FIRST_PHASE
+        ):
+            next_step = self.define_next_first_phase_tarry_interval_priority_step(
+                non_visited_neighbors, graph
+            )
+            return next_step
+
+        # Next Step for Tarry - First Phase Tie-Breaker Variant
+        if self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER and (
+            self.status == AgentStatus.TARRY_FIRST_PHASE
+        ):
+            next_step = self.define_next_first_phase_tarry_interval_tie_breaker_step(
                 non_visited_neighbors, graph
             )
             return next_step
@@ -355,7 +413,9 @@ class Agent:
         non_visited_neighbors: List[str],
     ) -> str:
         neighbors_weights = self.get_neighbors_weights(non_visited_neighbors)
-        self.add_neighbors_to_tree(non_visited_neighbors, neighbors_weights)
+        self.add_neighbors_to_tree(
+            non_visited_neighbors, neighbors_weights, algorithm=Algorithm.SELF
+        )
         total_number_of_neighbors = len(non_visited_neighbors)
 
         # Decide next step based on interval
@@ -405,7 +465,9 @@ class Agent:
         non_visited_neighbors: List[str],
     ) -> str:
         neighbors_weights = self.get_neighbors_weights(non_visited_neighbors)
-        self.add_neighbors_to_tree(non_visited_neighbors, neighbors_weights)
+        self.add_neighbors_to_tree(
+            non_visited_neighbors, neighbors_weights, algorithm=Algorithm.TWO_INTERVAL
+        )
         total_number_of_neighbors = len(non_visited_neighbors)
 
         if not self.filled_interval:
@@ -518,7 +580,7 @@ class Agent:
         self.status = AgentStatus.DFS
         return self.define_next_dfs_step(non_visited_neighbors)
 
-    def define_next_first_phase_terry_step(
+    def define_next_first_phase_tarry_step(
         self,
         non_visited_neighbors: List[str],
         graph: nx.Graph,
@@ -575,7 +637,7 @@ class Agent:
         else:
             return "-1"
 
-    def define_next_second_phase_terry_step(
+    def define_next_second_phase_tarry_step(
         self,
         non_visited_neighbors: List[str],
         graph: nx.Graph,
@@ -609,18 +671,174 @@ class Agent:
                     "TARRY-PH1",
                 )
 
-        if self.status == AgentStatus.TERRY_FIRST_PHASE:
-            self.status = AgentStatus.TERRY_SECOND_PHASE
+        if self.status == AgentStatus.TARRY_FIRST_PHASE:
+            self.status = AgentStatus.TARRY_SECOND_PHASE
 
-        if self.status == AgentStatus.TERRY_SECOND_PHASE:
+        if self.status == AgentStatus.TARRY_SECOND_PHASE:
             if self.current_node_id != lcl[pioneer][self.id]:
                 return "-1"
             else:
-                self.status = AgentStatus.TERRY_FOLLOW_pioneer
+                self.status = AgentStatus.TARRY_FOLLOW_PIONEER
 
         current_node_index = pioneer_effective_path.index(self.current_node_id)
         self.visited_path.append((-1, -1))
         return pioneer_effective_path[current_node_index + 1]
+
+    def define_next_first_phase_tarry_interval_priority_step(
+        self,
+        non_visited_neighbors: List[str],
+        graph: nx.Graph,
+    ) -> str:
+        # Adding Neighbors to Tree
+        neighbors_weights = self.get_neighbors_weights(non_visited_neighbors)
+        self.add_neighbors_to_tree(
+            non_visited_neighbors,
+            neighbors_weights,
+            algorithm=Algorithm.TARRY_INTERVAL_PRIORITY,
+        )
+        total_number_of_neighbors = len(non_visited_neighbors)
+
+        if not self.filled_interval:
+            # Decide next step based on interval
+            for index, neighbor in enumerate(non_visited_neighbors):
+                neighbor_interval = neighbors_weights[index]
+
+                # If the current child's interval is on the right of the agent's interval, surely the agent finished its interval
+                if self.interval[1] <= neighbor_interval[0]:
+                    self.filled_interval = True
+                    break
+
+                neighbor_is_inside_agent_interval = (
+                    self.interval[0] < neighbor_interval[1]
+                    and self.interval[1] > neighbor_interval[0]
+                )
+
+                if neighbor_is_inside_agent_interval:
+                    neighbor_is_backtrack = neighbor_interval[2]
+                    if neighbor_is_backtrack:
+                        node_index = self.known_tree.nodes[neighbor]["index"]
+                        choice = (int(node_index[0]), int(node_index[1]))
+                        self.visited_path.append(choice)
+                    else:
+                        if total_number_of_neighbors == 1:
+                            self.visited_path.append((-1, -1))
+                        else:
+                            self.visited_path.append((index, total_number_of_neighbors))
+                    return neighbor
+
+            # If the agent is in the root and it doesn't find a node that fills the requirement, it finished its interval
+            # It occurs when the agent come back to root but it has already been visited the root's children
+            # In the context of this Bachelor's thesis, the agent will stop
+            if self.current_node_id == self.starting_node.id:
+                self.filled_interval = True
+            # If didn't fill interval yet, step back
+            if not self.filled_interval:
+                return "-1"
+
+        # If interval was filled, start Random Tarry
+        # Splitting neighbors
+        new_neighbors = []
+        already_visited_neighbors = []
+
+        for neighbor in non_visited_neighbors:
+            if graph.nodes.get(neighbor) is not None:
+                if graph.nodes.get(neighbor).get("deadEnd") != True:
+                    if graph.nodes.get(neighbor).get("visited"):
+                        already_visited_neighbors.append(neighbor)
+                    else:
+                        new_neighbors.append(neighbor)
+
+        # Couldn't solve it using intervals, so use Random Tarry
+        if len(new_neighbors) > 0:
+            self.visited_path.append((-1, -1))
+            if len(new_neighbors) == 1:
+                return new_neighbors[0]
+            return new_neighbors[randint(0, len(new_neighbors) - 1)]
+        elif len(already_visited_neighbors) > 0:
+            self.visited_path.append((-1, -1))
+            if len(already_visited_neighbors) == 1:
+                return already_visited_neighbors[0]
+            return already_visited_neighbors[
+                randint(0, len(already_visited_neighbors) - 1)
+            ]
+        else:
+            return "-1"
+
+    def define_next_first_phase_tarry_interval_tie_breaker_step(
+        self,
+        non_visited_neighbors: List[str],
+        graph: nx.Graph,
+    ) -> str:
+        # Splitting neighbors
+        new_neighbors = []
+        already_visited_neighbors = []
+
+        for neighbor in non_visited_neighbors:
+            if graph.nodes.get(neighbor) is not None:
+                if graph.nodes.get(neighbor).get("deadEnd") != True:
+                    if graph.nodes.get(neighbor).get("visited"):
+                        already_visited_neighbors.append(neighbor)
+                    else:
+                        new_neighbors.append(neighbor)
+
+        # Adding Neighbors to Tree
+        neighbors_weights = self.get_neighbors_weights(non_visited_neighbors)
+        self.add_neighbors_to_tree(
+            non_visited_neighbors,
+            neighbors_weights,
+            algorithm=Algorithm.TARRY_INTERVAL_TIE_BREAKER,
+        )
+        total_number_of_neighbors = len(non_visited_neighbors)
+        neighbors_weights_dict = {
+            neighbor: neighbors_weights[i]
+            for i, neighbor in enumerate(non_visited_neighbors)
+        }
+
+        def is_inside_interval(neighbor):
+            neighbor_interval = neighbors_weights_dict[neighbor]
+            return (
+                self.interval[0] < neighbor_interval[1]
+                and self.interval[1] > neighbor_interval[0]
+            )
+
+        # Filter new neighbors inside the interval
+        new_neighbors_inside_interval = [
+            neighbor for neighbor in new_neighbors if is_inside_interval(neighbor)
+        ]
+
+        # Filter already visited neighbors inside the interval
+        already_visited_neighbors_inside_interval = [
+            neighbor
+            for neighbor in already_visited_neighbors
+            if is_inside_interval(neighbor)
+        ]
+
+        # Selecting neighbors based on the priority rules
+        # New Neighbors Inside the Interval
+        if len(new_neighbors_inside_interval) > 0:
+            self.visited_path.append((-1, -1))
+            return new_neighbors_inside_interval[0]
+        # If there aren't any new neighbors in the interval, just select a random one.
+        # New Neighbors
+        elif len(new_neighbors) > 0:
+            self.visited_path.append((-1, -1))
+            if len(new_neighbors) == 1:
+                return new_neighbors[0]
+            return new_neighbors[randint(0, len(new_neighbors) - 1)]
+        # Visited Neighbors Inside the Interval
+        elif len(already_visited_neighbors_inside_interval) > 0:
+            self.visited_path.append((-1, -1))
+            return already_visited_neighbors_inside_interval[0]
+        # Visited Neighbors
+        elif len(already_visited_neighbors) > 0:
+            self.visited_path.append((-1, -1))
+            if len(already_visited_neighbors) == 1:
+                return already_visited_neighbors[0]
+            return already_visited_neighbors[
+                randint(0, len(already_visited_neighbors) - 1)
+            ]
+        else:
+            return "-1"
 
     def get_neighbors_weights(
         self,
@@ -679,14 +897,20 @@ class Agent:
         self,
         non_visited_neighbors: List[str],
         neighbor_weights: List[Tuple[float, float]],
+        algorithm: Algorithm,
     ):
         for index, neighbor in enumerate(non_visited_neighbors):
             # Check if the neighbor is already in tree and is a backtrack
             neighbor_is_backtrack = neighbor_weights[index][2]
 
             # If neighbor is backtrack, no need to add it to tree, just update
+            node_status = "Int"
+            if algorithm == Algorithm.TARRY_INTERVAL_PRIORITY:
+                node_status = "Tarry-PRIORITY-PH1"
+            if algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER:
+                node_status = "Tarry-TIE-BREAKER-PH1"
             if neighbor_is_backtrack:
-                self.known_tree.nodes[neighbor]["status"] = "Int-BT"
+                self.known_tree.nodes[neighbor]["status"] = f"{node_status}-BT"
             else:
                 self.known_tree = add_edge_to_graph(
                     self.current_node_id,
@@ -698,7 +922,7 @@ class Agent:
                         else ("X", "X")
                     ),
                     neighbor_weights[index],
-                    "Int",
+                    node_status,
                 )
         return
 
