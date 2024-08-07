@@ -37,6 +37,7 @@ def get_algorithm_label(algorithm: Algorithm) -> str:
         Algorithm.TARRY: "Tarry",
         Algorithm.TWO_INTERVAL: "2I",
         Algorithm.TARRY_INTERVAL_TIE_BREAKER: "Tarry-Tie",
+        Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER: "Tarry-Delay-Tie",
         Algorithm.TARRY_INTERVAL_PRIORITY: "Tarry-Priority",
     }
     return algorithm_labels[algorithm]

@@ -12,8 +12,9 @@ class Algorithm(Enum):
     SELF = "self"
     TWO_INTERVAL = "two_interval"
     TARRY = "tarry"
-    TARRY_INTERVAL_PRIORITY = "tarry_interval_priority"
     TARRY_INTERVAL_TIE_BREAKER = "tarry_interval_tie_breaker"
+    TARRY_DELAYED_INTERVAL_TIE_BREAKER = "tarry_delayed_interval_tie_breaker"
+    TARRY_INTERVAL_PRIORITY = "tarry_interval_priority"
 
 
 class AgentStatus(Enum):
@@ -141,6 +142,7 @@ class Agent:
                 self.algorithm == Algorithm.TARRY
                 or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
                 or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                or self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
             ):
                 self.status = AgentStatus.TARRY_WAITING_PIONEER
                 return
@@ -167,6 +169,7 @@ class Agent:
                 self.algorithm == Algorithm.TARRY
                 or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
                 or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+                or self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
             ):
                 self.status = AgentStatus.TARRY_FIRST_PHASE
             else:
@@ -226,6 +229,7 @@ class Agent:
                 self.algorithm == Algorithm.TARRY
                 or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
                 or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                or self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
             )
             and (
                 self.status == AgentStatus.TARRY_FOLLOW_PIONEER
@@ -300,6 +304,7 @@ class Agent:
                     self.algorithm == Algorithm.TARRY
                     or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
                     or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                    or self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
                 )
             )
         ):
@@ -355,6 +360,22 @@ class Agent:
             next_step = self.define_next_first_phase_tarry_interval_tie_breaker_step(
                 non_visited_neighbors, graph
             )
+            return next_step
+
+        # Next Step for Tarry - First Phase Tie-Breaker Delayed Variant
+        if self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER and (
+            self.status == AgentStatus.TARRY_FIRST_PHASE
+        ):
+            if self.step_count < 2 and not self.filled_interval:
+                next_step = self.define_next_first_phase_tarry_interval_priority_step(
+                    non_visited_neighbors, graph
+                )
+            else:
+                next_step = (
+                    self.define_next_first_phase_tarry_interval_tie_breaker_step(
+                        non_visited_neighbors, graph
+                    )
+                )
             return next_step
 
     def define_next_dfs_step(
@@ -731,6 +752,11 @@ class Agent:
             # In the context of this Bachelor's thesis, the agent will stop
             if self.current_node_id == self.starting_node.id:
                 self.filled_interval = True
+
+            # Calculate if interval is filled based on radix path
+            if self.check_filled_interval():
+                self.filled_interval = True
+
             # If didn't fill interval yet, step back
             if not self.filled_interval:
                 return "-1"
@@ -939,3 +965,47 @@ class Agent:
         self.known_tree = preprocess_node_ids(self.known_tree)
         root_id_cleaned = self.starting_node.id.replace(",", " ")
         display_graph(self.known_tree, root_id_cleaned, None, True, title)
+
+    def check_filled_interval(self) -> bool:
+        # Next Possible Decision
+        next_path = [list(t) for t in self.visited_path]
+        # Disregard (-1,-1) to find the last valid decision
+        i = len(next_path) - 1
+        while i >= 0 and next_path[i] == [-1, -1]:
+            i -= 1
+
+        # Add 1 to last valid decision
+        while i >= 0:
+            if next_path[i][0] + 1 < next_path[i][1]:
+                next_path[i][0] += 1
+                break
+            else:
+                next_path[i][0] = 0
+                i -= 1
+                # Ignore (-1,-1) when propagating the overflow
+                while i >= 0 and next_path[i] == [-1, -1]:
+                    i -= 1
+                if i < 0:
+                    # If tries to overflow to first digit, just assume the interval is filled
+                    return True
+
+        # Next Path
+        next_path = [(a, b) if (a, b) != [-1, -1] else (-1, -1) for a, b in next_path]
+        next_path_radix = self.convert_mixed_base_to_decimal(next_path)
+
+        is_inside_agent_interval = (
+            self.interval[0] < next_path_radix and self.interval[1] > next_path_radix
+        )
+
+        return not is_inside_agent_interval
+
+    def convert_mixed_base_to_decimal(self, radix_path):
+        result = 0.0
+        for k, (a, m) in enumerate(radix_path):
+            if a == -1 or m == -1:
+                continue
+            product = 1.0
+            for j in range(k + 1):
+                product *= 1 / abs(radix_path[j][1])
+            result += a * product
+        return result

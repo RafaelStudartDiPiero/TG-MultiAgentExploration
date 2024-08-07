@@ -35,6 +35,8 @@ As an example, you could run:
 
 `python3 demo.py --agents 3 --graph test1.csv --algorithm tarry_interval_tie_breaker`
 
+`python3 demo.py --agents 3 --graph test1.csv --algorithm tarry_delayed_interval_tie_breaker`
+
 ## Generating Results
 
 After making sure the simulation works, you can automatically generate results for multiple sets of graphs. This can take a long time.
@@ -69,6 +71,9 @@ As an example, you could run:
 
 `python3 results.py --base_path mazes --algorithm tarry_interval_tie_breaker --max_agents 40 --plot true`
 
+`python3 results.py --base_path mazes --algorithm tarry_delayed_interval_tie_breaker --graph_size_path 10_by_10 --max_agents 40 --plot true`
+
+`python3 results.py --base_path mazes --algorithm tarry_delayed_interval_tie_breaker --max_agents 40 --plot true`
 
 ## Comparing Results
 
@@ -88,7 +93,9 @@ You can pass specific arguments to define which and how they should be compared,
 
 As an example, you could run:
 
-```python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker" --graph_size 30_by_30 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" ```
+`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker" --graph_size 30_by_30 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
+
+`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --graph_size 30_by_30 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
 
 ## Multi-agent graph exploration without communication
 

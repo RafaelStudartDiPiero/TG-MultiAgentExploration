@@ -117,6 +117,7 @@ class Simulation:
                     self.algorithm == Algorithm.TARRY
                     or self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
                     or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                    or self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
                 ):
                     # Update the Last Common Location (LCL) matrix if it is necessary
                     for j in range(0, self.n_agents):
