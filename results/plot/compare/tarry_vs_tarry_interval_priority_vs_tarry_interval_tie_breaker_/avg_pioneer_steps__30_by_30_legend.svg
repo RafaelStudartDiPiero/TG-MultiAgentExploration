@@ -6,7 +6,7 @@
   <rdf:RDF xmlns:dc="http://purl.org/dc/elements/1.1/" xmlns:cc="http://creativecommons.org/ns#" xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#">
    <cc:Work>
     <dc:type rdf:resource="http://purl.org/dc/dcmitype/StillImage"/>
-    <dc:date>2024-08-07T13:17:01.192481</dc:date>
+    <dc:date>2024-08-14T07:54:49.130680</dc:date>
     <dc:format>image/svg+xml</dc:format>
     <dc:creator>
      <cc:Agent>
@@ -48,7 +48,7 @@ L 46.801562 56.58125
 L 56.801562 56.58125 
 " style="fill: none; stroke: #0000ff; stroke-width: 1.5; stroke-linecap: square"/>
     <defs>
-     <path id="m02a08055f4" d="M 0 1.5 
+     <path id="m71dc8f8dfb" d="M 0 1.5 
 C 0.397805 1.5 0.77937 1.341951 1.06066 1.06066 
 C 1.341951 0.77937 1.5 0.397805 1.5 0 
 C 1.5 -0.397805 1.341951 -0.77937 1.06066 -1.06066 
@@ -61,7 +61,7 @@ z
 " style="stroke: #0000ff"/>
     </defs>
     <g>
-     <use xlink:href="#m02a08055f4" x="46.801562" y="56.58125" style="fill: #0000ff; stroke: #0000ff"/>
+     <use xlink:href="#m71dc8f8dfb" x="46.801562" y="56.58125" style="fill: #0000ff; stroke: #0000ff"/>
     </g>
    </g>
    <g id="text_1">
@@ -460,7 +460,7 @@ L 46.801562 71.259375
 L 56.801562 71.259375 
 " style="fill: none; stroke: #ff0000; stroke-width: 1.5; stroke-linecap: square"/>
     <defs>
-     <path id="m6c1eea4f56" d="M 0 1.5 
+     <path id="m9d9271f479" d="M 0 1.5 
 C 0.397805 1.5 0.77937 1.341951 1.06066 1.06066 
 C 1.341951 0.77937 1.5 0.397805 1.5 0 
 C 1.5 -0.397805 1.341951 -0.77937 1.06066 -1.06066 
@@ -473,7 +473,7 @@ z
 " style="stroke: #ff0000"/>
     </defs>
     <g>
-     <use xlink:href="#m6c1eea4f56" x="46.801562" y="71.259375" style="fill: #ff0000; stroke: #ff0000"/>
+     <use xlink:href="#m9d9271f479" x="46.801562" y="71.259375" style="fill: #ff0000; stroke: #ff0000"/>
     </g>
    </g>
    <g id="text_2">
@@ -525,7 +525,7 @@ L 46.801562 85.9375
 L 56.801562 85.9375 
 " style="fill: none; stroke: #008000; stroke-width: 1.5; stroke-linecap: square"/>
     <defs>
-     <path id="m1d9559a108" d="M 0 1.5 
+     <path id="m536f1433ff" d="M 0 1.5 
 C 0.397805 1.5 0.77937 1.341951 1.06066 1.06066 
 C 1.341951 0.77937 1.5 0.397805 1.5 0 
 C 1.5 -0.397805 1.341951 -0.77937 1.06066 -1.06066 
@@ -538,7 +538,7 @@ z
 " style="stroke: #008000"/>
     </defs>
     <g>
-     <use xlink:href="#m1d9559a108" x="46.801562" y="85.9375" style="fill: #008000; stroke: #008000"/>
+     <use xlink:href="#m536f1433ff" x="46.801562" y="85.9375" style="fill: #008000; stroke: #008000"/>
     </g>
    </g>
    <g id="text_3">

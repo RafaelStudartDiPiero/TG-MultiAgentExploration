@@ -95,7 +95,7 @@ As an example, you could run:
 
 `python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker" --graph_size 30_by_30 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
 
-`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --graph_size 30_by_30 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
+`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --graph_size 10_by_10 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
 
 ## Multi-agent graph exploration without communication
 

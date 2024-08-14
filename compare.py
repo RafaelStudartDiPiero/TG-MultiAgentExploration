@@ -64,7 +64,7 @@ def compare_explorations(
     split_legend: bool,
     title: str,
 ):
-    algorithm_colors = ["blue", "red", "green"]
+    algorithm_colors = ["blue", "red", "green", "orange"]
     metric_markers = [".", "d", "s"]
 
     # Loading Results Correctly

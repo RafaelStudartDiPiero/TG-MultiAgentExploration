@@ -70,6 +70,7 @@ class Simulation:
                     color=defaultAgentColorList[i % len(defaultAgentColorList)],
                     starting_node=node,
                     interval=agentInterval,
+                    n_agents=self.n_agents,
                 )
             )
             self.agents_stopped.append(False)
