@@ -1,3 +1,4 @@
+import math
 from enum import Enum
 from random import randint
 from typing import List, Optional, Tuple
@@ -58,6 +59,7 @@ class Agent:
         color: Color,
         starting_node: Node,
         interval: Tuple[float, float],
+        n_agents: Optional[int],
     ) -> None:
         # Personal Attributes
         # ID is the unique identification of the agent
@@ -75,6 +77,9 @@ class Agent:
             if self.interval[1] == 1
             else (self.interval[1], self.interval[1] + chunk)
         )
+        # Number of Agents
+        self.n_agents = n_agents
+
         # Status defines the current status of the agent
         self.status = AgentStatus.STARTED
 
@@ -109,6 +114,9 @@ class Agent:
         self.filled_backup_interval = False
         # Agent Step Count
         self.step_count = 0
+        # Step Limit
+        self.step_limit = math.floor(math.log2(self.n_agents)) + 1
+        self.passed_step_limit = False
 
     def step_back(self):
         # Consider current cell explored
@@ -155,6 +163,7 @@ class Agent:
         self.current_node_id = self.parent_list.pop()
         self.effective_path.pop()
         self.visited_path.pop()
+        self.step_count += 1
         return
 
     def move_one_step(
@@ -260,6 +269,7 @@ class Agent:
         self.search.append(self.current_node_id)
         self.effective_path.append(self.current_node_id)
         self.current_node_id = next_neighbor_id
+        self.step_count += 1
 
         # Checking if the next step is the finish
         graph.nodes[self.current_node_id]["visited"] = True
@@ -366,11 +376,18 @@ class Agent:
         if self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER and (
             self.status == AgentStatus.TARRY_FIRST_PHASE
         ):
-            if self.step_count < 2 and not self.filled_interval:
+            if (
+                self.step_count < self.step_limit
+                and not self.filled_interval
+                and not self.passed_step_limit
+            ):
                 next_step = self.define_next_first_phase_tarry_interval_priority_step(
                     non_visited_neighbors, graph
                 )
             else:
+                if not self.passed_step_limit:
+                    self.passed_step_limit = True
+                    # print(f"Passed Step Limit. Start Tie Breaker.{self.id=} {self.step_count=} {self.current_node_id}")
                 next_step = (
                     self.define_next_first_phase_tarry_interval_tie_breaker_step(
                         non_visited_neighbors, graph
@@ -754,8 +771,9 @@ class Agent:
                 self.filled_interval = True
 
             # Calculate if interval is filled based on radix path
-            if self.check_filled_interval():
-                self.filled_interval = True
+            # TODO: Check Filled Interval
+            # if self.check_filled_interval():
+            #     self.filled_interval = True
 
             # If didn't fill interval yet, step back
             if not self.filled_interval:
@@ -853,6 +871,7 @@ class Agent:
             return new_neighbors[randint(0, len(new_neighbors) - 1)]
         # Visited Neighbors Inside the Interval
         elif len(already_visited_neighbors_inside_interval) > 0:
+            # print(f"{self.id} visited {already_visited_neighbors_inside_interval}. {self.current_node_id}")
             self.visited_path.append((-1, -1))
             return already_visited_neighbors_inside_interval[0]
         # Visited Neighbors
