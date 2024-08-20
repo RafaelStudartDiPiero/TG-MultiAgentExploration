@@ -3,14 +3,11 @@ import argparse
 import os
 import pickle
 from enum import Enum
-from statistics import stdev
 from typing import List
 
 import matplotlib.pyplot as plt
-import numpy as np
 
-from simulation.graph_utils import convert_maze, load_graph
-from simulation.simulation import Algorithm, Simulation
+from simulation.simulation import Algorithm
 
 
 class GraphSize(Enum):

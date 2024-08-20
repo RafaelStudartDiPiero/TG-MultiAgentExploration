@@ -97,6 +97,19 @@ As an example, you could run:
 
 `python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --graph_size 10_by_10 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
 
+## Graph Statistics
+
+For a deeper analysis, we can calculate statistics related to the graphs used.
+
+`--graph-path` : Defines which file path to saved graph(file) or saved graphs(directory) should be analysed.
+
+As an example, you could run:
+
+`python3 graph_statistics.py --graph-path "test1.csv" `
+`python3 graph_statistics.py --graph-path "mazes/10_by_10/maze_10x10__1.csv" `
+`python3 graph_statistics.py --graph-path "mazes/10_by_10" `
+
+
 ## Multi-agent graph exploration without communication
 
 A in-depth analysis of the algoritm can be found here:
