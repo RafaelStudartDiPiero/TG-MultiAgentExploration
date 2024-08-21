@@ -30,7 +30,7 @@ if __name__ == "__main__":
 
     if args.graph.endswith(".graphml"):
         graph = load_graph(args.graph)
-        starting_node_id = "1"
+        starting_node_id = "0"
         is_maze = False
     else:
         graph, rows, columns = convert_maze(args.graph)

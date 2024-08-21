@@ -126,7 +126,7 @@ if __name__ == "__main__":
     else:
         if args.graph_path.endswith(".graphml"):
             graph = load_graph(args.graph_path)
-            starting_node_id = "1"
+            starting_node_id = "0"
         else:
             graph, rows, columns = convert_maze(args.graph_path)
             starting_node_id = f"{rows},{columns}"

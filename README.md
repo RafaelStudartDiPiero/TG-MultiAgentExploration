@@ -37,6 +37,8 @@ As an example, you could run:
 
 `python3 demo.py --agents 3 --graph test1.csv --algorithm tarry_delayed_interval_tie_breaker`
 
+`python3 demo.py --agents 3 --graph graphs/100/graph_100__1.graphml`
+
 ## Generating Results
 
 After making sure the simulation works, you can automatically generate results for multiple sets of graphs. This can take a long time.
@@ -109,6 +111,17 @@ As an example, you could run:
 `python3 graph_statistics.py --graph-path "mazes/10_by_10/maze_10x10__1.csv" `
 `python3 graph_statistics.py --graph-path "mazes/10_by_10" `
 
+## Generate Graphs
+
+You can also create your own dataset of graphs.
+
+`--graph_type` : Defines which generator should be used for creating the graphs.
+`--graph_size` : Defines the size of the graph(number of nodes).
+`--n_graph` : Defines how many graphs should be generated.
+
+As an example, you could run:
+
+`python3 generate_graphs.py --graph_type random_power_law_tree --graph_size 100 --n_graph 250 `
 
 ## Multi-agent graph exploration without communication
 

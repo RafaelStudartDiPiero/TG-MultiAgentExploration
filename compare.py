@@ -15,6 +15,13 @@ class GraphSize(Enum):
     SIZE_20 = "20_by_20"
     SIZE_30 = "30_by_30"
     SIZE_40 = "40_by_40"
+    N_10 = "10"
+    N_25 = "25"
+    N_50 = "50"
+    N_100 = "100"
+    N_250 = "250"
+    N_500 = "500"
+    N_1000 = "1000"
 
 
 class Metric(Enum):

@@ -3,10 +3,12 @@ import argparse
 import os
 import pickle
 from statistics import stdev
+from typing import Optional
 
 import matplotlib.pyplot as plt
 import numpy as np
 
+from compare import GraphSize
 from simulation.graph_utils import convert_maze, load_graph
 from simulation.simulation import Algorithm, Simulation
 
@@ -27,7 +29,7 @@ def parse_arguments():
     )
     parser.add_argument(
         "--graph_size_path",
-        type=str,
+        type=GraphSize,
         default=None,
         help="Specific size directory to use (e.g., '10_by_10', '20_by_20'). If not provided, all sizes found will be used",
     )
@@ -62,7 +64,13 @@ def calculate_stats(data):
     return avg, std_dev
 
 
-def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents, plot):
+def simulate_graph_exploration(
+    algorithm: Optional[Algorithm],
+    base_path: str,
+    graph_size_path: Optional[GraphSize],
+    max_agents: int,
+    plot: bool,
+):
     if graph_size_path is None:
         # If graph_size_path is not provided, get all subdirectories in base_path
         graph_sizes = [
@@ -71,7 +79,7 @@ def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents
             if os.path.isdir(os.path.join(base_path, name))
         ]
     else:
-        graph_sizes = [graph_size_path]
+        graph_sizes = [graph_size_path.value]
 
     if algorithm is None:
         # If algorithm is not provided, do the simulation for all algorithms
@@ -101,7 +109,7 @@ def simulate_graph_exploration(algorithm, base_path, graph_size_path, max_agents
                         graph_path = os.path.join(root, file)
                         if graph_path.endswith(".graphml"):
                             graph = load_graph(graph_path)
-                            starting_node_id = "1"
+                            starting_node_id = "0"
                             is_maze = False
                         else:
                             graph, rows, columns = convert_maze(graph_path)
