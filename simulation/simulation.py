@@ -1,11 +1,12 @@
 from typing import List, Optional
+from gmpy2 import mpfr
 
 import matplotlib.pyplot as plt
 import networkx as nx
 
+import gmpyconfig
 from simulation.agent import Agent, AgentStatus, Algorithm, Color, Node
 from simulation.graph_utils import display_graph, display_maze
-from simulation.utils import concatenate_new_elements
 
 defaultAgentColorList = [
     Color.red,
@@ -16,6 +17,13 @@ defaultAgentColorList = [
     Color.yellow,
     Color.black,
 ]
+
+
+# Auxiliary function to concatenate to add only new elements to array
+def concatenate_new_elements(main_list, vector):
+    for e in vector:
+        if e not in main_list:
+            main_list.append(e)
 
 
 class Simulation:
@@ -59,8 +67,8 @@ class Simulation:
         )
 
         for i in range(0, self.n_agents):
-            start = i * division
-            end = (i + 1) * division
+            start = mpfr(i * division)
+            end = mpfr((i + 1) * division)
             agentInterval = (start, end)
 
             self.agents.append(

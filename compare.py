@@ -5,8 +5,10 @@ import pickle
 from enum import Enum
 from typing import List
 
+import gmpy2
 import matplotlib.pyplot as plt
 
+import gmpyconfig
 from simulation.simulation import Algorithm
 
 
@@ -63,6 +65,7 @@ def get_metric_label(metric: Metric) -> str:
 
 def compare_explorations(
     algorithms: List[Algorithm],
+    base_path: str,
     graph_size: GraphSize,
     metrics: List[Metric],
     split_legend: bool,
@@ -75,7 +78,7 @@ def compare_explorations(
     algorithms_results = []
     for algorithm in algorithms:
         with open(
-            f"results/data/{algorithm.value}/{graph_size.value}_result.pkl", "rb"
+            f"results/data/{base_path}/{algorithm.value}/{graph_size.value}_result.pkl", "rb"
         ) as f:
             results = pickle.load(f)
             algorithms_results.append(results)
@@ -118,11 +121,15 @@ def compare_explorations(
     metrics_string = ""
     for index, metric in enumerate(metrics):
         metrics_string += f"{metric.value}_"
+    # Creating Base Directoy
+    algorithms_base_path_comparison_dir = os.path.join("results/plot/compare", base_path)
+    os.makedirs(algorithms_base_path_comparison_dir, exist_ok=True)
+
     # Creating Directory
-    algorithms_comparison_dir = os.path.join("results/plot/compare", algorithms_string)
+    algorithms_comparison_dir = os.path.join(algorithms_base_path_comparison_dir, algorithms_string)
     os.makedirs(algorithms_comparison_dir, exist_ok=True)
 
-    file_path = f"results/plot/compare/{algorithms_string}/{metrics_string}_{graph_size.value}.svg"
+    file_path = f"results/plot/compare/{base_path}/{algorithms_string}/{metrics_string}_{graph_size.value}.svg"
     plt.savefig(file_path, format="svg")
     # Saving Legend
     if split_legend:
@@ -130,7 +137,7 @@ def compare_explorations(
         legend = fig_legend.legend(handles=used_lines, loc="center", ncol=1)
         fig_legend.canvas.draw()
         # Save the legend as SVG
-        legend_file_path = f"results/plot/compare/{algorithms_string}/{metrics_string}_{graph_size.value}_legend.svg"
+        legend_file_path = f"results/plot/compare/{base_path}/{algorithms_string}/{metrics_string}_{graph_size.value}_legend.svg"
         fig_legend.savefig(legend_file_path, format="svg")
     plt.close()
     return
@@ -151,12 +158,18 @@ def convert_metrics_list(metrics: str) -> List[Metric]:
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Compare algorithms' results.")
+    parser = argparse.ArgumentParser(description="Compare algorithms' results.") 
     parser.add_argument(
         "--algorithms",
         type=str,
         default="self,tarry",
         help="A comma-separated list of algorithms that should be compared.",
+    )
+    parser.add_argument(
+        "--base_path",
+        type=str,
+        default="mazes/",
+        help="Base path where result directories are located",
     )
     parser.add_argument(
         "--graph_size",
@@ -198,6 +211,7 @@ if __name__ == "__main__":
     # Generate Comparation Plots
     compare_explorations(
         args.algorithms,
+        args.base_path,
         args.graph_size,
         args.metrics,
         args.split_legend,

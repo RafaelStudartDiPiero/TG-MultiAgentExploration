@@ -1,9 +1,12 @@
 import csv
-from typing import Tuple, Optional
+from typing import Optional, Tuple
 
+import gmpy2
 import matplotlib.pyplot as plt
 import networkx as nx
 from networkx.drawing.nx_pydot import graphviz_layout
+
+import gmpyconfig
 
 
 def load_graph(file_path) -> nx.Graph:

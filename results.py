@@ -5,9 +5,11 @@ import pickle
 from statistics import stdev
 from typing import Optional
 
+import gmpy2
 import matplotlib.pyplot as plt
 import numpy as np
 
+import gmpyconfig
 from compare import GraphSize
 from simulation.graph_utils import convert_maze, load_graph
 from simulation.simulation import Algorithm, Simulation
@@ -161,9 +163,12 @@ def simulate_graph_exploration(
                 )
             # Loading results for each graph_size into a pickle that can be found later
             general_results.append(results)
-
+            
+            # Define base path directory
+            base_path_results_dir = os.path.join("results/data", base_path)
+            os.makedirs(base_path_results_dir, exist_ok=True)
             # Define the algorithm-specific directory
-            algorithm_data_dir = os.path.join("results/data", chosen_algorithm.value)
+            algorithm_data_dir = os.path.join(base_path_results_dir, chosen_algorithm.value)
             os.makedirs(algorithm_data_dir, exist_ok=True)
             with open(
                 os.path.join(algorithm_data_dir, f"{graph_size}_result.pkl"), "wb"
@@ -172,9 +177,12 @@ def simulate_graph_exploration(
 
             # Generating and saving plots
             if plot:
+                # Define base plot path directory
+                base_path_plot_dir = os.path.join("results/plot", base_path)
+                os.makedirs(base_path_plot_dir, exist_ok=True)
                 # Define the algorithm-specific directory
                 algorithm_plot_dir = os.path.join(
-                    "results/plot", chosen_algorithm.value
+                    base_path_plot_dir, chosen_algorithm.value
                 )
                 os.makedirs(algorithm_plot_dir, exist_ok=True)
 

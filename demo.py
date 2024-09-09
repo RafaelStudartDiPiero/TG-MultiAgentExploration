@@ -1,7 +1,10 @@
 import argparse
 
+import gmpy2
+
+import gmpyconfig
 from simulation.graph_utils import convert_maze, load_graph
-from simulation.simulation import Simulation, Algorithm
+from simulation.simulation import Algorithm, Simulation
 
 
 def parse_arguments():

@@ -2,11 +2,13 @@ import math
 from enum import Enum
 from random import randint
 from typing import List, Optional, Tuple
+from gmpy2 import mpfr
 
 import networkx as nx
 
+import gmpyconfig
 from simulation.graph import Node, sort_neighbors
-from simulation.graph_utils import display_graph, preprocess_node_ids, add_edge_to_graph
+from simulation.graph_utils import add_edge_to_graph, display_graph, preprocess_node_ids
 
 
 class Algorithm(Enum):
@@ -58,7 +60,7 @@ class Agent:
         algorithm: Algorithm,
         color: Color,
         starting_node: Node,
-        interval: Tuple[float, float],
+        interval: Tuple[mpfr, mpfr],
         n_agents: Optional[int],
     ) -> None:
         # Personal Attributes
@@ -71,11 +73,11 @@ class Agent:
         # Interval defines the interval of radix values this agent will tranverse
         self.interval = interval
         # Backup Interval defines the interval used for the two interval algorithm
-        chunk = self.interval[1] - self.interval[0]
+        chunk = mpfr(self.interval[1] - self.interval[0])
         self.backup_interval = (
-            (0, chunk)
-            if self.interval[1] == 1
-            else (self.interval[1], self.interval[1] + chunk)
+            (mpfr(0), mpfr(chunk))
+            if self.interval[1] == mpfr(1)
+            else (mpfr(self.interval[1]), mpfr(self.interval[1] + chunk))
         )
         # Number of Agents
         self.n_agents = n_agents
@@ -455,6 +457,12 @@ class Agent:
             non_visited_neighbors, neighbors_weights, algorithm=Algorithm.SELF
         )
         total_number_of_neighbors = len(non_visited_neighbors)
+
+        if self.id == 1 and len(non_visited_neighbors) > 1:
+            for weight in neighbors_weights:
+                if weight[1] == weight[0]:
+                    print(f"IGUALOU!")
+                    print(f"Next Weights: [{weight[0]:.16f}, {weight[1]:.16f}]\n")
 
         # Decide next step based on interval
         for index, neighbor in enumerate(non_visited_neighbors):
@@ -888,16 +896,18 @@ class Agent:
     def get_neighbors_weights(
         self,
         non_visited_neighbors: List[str],
-    ) -> List[Tuple[float, float, bool]]:
+    ) -> List[Tuple[mpfr, mpfr, bool]]:
         current_node_interval_string = self.known_tree.nodes[self.current_node_id][
             "radix"
         ]
         current_node_interval = (
-            float(current_node_interval_string[0]),
-            float(current_node_interval_string[1]),
+            mpfr(current_node_interval_string[0]),
+            mpfr(current_node_interval_string[1]),
         )
-        current_node_interval_size = current_node_interval[1] - current_node_interval[0]
-        chunk = current_node_interval_size / len(non_visited_neighbors)
+        current_node_interval_size = mpfr(
+            current_node_interval[1] - current_node_interval[0]
+        )
+        chunk = mpfr(current_node_interval_size / len(non_visited_neighbors))
         neighbor_weights = []
 
         neighbor_count = 0
@@ -917,18 +927,18 @@ class Agent:
             if neighbor_is_backtrack:
                 neighbor_interval = self.known_tree.nodes[neighbor]["radix"]
                 neighbor_interval = (
-                    float(neighbor_interval[0]),
-                    float(neighbor_interval[1]),
+                    mpfr(neighbor_interval[0]),
+                    mpfr(neighbor_interval[1]),
                     True,
                 )
             else:
-                neighbor_interval_start = (
-                    current_node_interval[0] + chunk * neighbor_count
+                neighbor_interval_start = mpfr(
+                    current_node_interval[0] + mpfr(chunk * neighbor_count)
                 )
-                neighbor_interval_end = neighbor_interval_start + chunk
+                neighbor_interval_end = mpfr(neighbor_interval_start + chunk)
                 neighbor_interval = (
-                    neighbor_interval_start,
-                    neighbor_interval_end,
+                    mpfr(neighbor_interval_start),
+                    mpfr(neighbor_interval_end),
                     False,
                 )
 
@@ -941,7 +951,7 @@ class Agent:
     def add_neighbors_to_tree(
         self,
         non_visited_neighbors: List[str],
-        neighbor_weights: List[Tuple[float, float]],
+        neighbor_weights: List[Tuple[mpfr, mpfr]],
         algorithm: Algorithm,
     ):
         for index, neighbor in enumerate(non_visited_neighbors):
@@ -1019,12 +1029,12 @@ class Agent:
         return not is_inside_agent_interval
 
     def convert_mixed_base_to_decimal(self, radix_path):
-        result = 0.0
+        result = mpfr(0.0)
         for k, (a, m) in enumerate(radix_path):
             if a == -1 or m == -1:
                 continue
-            product = 1.0
+            product = mpfr(1.0)
             for j in range(k + 1):
-                product *= 1 / abs(radix_path[j][1])
-            result += a * product
+                product *= mpfr(1 / abs(radix_path[j][1]))
+            result += mpfr(a * product)
         return result

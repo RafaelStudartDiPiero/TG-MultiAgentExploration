@@ -37,7 +37,15 @@ As an example, you could run:
 
 `python3 demo.py --agents 3 --graph test1.csv --algorithm tarry_delayed_interval_tie_breaker`
 
-`python3 demo.py --agents 3 --graph graphs/100/graph_100__1.graphml`
+`python3 demo.py --agents 3 --graph "mazes/10_by_10/maze_10x10__1.csv"`
+
+`python3 demo.py --agents 3 --graph "mazes/20_by_20/maze_20x20__1.csv"`
+
+`python3 demo.py --agents 3 --graph "mazes/30_by_30/maze_30x30__1.csv"`
+
+`python3 demo.py --agents 3 --graph "mazes/40_by_40/maze_40x40__1.csv"`
+
+`python3 demo.py --agents 3 --graph "graphs/random_unlabeled_tree/100/graph_100__2.graphml"`
 
 ## Generating Results
 
@@ -57,7 +65,7 @@ You can pass specific arguments to define parameters, like:
 
 As an example, you could run:
 
-`python3 results.py --base_path mazes  --algorithm self --graph_size_path 10_by_10 --max_agents 40 --plot true`
+`python3 results.py --base_path mazes  --algorithm self --max_agents 40 --plot true`
 
 `python3 results.py --base_path mazes --algorithm two_interval --max_agents 40 --plot true`
 
@@ -77,6 +85,10 @@ As an example, you could run:
 
 `python3 results.py --base_path mazes --algorithm tarry_delayed_interval_tie_breaker --max_agents 40 --plot true`
 
+`python3 results.py --base_path graphs/random_unlabeled_tree --max_agents 40 --plot true`
+
+`python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 250 --max_agents 40 --plot true`
+
 ## Comparing Results
 
 After generating results, you can generate specific plots to compare different algorithms.
@@ -95,9 +107,14 @@ You can pass specific arguments to define which and how they should be compared,
 
 As an example, you could run:
 
-`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker" --graph_size 30_by_30 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
+`python3 compare.py --algorithms "self, two_interval, tarry" --base_path mazes --graph_size 40_by_40 --metrics "avg_pioneer_steps" --split_legend False --title "Algorithms Pioneer Steps - Comparison" `
+`python3 compare.py --algorithms "self, two_interval, tarry" --base_path mazes --graph_size 40_by_40 --metrics "avg_fraction_pioneer" --split_legend False --title "Algorithms Pioneer Fraction - Comparison" `
 
-`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --graph_size 10_by_10 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
+`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker" --base_path mazes --graph_size 40_by_40 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
+`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --base_path mazes --graph_size 40_by_40 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants - Comparison" `
+
+`python3 compare.py --algorithms "self, two_interval, tarry" --base_path graphs/random_unlabeled_tree --graph_size 100 --metrics "avg_pioneer_steps" --split_legend False --title "Algorithms Pioneer Steps Random Unlabeled - Comparison" `
+`python3 compare.py --algorithms "tarry,tarry_interval_priority,tarry_interval_tie_breaker, tarry_delayed_interval_tie_breaker" --base_path graphs/random_unlabeled_tree --graph_size 100 --metrics "avg_pioneer_steps" --split_legend True --title "Tarry Variants Random Unlabeled - Comparison" `
 
 ## Graph Statistics
 
@@ -108,8 +125,15 @@ For a deeper analysis, we can calculate statistics related to the graphs used.
 As an example, you could run:
 
 `python3 graph_statistics.py --graph-path "test1.csv" `
-`python3 graph_statistics.py --graph-path "mazes/10_by_10/maze_10x10__1.csv" `
 `python3 graph_statistics.py --graph-path "mazes/10_by_10" `
+`python3 graph_statistics.py --graph-path "mazes/10_by_10/maze_10x10__1.csv" `
+`python3 graph_statistics.py --graph-path "mazes/20_by_20" `
+`python3 graph_statistics.py --graph-path "mazes/20_by_20/maze_20x20__1.csv" `
+`python3 graph_statistics.py --graph-path "mazes/30_by_30" `
+`python3 graph_statistics.py --graph-path "mazes/30_by_30/maze_30x30__1.csv" `
+`python3 graph_statistics.py --graph-path "mazes/40_by_40" `
+`python3 graph_statistics.py --graph-path "mazes/40_by_40/maze_40x40__1.csv" `
+`python3 graph_statistics.py --graph-path "graphs/random_unlabeled_tree/100 `
 
 ## Generate Graphs
 
@@ -121,6 +145,14 @@ You can also create your own dataset of graphs.
 
 As an example, you could run:
 
+`python3 generate_graphs.py --graph_type balanced_tree --graph_size 10 --n_graph 1 `
+`python3 generate_graphs.py --graph_type full_rary_tree --graph_size 10 --n_graph 1 `
+`python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 10 --n_graph 1 `
+`python3 generate_graphs.py --graph_type random_power_law_tree --graph_size 10 --n_graph 1 `
+
+`python3 generate_graphs.py --graph_type balanced_tree --graph_size 100 --n_graph 250 `
+`python3 generate_graphs.py --graph_type full_rary_tree --graph_size 100 --n_graph 250 `
+`python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 100 --n_graph 250 `
 `python3 generate_graphs.py --graph_type random_power_law_tree --graph_size 100 --n_graph 250 `
 
 ## Multi-agent graph exploration without communication
