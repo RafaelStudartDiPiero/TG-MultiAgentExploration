@@ -45,7 +45,13 @@ As an example, you could run:
 
 `python3 demo.py --agents 3 --graph "mazes/40_by_40/maze_40x40__1.csv"`
 
-`python3 demo.py --agents 3 --graph "graphs/random_unlabeled_tree/100/graph_100__2.graphml"`
+`python3 demo.py --agents 3 --graph "graphs/random_unlabeled_tree/100/graph_100__1.graphml" --algorithm tarry_delayed_interval_tie_breaker`
+
+`python3 demo.py --agents 3 --graph "graphs/random_unlabeled_tree/250/graph_250__1.graphml" --algorithm tarry_delayed_interval_tie_breaker`
+
+`python3 demo.py --agents 3 --graph "graphs/random_unlabeled_tree/500/graph_500__1.graphml" --algorithm tarry_delayed_interval_tie_breaker`
+
+`python3 demo.py --agents 3 --graph "graphs/random_unlabeled_tree/1000/graph_1000__1.graphml" --algorithm tarry_delayed_interval_tie_breaker`
 
 ## Generating Results
 
@@ -87,7 +93,15 @@ As an example, you could run:
 
 `python3 results.py --base_path graphs/random_unlabeled_tree --max_agents 40 --plot true`
 
+`python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 100 --max_agents 40 --plot true`
+
 `python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 250 --max_agents 40 --plot true`
+
+`python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 500 --max_agents 40 --plot true`
+
+`python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 1000 --max_agents 40 --plot true`
+
+`python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 1500 --max_agents 40 --plot true`
 
 ## Comparing Results
 

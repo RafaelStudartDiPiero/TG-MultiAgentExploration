@@ -1,0 +1,107 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d1" for="node" attr.name="finish" attr.type="boolean" />
+  <key id="d0" for="node" attr.name="color" attr.type="string" />
+  <graph edgedefault="undirected">
+    <node id="0">
+      <data key="d0">red</data>
+    </node>
+    <node id="1" />
+    <node id="2" />
+    <node id="3" />
+    <node id="4" />
+    <node id="5" />
+    <node id="6" />
+    <node id="7" />
+    <node id="8" />
+    <node id="9" />
+    <node id="12" />
+    <node id="13" />
+    <node id="15" />
+    <node id="20" />
+    <node id="22" />
+    <node id="23" />
+    <node id="24">
+      <data key="d0">green</data>
+      <data key="d1">True</data>
+    </node>
+    <node id="27" />
+    <node id="30" />
+    <node id="33" />
+    <node id="34" />
+    <node id="35" />
+    <node id="41" />
+    <node id="43" />
+    <node id="44" />
+    <node id="45" />
+    <node id="46" />
+    <node id="47" />
+    <node id="50" />
+    <node id="51" />
+    <node id="52" />
+    <node id="57" />
+    <node id="58" />
+    <node id="65" />
+    <node id="74" />
+    <node id="75" />
+    <node id="76" />
+    <node id="77" />
+    <node id="81" />
+    <node id="82" />
+    <node id="83" />
+    <node id="93" />
+    <node id="94" />
+    <node id="95" />
+    <node id="96" />
+    <node id="97" />
+    <node id="98" />
+    <node id="99" />
+    <edge source="0" target="1" />
+    <edge source="0" target="6" />
+    <edge source="0" target="50" />
+    <edge source="1" target="2" />
+    <edge source="1" target="3" />
+    <edge source="3" target="4" />
+    <edge source="3" target="5" />
+    <edge source="6" target="7" />
+    <edge source="6" target="22" />
+    <edge source="6" target="33" />
+    <edge source="6" target="43" />
+    <edge source="7" target="8" />
+    <edge source="7" target="13" />
+    <edge source="8" target="9" />
+    <edge source="8" target="12" />
+    <edge source="15" target="22" />
+    <edge source="20" target="22" />
+    <edge source="22" target="23" />
+    <edge source="22" target="24" />
+    <edge source="22" target="27" />
+    <edge source="22" target="30" />
+    <edge source="33" target="34" />
+    <edge source="33" target="35" />
+    <edge source="41" target="43" />
+    <edge source="43" target="44" />
+    <edge source="43" target="45" />
+    <edge source="43" target="46" />
+    <edge source="43" target="47" />
+    <edge source="50" target="51" />
+    <edge source="50" target="52" />
+    <edge source="52" target="58" />
+    <edge source="52" target="57" />
+    <edge source="58" target="65" />
+    <edge source="58" target="75" />
+    <edge source="58" target="74" />
+    <edge source="75" target="76" />
+    <edge source="75" target="77" />
+    <edge source="75" target="93" />
+    <edge source="81" target="82" />
+    <edge source="81" target="83" />
+    <edge source="81" target="93" />
+    <edge source="93" target="94" />
+    <edge source="93" target="95" />
+    <edge source="93" target="96" />
+    <edge source="93" target="97" />
+    <edge source="93" target="98" />
+    <edge source="93" target="99" />
+  </graph>
+</graphml>

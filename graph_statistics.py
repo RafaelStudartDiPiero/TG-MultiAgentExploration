@@ -31,7 +31,7 @@ def custom_dfs_tree(graph, start_node):
     return dfs_tree
 
 
-def analyze_graph(graph: nx.Graph, root_id: str) -> Tuple[int, int]:
+def analyze_graph(graph: nx.Graph, root_id: str) -> Tuple[int, int, int]:
     # Convert Graph into Tree
     tree = custom_dfs_tree(graph, root_id)
     visited = set()
@@ -63,31 +63,34 @@ def analyze_graph(graph: nx.Graph, root_id: str) -> Tuple[int, int]:
         return max_depth, leaf_count
 
     max_depth, leaf_count = dfs(root_id, None, 0)
-    return max_depth, leaf_count
+    return max_depth, leaf_count, len(graph.nodes)
 
 
-def analyze_directory(graph_dir: str) -> Tuple[float, float]:
+def analyze_directory(graph_dir: str) -> Tuple[float, float, float]:
     depths = []
     leaf_counts = []
+    node_counts = []
 
     for file_name in os.listdir(graph_dir):
         file_path = os.path.join(graph_dir, file_name)
 
         if file_path.endswith(".graphml"):
             graph = load_graph(file_path)
-            starting_node_id = "1"
+            starting_node_id = "0"
         else:
             graph, rows, columns = convert_maze(file_path)
             starting_node_id = f"{rows},{columns}"
 
         # Analyze the current graph
-        max_depth, leaf_nodes = analyze_graph(graph, starting_node_id)
+        max_depth, leaf_nodes, n_nodes = analyze_graph(graph, starting_node_id)
         depths.append(max_depth)
         leaf_counts.append(leaf_nodes)
+        node_counts.append(n_nodes)
 
     # Calculate the mean of the depths and leaf counts
     mean_depth = mean(depths)
     mean_leaf_count = mean(leaf_counts)
+    mean_n_nodes = mean(node_counts)
     # Number of Graphs
     print(f"Number of Graphs:{len(depths)}")
 
@@ -95,9 +98,9 @@ def analyze_directory(graph_dir: str) -> Tuple[float, float]:
     sanity_res_dir = os.path.join(f"sanity_checks", graph_dir)
     os.makedirs(sanity_res_dir, exist_ok=True)
     with open(os.path.join(sanity_res_dir, f"result.pkl"), "wb") as f:
-        pickle.dump({"depth": mean_depth, "leaf_count": mean_leaf_count}, f)
+        pickle.dump({"depth": mean_depth, "leaf_count": mean_leaf_count, "n_nodes": mean_n_nodes}, f)
 
-    return mean_depth, mean_leaf_count
+    return mean_depth, mean_leaf_count, mean_n_nodes
 
 
 def parse_arguments():
@@ -120,9 +123,10 @@ if __name__ == "__main__":
     args = parse_arguments()
 
     if os.path.isdir(args.graph_path):
-        mean_depth, mean_leaf_count = analyze_directory(args.graph_path)
+        mean_depth, mean_leaf_count, mean_n_nodes = analyze_directory(args.graph_path)
         print(f"Mean Depth: {mean_depth}")
         print(f"Mean Leaf Nodes: {mean_leaf_count}")
+        print(f"Mean Nodes: {mean_n_nodes}")
     else:
         if args.graph_path.endswith(".graphml"):
             graph = load_graph(args.graph_path)
@@ -132,6 +136,7 @@ if __name__ == "__main__":
             starting_node_id = f"{rows},{columns}"
 
         # Analyze single graph
-        max_depth, leaf_nodes = analyze_graph(graph, starting_node_id)
+        max_depth, leaf_nodes, n_nodes = analyze_graph(graph, starting_node_id)
         print(f"Depth: {max_depth}")
         print(f"Leaf Nodes: {leaf_nodes}")
+        print(f"Nodes: {n_nodes}")

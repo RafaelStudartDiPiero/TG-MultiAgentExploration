@@ -24,6 +24,7 @@ class GraphSize(Enum):
     N_250 = "250"
     N_500 = "500"
     N_1000 = "1000"
+    N_1500 = "1500"
 
 
 class Metric(Enum):
@@ -78,7 +79,8 @@ def compare_explorations(
     algorithms_results = []
     for algorithm in algorithms:
         with open(
-            f"results/data/{base_path}/{algorithm.value}/{graph_size.value}_result.pkl", "rb"
+            f"results/data/{base_path}/{algorithm.value}/{graph_size.value}_result.pkl",
+            "rb",
         ) as f:
             results = pickle.load(f)
             algorithms_results.append(results)
@@ -122,11 +124,15 @@ def compare_explorations(
     for index, metric in enumerate(metrics):
         metrics_string += f"{metric.value}_"
     # Creating Base Directoy
-    algorithms_base_path_comparison_dir = os.path.join("results/plot/compare", base_path)
+    algorithms_base_path_comparison_dir = os.path.join(
+        "results/plot/compare", base_path
+    )
     os.makedirs(algorithms_base_path_comparison_dir, exist_ok=True)
 
     # Creating Directory
-    algorithms_comparison_dir = os.path.join(algorithms_base_path_comparison_dir, algorithms_string)
+    algorithms_comparison_dir = os.path.join(
+        algorithms_base_path_comparison_dir, algorithms_string
+    )
     os.makedirs(algorithms_comparison_dir, exist_ok=True)
 
     file_path = f"results/plot/compare/{base_path}/{algorithms_string}/{metrics_string}_{graph_size.value}.svg"
@@ -158,7 +164,7 @@ def convert_metrics_list(metrics: str) -> List[Metric]:
 
 
 def parse_arguments():
-    parser = argparse.ArgumentParser(description="Compare algorithms' results.") 
+    parser = argparse.ArgumentParser(description="Compare algorithms' results.")
     parser.add_argument(
         "--algorithms",
         type=str,

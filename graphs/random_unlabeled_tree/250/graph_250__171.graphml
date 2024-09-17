@@ -1,0 +1,287 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd">
+  <key id="d1" for="node" attr.name="finish" attr.type="boolean" />
+  <key id="d0" for="node" attr.name="color" attr.type="string" />
+  <graph edgedefault="undirected">
+    <node id="0">
+      <data key="d0">red</data>
+    </node>
+    <node id="5" />
+    <node id="6" />
+    <node id="11" />
+    <node id="12" />
+    <node id="13" />
+    <node id="14" />
+    <node id="19" />
+    <node id="20" />
+    <node id="21" />
+    <node id="22" />
+    <node id="23" />
+    <node id="24" />
+    <node id="25" />
+    <node id="26" />
+    <node id="27" />
+    <node id="28" />
+    <node id="31" />
+    <node id="34" />
+    <node id="35" />
+    <node id="36" />
+    <node id="37" />
+    <node id="38" />
+    <node id="39" />
+    <node id="43" />
+    <node id="47" />
+    <node id="48" />
+    <node id="49" />
+    <node id="50" />
+    <node id="51" />
+    <node id="52" />
+    <node id="53" />
+    <node id="54" />
+    <node id="55" />
+    <node id="56" />
+    <node id="57" />
+    <node id="58" />
+    <node id="59" />
+    <node id="60" />
+    <node id="61" />
+    <node id="62" />
+    <node id="63" />
+    <node id="66" />
+    <node id="67" />
+    <node id="68" />
+    <node id="69" />
+    <node id="70" />
+    <node id="71" />
+    <node id="72" />
+    <node id="75" />
+    <node id="76" />
+    <node id="77" />
+    <node id="78" />
+    <node id="79" />
+    <node id="80" />
+    <node id="81" />
+    <node id="85" />
+    <node id="89" />
+    <node id="90" />
+    <node id="91" />
+    <node id="92" />
+    <node id="93" />
+    <node id="94" />
+    <node id="95" />
+    <node id="98" />
+    <node id="101" />
+    <node id="102" />
+    <node id="111" />
+    <node id="116" />
+    <node id="117" />
+    <node id="118" />
+    <node id="119" />
+    <node id="120" />
+    <node id="121" />
+    <node id="124" />
+    <node id="127" />
+    <node id="128" />
+    <node id="129" />
+    <node id="130" />
+    <node id="131" />
+    <node id="132" />
+    <node id="133" />
+    <node id="136" />
+    <node id="139" />
+    <node id="142" />
+    <node id="143" />
+    <node id="144" />
+    <node id="151" />
+    <node id="156" />
+    <node id="157" />
+    <node id="158" />
+    <node id="159" />
+    <node id="160" />
+    <node id="165" />
+    <node id="166" />
+    <node id="167" />
+    <node id="168" />
+    <node id="171" />
+    <node id="172" />
+    <node id="173" />
+    <node id="174" />
+    <node id="175" />
+    <node id="176" />
+    <node id="177" />
+    <node id="178" />
+    <node id="181" />
+    <node id="182" />
+    <node id="183" />
+    <node id="184" />
+    <node id="191">
+      <data key="d0">green</data>
+      <data key="d1">True</data>
+    </node>
+    <node id="192" />
+    <node id="195" />
+    <node id="196" />
+    <node id="197" />
+    <node id="198" />
+    <node id="199" />
+    <node id="204" />
+    <node id="205" />
+    <node id="206" />
+    <node id="207" />
+    <node id="208" />
+    <node id="209" />
+    <node id="210" />
+    <node id="221" />
+    <node id="222" />
+    <node id="225" />
+    <node id="226" />
+    <node id="229" />
+    <node id="230" />
+    <node id="231" />
+    <node id="232" />
+    <node id="233" />
+    <node id="238" />
+    <node id="239" />
+    <node id="240" />
+    <node id="241" />
+    <node id="248" />
+    <node id="249" />
+    <edge source="0" target="5" />
+    <edge source="0" target="249" />
+    <edge source="0" target="19" />
+    <edge source="0" target="20" />
+    <edge source="0" target="21" />
+    <edge source="0" target="22" />
+    <edge source="5" target="6" />
+    <edge source="5" target="12" />
+    <edge source="5" target="11" />
+    <edge source="12" target="13" />
+    <edge source="12" target="14" />
+    <edge source="22" target="23" />
+    <edge source="22" target="53" />
+    <edge source="23" target="24" />
+    <edge source="23" target="25" />
+    <edge source="23" target="26" />
+    <edge source="23" target="27" />
+    <edge source="27" target="28" />
+    <edge source="27" target="31" />
+    <edge source="27" target="47" />
+    <edge source="31" target="36" />
+    <edge source="31" target="34" />
+    <edge source="31" target="35" />
+    <edge source="36" target="37" />
+    <edge source="36" target="38" />
+    <edge source="36" target="39" />
+    <edge source="43" target="47" />
+    <edge source="47" target="48" />
+    <edge source="47" target="49" />
+    <edge source="47" target="50" />
+    <edge source="47" target="51" />
+    <edge source="47" target="52" />
+    <edge source="53" target="54" />
+    <edge source="53" target="58" />
+    <edge source="53" target="75" />
+    <edge source="53" target="79" />
+    <edge source="54" target="55" />
+    <edge source="54" target="56" />
+    <edge source="54" target="57" />
+    <edge source="58" target="59" />
+    <edge source="58" target="60" />
+    <edge source="58" target="68" />
+    <edge source="60" target="61" />
+    <edge source="60" target="62" />
+    <edge source="60" target="63" />
+    <edge source="63" target="67" />
+    <edge source="63" target="66" />
+    <edge source="68" target="69" />
+    <edge source="68" target="70" />
+    <edge source="70" target="71" />
+    <edge source="70" target="72" />
+    <edge source="75" target="76" />
+    <edge source="75" target="77" />
+    <edge source="75" target="78" />
+    <edge source="79" target="80" />
+    <edge source="79" target="81" />
+    <edge source="79" target="89" />
+    <edge source="85" target="89" />
+    <edge source="89" target="90" />
+    <edge source="89" target="91" />
+    <edge source="92" target="93" />
+    <edge source="92" target="142" />
+    <edge source="92" target="249" />
+    <edge source="93" target="94" />
+    <edge source="93" target="95" />
+    <edge source="93" target="116" />
+    <edge source="93" target="98" />
+    <edge source="98" target="101" />
+    <edge source="98" target="102" />
+    <edge source="98" target="111" />
+    <edge source="116" target="117" />
+    <edge source="116" target="133" />
+    <edge source="117" target="118" />
+    <edge source="117" target="127" />
+    <edge source="118" target="119" />
+    <edge source="118" target="124" />
+    <edge source="119" target="120" />
+    <edge source="119" target="121" />
+    <edge source="127" target="128" />
+    <edge source="127" target="129" />
+    <edge source="127" target="130" />
+    <edge source="127" target="131" />
+    <edge source="127" target="132" />
+    <edge source="133" target="136" />
+    <edge source="133" target="139" />
+    <edge source="143" target="144" />
+    <edge source="143" target="249" />
+    <edge source="143" target="156" />
+    <edge source="143" target="151" />
+    <edge source="156" target="157" />
+    <edge source="156" target="158" />
+    <edge source="156" target="159" />
+    <edge source="156" target="171" />
+    <edge source="156" target="183" />
+    <edge source="159" target="160" />
+    <edge source="159" target="166" />
+    <edge source="159" target="165" />
+    <edge source="166" target="167" />
+    <edge source="166" target="168" />
+    <edge source="171" target="172" />
+    <edge source="171" target="173" />
+    <edge source="173" target="174" />
+    <edge source="173" target="177" />
+    <edge source="173" target="178" />
+    <edge source="173" target="181" />
+    <edge source="173" target="182" />
+    <edge source="174" target="175" />
+    <edge source="174" target="176" />
+    <edge source="183" target="184" />
+    <edge source="183" target="191" />
+    <edge source="183" target="192" />
+    <edge source="183" target="195" />
+    <edge source="195" target="196" />
+    <edge source="195" target="197" />
+    <edge source="195" target="198" />
+    <edge source="195" target="199" />
+    <edge source="195" target="238" />
+    <edge source="195" target="248" />
+    <edge source="199" target="205" />
+    <edge source="199" target="208" />
+    <edge source="199" target="209" />
+    <edge source="199" target="204" />
+    <edge source="205" target="206" />
+    <edge source="205" target="207" />
+    <edge source="209" target="210" />
+    <edge source="209" target="221" />
+    <edge source="209" target="222" />
+    <edge source="209" target="225" />
+    <edge source="209" target="226" />
+    <edge source="209" target="230" />
+    <edge source="209" target="229" />
+    <edge source="230" target="231" />
+    <edge source="230" target="232" />
+    <edge source="230" target="233" />
+    <edge source="238" target="239" />
+    <edge source="238" target="240" />
+    <edge source="238" target="241" />
+  </graph>
+</graphml>

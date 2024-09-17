@@ -24,7 +24,7 @@ class Node:
 
 def sort_neighbors(neighbor_ids: List[str], node_id: str) -> List[str]:
     if "," not in node_id:  # If node_id is a single number
-        return sorted(neighbor_ids)
+        return sorted(neighbor_ids, key=int)
 
     # Extract the row and column numbers from the node_id
     row, col = map(int, node_id.split(","))

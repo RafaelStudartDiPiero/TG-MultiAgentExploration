@@ -247,7 +247,23 @@ class Agent:
                 or self.status == AgentStatus.TARRY_SECOND_PHASE
             )
         ):
-            graph.nodes[self.current_node_id]["deadEnd"] = True
+            if (
+                self.algorithm == Algorithm.TARRY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                or (
+                    self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+                    and self.filled_interval
+                )
+                or (
+                    self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
+                    and (
+                        self.step_count > self.step_limit
+                        or self.filled_interval
+                        or self.passed_step_limit
+                    )
+                )
+            ):
+                graph.nodes[self.current_node_id]["deadEnd"] = True
             self.step_back()
             return
 
@@ -263,7 +279,23 @@ class Agent:
 
         # No valid neighbor to next step
         if next_neighbor_id == "-1":
-            graph.nodes[self.current_node_id]["deadEnd"] = True
+            if (
+                self.algorithm == Algorithm.TARRY
+                or self.algorithm == Algorithm.TARRY_INTERVAL_TIE_BREAKER
+                or (
+                    self.algorithm == Algorithm.TARRY_INTERVAL_PRIORITY
+                    and self.filled_interval
+                )
+                or (
+                    self.algorithm == Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER
+                    and (
+                        self.step_count > self.step_limit
+                        or self.filled_interval
+                        or self.passed_step_limit
+                    )
+                )
+            ):
+                graph.nodes[self.current_node_id]["deadEnd"] = True
             self.step_back()
             return
 

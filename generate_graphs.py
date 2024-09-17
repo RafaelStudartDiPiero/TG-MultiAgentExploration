@@ -26,6 +26,61 @@ def convert_enum_to_int(graph_size: GraphSize):
         return int(value_str)
 
 
+def contract_paths(uncontracted_graph: nx.Graph, root: int) -> nx.Graph:
+    # Copy graph
+    contracted_graph = uncontracted_graph.copy()
+    # All Degree 2 Nodes
+    degree_two_nodes = [
+        node
+        for node, degree in contracted_graph.degree()
+        if degree == 2 and node != root
+    ]
+
+    while len(degree_two_nodes) > 0:
+        for v in degree_two_nodes:
+            try:
+                neighbors = list(contracted_graph.neighbors(v))
+            except:
+                # Searched already contracted node, just continue
+                continue
+            # Check it has only 2 neighbors
+            if len(neighbors) == 2:
+                u, w = neighbors
+                
+                # Choosing main neighbor
+                # Order nodes by rule: root > node with more neighbors
+                sorted_neighbors = sorted(
+                    [u, w],
+                    key=lambda x: (x == root, contracted_graph.degree(x)),
+                    reverse=True,
+                )
+                main_node = sorted_neighbors[0]
+                auxiliar_node = sorted_neighbors[1]
+                last_node = v  # v is the node to be contracted first
+                
+                # Contract auxiliar and last, maintaining auxiliar
+                contracted_graph = nx.contracted_nodes(
+                    contracted_graph, auxiliar_node, last_node, self_loops=False, copy=False
+                )
+                # Remove "contraction" metadata
+                if "contraction" in contracted_graph.nodes[auxiliar_node]:
+                    del contracted_graph.nodes[auxiliar_node]["contraction"]
+                # Contract main and aux, maintaining main
+                contracted_graph = nx.contracted_nodes(
+                    contracted_graph, main_node, auxiliar_node, self_loops=False, copy=False
+                )
+                # Remove "contraction" metadata
+                if "contraction" in contracted_graph.nodes[main_node]:
+                    del contracted_graph.nodes[main_node]["contraction"]
+        degree_two_nodes = [
+            node
+            for node, degree in contracted_graph.degree()
+            if degree == 2 and node != root
+        ]
+
+    return contracted_graph
+
+
 def generate_graph_by_enum(graph_type: GraphType, n_nodes: int) -> nx.Graph:
     G = None
 
@@ -43,6 +98,7 @@ def generate_graph_by_enum(graph_type: GraphType, n_nodes: int) -> nx.Graph:
         G = nx.random_unlabeled_tree(n_nodes, number_of_trees=None, seed=None)
 
     # Contract Paths
+    G = contract_paths(G, 0)
 
     # Set root and finish
     G.nodes[0]["color"] = "red"
