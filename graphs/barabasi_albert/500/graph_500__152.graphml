@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="20"/>
+<node id="88"/>
+<node id="151"/>
+<node id="182"/>
+<node id="204"/>
+<node id="232"/>
+<node id="240"/>
+<node id="247"/>
+<node id="251"/>
+<node id="253"/>
+<node id="270"/>
+<node id="294"/>
+<node id="298"/>
+<node id="329"/>
+<node id="338"/>
+<node id="370"/>
+<node id="371"/>
+<node id="384">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="430"/>
+<node id="432"/>
+<node id="445"/>
+<node id="457"/>
+<node id="459"/>
+<node id="468"/>
+<node id="474"/>
+<node id="480"/>
+<node id="487"/>
+<node id="491"/>
+<node id="495"/>
+<edge source="0" target="20"/>
+<edge source="0" target="151"/>
+<edge source="0" target="232"/>
+<edge source="0" target="251"/>
+<edge source="0" target="270"/>
+<edge source="0" target="468"/>
+<edge source="0" target="480"/>
+<edge source="0" target="329"/>
+<edge source="0" target="240"/>
+<edge source="0" target="204"/>
+<edge source="0" target="371"/>
+<edge source="0" target="459"/>
+<edge source="0" target="298"/>
+<edge source="0" target="338"/>
+<edge source="0" target="491"/>
+<edge source="0" target="294"/>
+<edge source="0" target="370"/>
+<edge source="0" target="445"/>
+<edge source="0" target="253"/>
+<edge source="0" target="457"/>
+<edge source="0" target="88"/>
+<edge source="0" target="495"/>
+<edge source="0" target="430"/>
+<edge source="0" target="182"/>
+<edge source="0" target="384"/>
+<edge source="0" target="487"/>
+<edge source="0" target="247"/>
+<edge source="0" target="432"/>
+<edge source="0" target="474"/>
+</graph></graphml>

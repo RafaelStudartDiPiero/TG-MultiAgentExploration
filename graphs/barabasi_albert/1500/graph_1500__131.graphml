@@ -1,0 +1,142 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="24"/>
+<node id="77"/>
+<node id="149"/>
+<node id="160"/>
+<node id="207"/>
+<node id="218"/>
+<node id="245"/>
+<node id="255"/>
+<node id="261"/>
+<node id="319"/>
+<node id="487"/>
+<node id="527"/>
+<node id="534"/>
+<node id="568"/>
+<node id="573"/>
+<node id="594"/>
+<node id="669"/>
+<node id="677"/>
+<node id="681"/>
+<node id="723"/>
+<node id="744"/>
+<node id="752"/>
+<node id="758"/>
+<node id="792"/>
+<node id="840"/>
+<node id="844"/>
+<node id="874"/>
+<node id="880"/>
+<node id="882"/>
+<node id="958"/>
+<node id="974"/>
+<node id="1042"/>
+<node id="1074"/>
+<node id="1085"/>
+<node id="1107"/>
+<node id="1120">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="1122"/>
+<node id="1127"/>
+<node id="1206"/>
+<node id="1211"/>
+<node id="1229"/>
+<node id="1231"/>
+<node id="1234"/>
+<node id="1245"/>
+<node id="1263"/>
+<node id="1274"/>
+<node id="1311"/>
+<node id="1316"/>
+<node id="1332"/>
+<node id="1333"/>
+<node id="1356"/>
+<node id="1404"/>
+<node id="1416"/>
+<node id="1418"/>
+<node id="1425"/>
+<node id="1432"/>
+<node id="1471"/>
+<node id="1472"/>
+<node id="1479"/>
+<node id="1489"/>
+<node id="1496"/>
+<edge source="0" target="1425"/>
+<edge source="0" target="534"/>
+<edge source="0" target="255"/>
+<edge source="0" target="573"/>
+<edge source="0" target="1356"/>
+<edge source="0" target="24"/>
+<edge source="0" target="218"/>
+<edge source="0" target="1333"/>
+<edge source="0" target="1234"/>
+<edge source="0" target="844"/>
+<edge source="0" target="1332"/>
+<edge source="0" target="874"/>
+<edge source="0" target="245"/>
+<edge source="0" target="882"/>
+<edge source="0" target="1042"/>
+<edge source="0" target="669"/>
+<edge source="0" target="207"/>
+<edge source="0" target="840"/>
+<edge source="0" target="1211"/>
+<edge source="0" target="487"/>
+<edge source="0" target="594"/>
+<edge source="0" target="974"/>
+<edge source="0" target="1311"/>
+<edge source="0" target="1263"/>
+<edge source="0" target="1229"/>
+<edge source="0" target="319"/>
+<edge source="0" target="1122"/>
+<edge source="0" target="1416"/>
+<edge source="0" target="77"/>
+<edge source="0" target="752"/>
+<edge source="0" target="1074"/>
+<edge source="0" target="723"/>
+<edge source="0" target="677"/>
+<edge source="0" target="1127"/>
+<edge source="0" target="527"/>
+<edge source="0" target="681"/>
+<edge source="0" target="1085"/>
+<edge source="0" target="1496"/>
+<edge source="0" target="160"/>
+<edge source="0" target="1245"/>
+<edge source="0" target="758"/>
+<edge source="0" target="1471"/>
+<edge source="0" target="744"/>
+<edge source="0" target="149"/>
+<edge source="0" target="1107"/>
+<edge source="0" target="958"/>
+<edge source="0" target="792"/>
+<edge source="0" target="1120"/>
+<edge source="0" target="261"/>
+<edge source="0" target="1316"/>
+<edge source="0" target="568"/>
+<edge source="0" target="1206"/>
+<edge source="0" target="1274"/>
+<edge source="0" target="1489"/>
+<edge source="0" target="1479"/>
+<edge source="0" target="1418"/>
+<edge source="0" target="1231"/>
+<edge source="0" target="1472"/>
+<edge source="0" target="880"/>
+<edge source="0" target="1404"/>
+<edge source="0" target="1432"/>
+<edge source="24" target="792"/>
+<edge source="24" target="880"/>
+<edge source="218" target="261"/>
+<edge source="218" target="573"/>
+<edge source="245" target="261"/>
+<edge source="245" target="882"/>
+<edge source="487" target="882"/>
+<edge source="487" target="1432"/>
+<edge source="573" target="1432"/>
+<edge source="792" target="880"/>
+</graph></graphml>

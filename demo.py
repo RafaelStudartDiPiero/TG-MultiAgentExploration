@@ -1,9 +1,10 @@
 import argparse
+import random
 
 import gmpy2
 
 import gmpyconfig
-from simulation.graph_utils import convert_maze, load_graph
+from simulation.graph_utils import convert_maze, load_graph, get_starting_node
 from simulation.simulation import Algorithm, Simulation
 
 
@@ -33,19 +34,16 @@ if __name__ == "__main__":
 
     if args.graph.endswith(".graphml"):
         graph = load_graph(args.graph)
-        starting_node_id = "0"
-        is_maze = False
+        starting_node_id = get_starting_node(random.choice(list(graph.nodes)))
     else:
         graph, rows, columns = convert_maze(args.graph)
         starting_node_id = f"{rows},{columns}"
-        is_maze = True
 
     simulation = Simulation(
         algorithm=args.algorithm,
         n_agents=args.agents,
         graph=graph,
         starting_node_id=starting_node_id,
-        is_maze=is_maze,
     )
 
     simulation.simulate(shoud_print=True, should_print_trees=False)

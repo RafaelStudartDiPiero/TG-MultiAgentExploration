@@ -1,7 +1,9 @@
 # Importing necessary libraries and functions
 import argparse
 import os
+import random
 import pickle
+import gc  # For garbage collection to free memory
 from statistics import stdev
 from typing import Optional
 
@@ -11,7 +13,12 @@ import numpy as np
 
 import gmpyconfig
 from compare import GraphSize
-from simulation.graph_utils import convert_maze, load_graph
+from simulation.graph_utils import (
+    convert_maze,
+    load_graph,
+    get_node_format,
+    get_starting_node,
+)
 from simulation.simulation import Algorithm, Simulation
 
 
@@ -111,19 +118,19 @@ def simulate_graph_exploration(
                         graph_path = os.path.join(root, file)
                         if graph_path.endswith(".graphml"):
                             graph = load_graph(graph_path)
-                            starting_node_id = "0"
-                            is_maze = False
+                            node_example = random.choice(list(graph.nodes))
+                            starting_node_id = get_starting_node(node_example)
                         else:
                             graph, rows, columns = convert_maze(graph_path)
                             starting_node_id = f"{rows},{columns}"
-                            is_maze = True
+                        
+                        print(graph_path)
 
                         simulation = Simulation(
                             algorithm=chosen_algorithm,
                             n_agents=agents,
                             graph=graph,
                             starting_node_id=starting_node_id,
-                            is_maze=is_maze,
                         )
 
                         simulation.simulate(False, False)
@@ -136,6 +143,11 @@ def simulate_graph_exploration(
                             simulation.fraction_pioneer * 100
                         )
                         count += 1
+                        
+                        # Free the graph memory after simulation
+                        del simulation  # Cleanup the simulation object
+                        del graph  # Cleanup the graph object
+                        gc.collect()
 
                 # Calculate average and standard deviation for steps and pioneer steps
                 avg_steps, std_steps = calculate_stats(agent_steps)
@@ -163,12 +175,14 @@ def simulate_graph_exploration(
                 )
             # Loading results for each graph_size into a pickle that can be found later
             general_results.append(results)
-            
+
             # Define base path directory
             base_path_results_dir = os.path.join("results/data", base_path)
             os.makedirs(base_path_results_dir, exist_ok=True)
             # Define the algorithm-specific directory
-            algorithm_data_dir = os.path.join(base_path_results_dir, chosen_algorithm.value)
+            algorithm_data_dir = os.path.join(
+                base_path_results_dir, chosen_algorithm.value
+            )
             os.makedirs(algorithm_data_dir, exist_ok=True)
             with open(
                 os.path.join(algorithm_data_dir, f"{graph_size}_result.pkl"), "wb"

@@ -10,7 +10,6 @@ def test_full_tree_simulation():
         n_agents=3,
         graph=graph,
         starting_node_id="1",
-        is_maze=False,
     )
 
     simulation.simulate(shoud_print=False, should_print_trees=False)

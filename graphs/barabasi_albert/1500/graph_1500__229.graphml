@@ -1,0 +1,192 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="36"/>
+<node id="88"/>
+<node id="117"/>
+<node id="262"/>
+<node id="263"/>
+<node id="289"/>
+<node id="304"/>
+<node id="321"/>
+<node id="328"/>
+<node id="401"/>
+<node id="414"/>
+<node id="422"/>
+<node id="472"/>
+<node id="497"/>
+<node id="508"/>
+<node id="517"/>
+<node id="534"/>
+<node id="567"/>
+<node id="594"/>
+<node id="605"/>
+<node id="608"/>
+<node id="636"/>
+<node id="640"/>
+<node id="643"/>
+<node id="645"/>
+<node id="681"/>
+<node id="695"/>
+<node id="715"/>
+<node id="727"/>
+<node id="739"/>
+<node id="743"/>
+<node id="749"/>
+<node id="778"/>
+<node id="788"/>
+<node id="810"/>
+<node id="812"/>
+<node id="845"/>
+<node id="857"/>
+<node id="864"/>
+<node id="873"/>
+<node id="874"/>
+<node id="875"/>
+<node id="893"/>
+<node id="930"/>
+<node id="934"/>
+<node id="944"/>
+<node id="972"/>
+<node id="993"/>
+<node id="1011"/>
+<node id="1036"/>
+<node id="1043"/>
+<node id="1045"/>
+<node id="1070"/>
+<node id="1086"/>
+<node id="1116"/>
+<node id="1117"/>
+<node id="1133"/>
+<node id="1153"/>
+<node id="1172"/>
+<node id="1183"/>
+<node id="1211">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="1217"/>
+<node id="1228"/>
+<node id="1229"/>
+<node id="1235"/>
+<node id="1240"/>
+<node id="1258"/>
+<node id="1280"/>
+<node id="1286"/>
+<node id="1290"/>
+<node id="1292"/>
+<node id="1307"/>
+<node id="1312"/>
+<node id="1317"/>
+<node id="1323"/>
+<node id="1337"/>
+<node id="1346"/>
+<node id="1348"/>
+<node id="1353"/>
+<node id="1392"/>
+<node id="1402"/>
+<node id="1405"/>
+<node id="1407"/>
+<node id="1409"/>
+<node id="1423"/>
+<node id="1427"/>
+<node id="1443"/>
+<node id="1452"/>
+<node id="1465"/>
+<node id="1496"/>
+<node id="1497"/>
+<edge source="0" target="36"/>
+<edge source="0" target="328"/>
+<edge source="0" target="508"/>
+<edge source="0" target="778"/>
+<edge source="0" target="1036"/>
+<edge source="0" target="1407"/>
+<edge source="0" target="1443"/>
+<edge source="0" target="1497"/>
+<edge source="0" target="321"/>
+<edge source="0" target="1070"/>
+<edge source="0" target="788"/>
+<edge source="0" target="1286"/>
+<edge source="0" target="289"/>
+<edge source="0" target="1235"/>
+<edge source="0" target="262"/>
+<edge source="0" target="1346"/>
+<edge source="0" target="414"/>
+<edge source="0" target="640"/>
+<edge source="0" target="594"/>
+<edge source="0" target="739"/>
+<edge source="0" target="645"/>
+<edge source="0" target="812"/>
+<edge source="0" target="1353"/>
+<edge source="0" target="1172"/>
+<edge source="0" target="864"/>
+<edge source="0" target="605"/>
+<edge source="0" target="944"/>
+<edge source="0" target="1086"/>
+<edge source="0" target="1217"/>
+<edge source="0" target="1307"/>
+<edge source="0" target="117"/>
+<edge source="0" target="401"/>
+<edge source="0" target="972"/>
+<edge source="0" target="1427"/>
+<edge source="0" target="1117"/>
+<edge source="0" target="1258"/>
+<edge source="0" target="643"/>
+<edge source="0" target="873"/>
+<edge source="0" target="1323"/>
+<edge source="0" target="1045"/>
+<edge source="0" target="1043"/>
+<edge source="0" target="1116"/>
+<edge source="0" target="1211"/>
+<edge source="0" target="845"/>
+<edge source="0" target="1402"/>
+<edge source="0" target="534"/>
+<edge source="0" target="1183"/>
+<edge source="0" target="727"/>
+<edge source="0" target="636"/>
+<edge source="0" target="497"/>
+<edge source="0" target="930"/>
+<edge source="0" target="810"/>
+<edge source="0" target="695"/>
+<edge source="0" target="472"/>
+<edge source="0" target="681"/>
+<edge source="0" target="1290"/>
+<edge source="0" target="874"/>
+<edge source="0" target="517"/>
+<edge source="0" target="1496"/>
+<edge source="0" target="1348"/>
+<edge source="0" target="893"/>
+<edge source="0" target="743"/>
+<edge source="0" target="715"/>
+<edge source="0" target="1292"/>
+<edge source="0" target="749"/>
+<edge source="0" target="1317"/>
+<edge source="0" target="1240"/>
+<edge source="0" target="1452"/>
+<edge source="0" target="608"/>
+<edge source="0" target="1011"/>
+<edge source="0" target="1409"/>
+<edge source="0" target="88"/>
+<edge source="0" target="1392"/>
+<edge source="0" target="1153"/>
+<edge source="0" target="422"/>
+<edge source="0" target="1228"/>
+<edge source="0" target="304"/>
+<edge source="0" target="857"/>
+<edge source="0" target="1229"/>
+<edge source="0" target="1280"/>
+<edge source="0" target="1423"/>
+<edge source="0" target="1312"/>
+<edge source="0" target="567"/>
+<edge source="0" target="934"/>
+<edge source="0" target="993"/>
+<edge source="0" target="263"/>
+<edge source="0" target="1405"/>
+<edge source="0" target="875"/>
+<edge source="0" target="1133"/>
+<edge source="0" target="1337"/>
+<edge source="0" target="1465"/>
+</graph></graphml>

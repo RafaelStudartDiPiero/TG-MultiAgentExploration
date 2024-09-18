@@ -1,0 +1,64 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="55"/>
+<node id="96"/>
+<node id="158"/>
+<node id="178"/>
+<node id="182"/>
+<node id="204"/>
+<node id="222"/>
+<node id="235"/>
+<node id="306"/>
+<node id="312"/>
+<node id="319"/>
+<node id="356">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="358"/>
+<node id="359"/>
+<node id="377"/>
+<node id="387"/>
+<node id="388"/>
+<node id="396"/>
+<node id="402"/>
+<node id="404"/>
+<node id="413"/>
+<node id="417"/>
+<node id="423"/>
+<node id="425"/>
+<node id="448"/>
+<node id="460"/>
+<node id="479"/>
+<edge source="0" target="222"/>
+<edge source="0" target="396"/>
+<edge source="0" target="402"/>
+<edge source="0" target="417"/>
+<edge source="0" target="425"/>
+<edge source="0" target="388"/>
+<edge source="0" target="413"/>
+<edge source="0" target="479"/>
+<edge source="0" target="319"/>
+<edge source="0" target="55"/>
+<edge source="0" target="158"/>
+<edge source="0" target="178"/>
+<edge source="0" target="387"/>
+<edge source="0" target="404"/>
+<edge source="0" target="306"/>
+<edge source="0" target="204"/>
+<edge source="0" target="423"/>
+<edge source="0" target="448"/>
+<edge source="0" target="377"/>
+<edge source="0" target="312"/>
+<edge source="0" target="356"/>
+<edge source="0" target="359"/>
+<edge source="0" target="358"/>
+<edge source="0" target="96"/>
+<edge source="0" target="235"/>
+<edge source="0" target="460"/>
+<edge source="0" target="182"/>
+</graph></graphml>

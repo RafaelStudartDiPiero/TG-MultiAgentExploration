@@ -1,15 +1,14 @@
 # Importing necessary libraries and functions
 import argparse
 import os
-import pickle
-from statistics import stdev, mean
+import csv
+from statistics import mean
 from typing import Tuple
+import random
 
-import matplotlib.pyplot as plt
-import numpy as np
 import networkx as nx
 
-from simulation.graph_utils import convert_maze, load_graph
+from simulation.graph_utils import convert_maze, load_graph, get_starting_node
 from simulation.graph import sort_neighbors
 
 
@@ -76,7 +75,7 @@ def analyze_directory(graph_dir: str) -> Tuple[float, float, float]:
 
         if file_path.endswith(".graphml"):
             graph = load_graph(file_path)
-            starting_node_id = "0"
+            starting_node_id = get_starting_node(random.choice(list(graph.nodes)))
         else:
             graph, rows, columns = convert_maze(file_path)
             starting_node_id = f"{rows},{columns}"
@@ -97,8 +96,25 @@ def analyze_directory(graph_dir: str) -> Tuple[float, float, float]:
     # Save Data
     sanity_res_dir = os.path.join(f"sanity_checks", graph_dir)
     os.makedirs(sanity_res_dir, exist_ok=True)
-    with open(os.path.join(sanity_res_dir, f"result.pkl"), "wb") as f:
-        pickle.dump({"depth": mean_depth, "leaf_count": mean_leaf_count, "n_nodes": mean_n_nodes}, f)
+    # Save as a CSV file
+    with open(os.path.join(sanity_res_dir, "result.csv"), "w", newline="") as csvfile:
+        fieldnames = ["mean_depth", "mean_leaf_count", "mean_n_nodes"]
+        writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
+
+        writer.writeheader()
+        writer.writerow(
+            {
+                "mean_depth": mean_depth,
+                "mean_leaf_count": mean_leaf_count,
+                "mean_n_nodes": mean_n_nodes,
+            }
+        )
+
+    # Save as a TXT file
+    with open(os.path.join(sanity_res_dir, "result.txt"), "w") as txtfile:
+        txtfile.write(f"Mean Depth: {mean_depth}\n")
+        txtfile.write(f"Mean Leaf Count: {mean_leaf_count}\n")
+        txtfile.write(f"Mean Nodes: {mean_n_nodes}\n")
 
     return mean_depth, mean_leaf_count, mean_n_nodes
 
@@ -130,7 +146,7 @@ if __name__ == "__main__":
     else:
         if args.graph_path.endswith(".graphml"):
             graph = load_graph(args.graph_path)
-            starting_node_id = "0"
+            starting_node_id = get_starting_node(random.choice(list(graph.nodes)))
         else:
             graph, rows, columns = convert_maze(args.graph_path)
             starting_node_id = f"{rows},{columns}"

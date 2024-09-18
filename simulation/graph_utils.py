@@ -1,5 +1,5 @@
 import csv
-from typing import Optional, Tuple
+from typing import Optional, Tuple, Union
 
 import gmpy2
 import matplotlib.pyplot as plt
@@ -7,6 +7,38 @@ import networkx as nx
 from networkx.drawing.nx_pydot import graphviz_layout
 
 import gmpyconfig
+
+
+def get_node_format(node: Union[int, str]) -> str:
+    if isinstance(node, int):
+        return "int"
+    elif isinstance(node, str):
+        if "," in node:
+            return "str"
+        else:
+            return "int"  # Assuming single values are also represented as "int" for consistency
+    else:
+        raise TypeError(f"Unsupported node type: {type(node)}")
+
+
+def get_starting_node(node: Union[int, str]) -> str:
+    node_format = get_node_format(node)
+    if node_format == "int":
+        return "0"
+    if node_format == "str":
+        return "0,0"
+    else:
+        raise TypeError(f"Unsupported node format: {node_format}")
+
+
+def is_graph_grid(node: Union[int, str]) -> str:
+    node_format = get_node_format(node)
+    if node_format == "int":
+        return False
+    if node_format == "str":
+        return True
+    else:
+        raise TypeError(f"Unsupported node format: {node_format}")
 
 
 def load_graph(file_path) -> nx.Graph:
@@ -175,8 +207,7 @@ def add_edge_to_graph(
 ) -> nx.Graph:
     # Checking if the id already exists
     if graph.has_node(dest_node_id):
-        # Rename older node id
-        graph = nx.relabel_nodes(graph, {dest_node_id: f"{dest_node_id}_0"})
+        graph.remove_node(dest_node_id)
 
     graph.add_edge(origin_node_id, dest_node_id)
     graph.nodes[dest_node_id]["index"] = index

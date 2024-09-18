@@ -1,0 +1,78 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="88"/>
+<node id="111"/>
+<node id="122"/>
+<node id="173"/>
+<node id="186"/>
+<node id="204"/>
+<node id="207"/>
+<node id="211"/>
+<node id="231"/>
+<node id="241"/>
+<node id="267"/>
+<node id="269"/>
+<node id="275"/>
+<node id="286"/>
+<node id="299"/>
+<node id="316"/>
+<node id="354"/>
+<node id="356"/>
+<node id="358"/>
+<node id="375"/>
+<node id="377"/>
+<node id="393"/>
+<node id="411"/>
+<node id="413"/>
+<node id="429"/>
+<node id="489">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="490"/>
+<node id="497"/>
+<node id="498"/>
+<edge source="0" target="207"/>
+<edge source="0" target="122"/>
+<edge source="0" target="358"/>
+<edge source="0" target="490"/>
+<edge source="0" target="354"/>
+<edge source="0" target="489"/>
+<edge source="0" target="88"/>
+<edge source="0" target="173"/>
+<edge source="0" target="375"/>
+<edge source="0" target="377"/>
+<edge source="0" target="413"/>
+<edge source="0" target="231"/>
+<edge source="0" target="275"/>
+<edge source="0" target="267"/>
+<edge source="0" target="356"/>
+<edge source="0" target="411"/>
+<edge source="0" target="299"/>
+<edge source="0" target="497"/>
+<edge source="0" target="286"/>
+<edge source="0" target="111"/>
+<edge source="0" target="393"/>
+<edge source="0" target="429"/>
+<edge source="0" target="186"/>
+<edge source="0" target="211"/>
+<edge source="0" target="204"/>
+<edge source="0" target="269"/>
+<edge source="0" target="498"/>
+<edge source="0" target="241"/>
+<edge source="0" target="316"/>
+<edge source="88" target="173"/>
+<edge source="88" target="204"/>
+<edge source="111" target="204"/>
+<edge source="111" target="316"/>
+<edge source="111" target="356"/>
+<edge source="111" target="429"/>
+<edge source="173" target="186"/>
+<edge source="186" target="207"/>
+<edge source="207" target="316"/>
+<edge source="356" target="429"/>
+</graph></graphml>

@@ -103,6 +103,8 @@ As an example, you could run:
 
 `python3 results.py --base_path graphs/random_unlabeled_tree --graph_size_path 1500 --max_agents 40 --plot true`
 
+`python3 results.py --base_path graphs/small_world --max_agents 40 --plot true`
+
 ## Comparing Results
 
 After generating results, you can generate specific plots to compare different algorithms.
@@ -147,7 +149,11 @@ As an example, you could run:
 `python3 graph_statistics.py --graph-path "mazes/30_by_30/maze_30x30__1.csv" `
 `python3 graph_statistics.py --graph-path "mazes/40_by_40" `
 `python3 graph_statistics.py --graph-path "mazes/40_by_40/maze_40x40__1.csv" `
-`python3 graph_statistics.py --graph-path "graphs/random_unlabeled_tree/100 `
+
+`python3 graph_statistics.py --graph-path "graphs/random_unlabeled_tree/100" `
+`python3 graph_statistics.py --graph-path "graphs/barabasi_albert/100" `
+`python3 graph_statistics.py --graph-path "graphs/small_world/100" `
+
 
 ## Generate Graphs
 
@@ -159,15 +165,26 @@ You can also create your own dataset of graphs.
 
 As an example, you could run:
 
-`python3 generate_graphs.py --graph_type balanced_tree --graph_size 10 --n_graph 1 `
-`python3 generate_graphs.py --graph_type full_rary_tree --graph_size 10 --n_graph 1 `
 `python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 10 --n_graph 1 `
-`python3 generate_graphs.py --graph_type random_power_law_tree --graph_size 10 --n_graph 1 `
+`python3 generate_graphs.py --graph_type barabasi_albert --graph_size 10 --n_graph 1 `
 
-`python3 generate_graphs.py --graph_type balanced_tree --graph_size 100 --n_graph 250 `
-`python3 generate_graphs.py --graph_type full_rary_tree --graph_size 100 --n_graph 250 `
 `python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 100 --n_graph 250 `
-`python3 generate_graphs.py --graph_type random_power_law_tree --graph_size 100 --n_graph 250 `
+`python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 250 --n_graph 250 `
+`python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 500 --n_graph 250 `
+`python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 1000 --n_graph 250 `
+`python3 generate_graphs.py --graph_type random_unlabeled_tree --graph_size 1500 --n_graph 250 `
+
+`python3 generate_graphs.py --graph_type barabasi_albert --graph_size 100 --n_graph 250 `
+`python3 generate_graphs.py --graph_type barabasi_albert --graph_size 250 --n_graph 250 `
+`python3 generate_graphs.py --graph_type barabasi_albert --graph_size 500 --n_graph 250 `
+`python3 generate_graphs.py --graph_type barabasi_albert --graph_size 1000 --n_graph 250 `
+`python3 generate_graphs.py --graph_type barabasi_albert --graph_size 1500 --n_graph 250 `
+
+`python3 generate_graphs.py --graph_type small_world --graph_size 100 --n_graph 250 `
+`python3 generate_graphs.py --graph_type small_world --graph_size 250 --n_graph 250 `
+`python3 generate_graphs.py --graph_type small_world --graph_size 500 --n_graph 250 `
+`python3 generate_graphs.py --graph_type small_world --graph_size 1000 --n_graph 250 `
+`python3 generate_graphs.py --graph_type small_world --graph_size 1500 --n_graph 250 `
 
 ## Multi-agent graph exploration without communication
 

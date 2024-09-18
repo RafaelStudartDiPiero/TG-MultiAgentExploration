@@ -1,12 +1,13 @@
 from typing import List, Optional
 from gmpy2 import mpfr
 
+import random
 import matplotlib.pyplot as plt
 import networkx as nx
 
 import gmpyconfig
 from simulation.agent import Agent, AgentStatus, Algorithm, Color, Node
-from simulation.graph_utils import display_graph, display_maze
+from simulation.graph_utils import display_graph, display_maze, is_graph_grid
 
 defaultAgentColorList = [
     Color.red,
@@ -33,12 +34,11 @@ class Simulation:
         n_agents: int,
         graph: nx.Graph,
         starting_node_id: str,
-        is_maze: Optional[bool] = False,
     ) -> None:
         self.n_agents = n_agents
         self.algorithm = algorithm
         self.graph = graph
-        self.is_maze = is_maze if is_maze is not None else False
+        self.is_grid = is_graph_grid(random.choice(list(graph.nodes)))
         self.agents: List[Agent] = []
         self.division = division = 1.0 / self.n_agents if self.n_agents > 0 else 0
         self.starting_node_id = starting_node_id
@@ -190,7 +190,7 @@ class Simulation:
         if shoud_print is not None and shoud_print:
             plt.ion()
             fig, ax = plt.subplots()
-            if self.is_maze:
+            if self.is_grid:
                 display_maze(self.graph, 6, 6, ax=ax)
             else:
                 display_graph(self.graph, self.starting_node_id)
@@ -234,7 +234,7 @@ class Simulation:
                     )
                     self.graph.nodes[step_node]["color"] = agent.color.value[0]
                     self.graph.nodes[previous_step_node]["color"] = agent.color.value[1]
-                    if self.is_maze:
+                    if self.is_grid:
                         display_maze(self.graph, 6, 6, ax=ax)
                         plt.pause(0.1)
                     else:
@@ -266,3 +266,8 @@ class Simulation:
                 agent.print_tree(
                     title=f"Agent ({agent.interval[0]:.3f},{agent.interval[1]:.3f})"
                 )
+
+    def __del__(self):
+        # Clean up memory
+        del self.graph
+        del self.agents

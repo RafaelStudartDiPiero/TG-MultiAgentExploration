@@ -2,18 +2,21 @@
 import argparse
 import os
 import random
+from math import floor, sqrt
 from enum import Enum
 
 import networkx as nx
 
 from compare import GraphSize
+from simulation.graph_utils import get_starting_node
 
 
 class GraphType(Enum):
-    BALANCED_TREE = "balanced_tree"
-    FULL_RARY_TREE = "full_rary_tree"
     RANDOM_UNLABELED_TREE = "random_unlabeled_tree"
-    RANDOM_POWER_LAW_TREE = "random_power_law_tree"
+    # With loops
+    SMALL_WORLD = "small_world"
+    RANDOM_GEOMETRIC = "random_geometric"
+    BARABASI_ALBERT = "barabasi_albert"
 
 
 def convert_enum_to_int(graph_size: GraphSize):
@@ -46,7 +49,7 @@ def contract_paths(uncontracted_graph: nx.Graph, root: int) -> nx.Graph:
             # Check it has only 2 neighbors
             if len(neighbors) == 2:
                 u, w = neighbors
-                
+
                 # Choosing main neighbor
                 # Order nodes by rule: root > node with more neighbors
                 sorted_neighbors = sorted(
@@ -57,17 +60,25 @@ def contract_paths(uncontracted_graph: nx.Graph, root: int) -> nx.Graph:
                 main_node = sorted_neighbors[0]
                 auxiliar_node = sorted_neighbors[1]
                 last_node = v  # v is the node to be contracted first
-                
+
                 # Contract auxiliar and last, maintaining auxiliar
                 contracted_graph = nx.contracted_nodes(
-                    contracted_graph, auxiliar_node, last_node, self_loops=False, copy=False
+                    contracted_graph,
+                    auxiliar_node,
+                    last_node,
+                    self_loops=False,
+                    copy=False,
                 )
                 # Remove "contraction" metadata
                 if "contraction" in contracted_graph.nodes[auxiliar_node]:
                     del contracted_graph.nodes[auxiliar_node]["contraction"]
                 # Contract main and aux, maintaining main
                 contracted_graph = nx.contracted_nodes(
-                    contracted_graph, main_node, auxiliar_node, self_loops=False, copy=False
+                    contracted_graph,
+                    main_node,
+                    auxiliar_node,
+                    self_loops=False,
+                    copy=False,
                 )
                 # Remove "contraction" metadata
                 if "contraction" in contracted_graph.nodes[main_node]:
@@ -77,6 +88,10 @@ def contract_paths(uncontracted_graph: nx.Graph, root: int) -> nx.Graph:
             for node, degree in contracted_graph.degree()
             if degree == 2 and node != root
         ]
+    # Clean edge attributes after contraction
+    for u, v, attributes in contracted_graph.edges(data=True):
+        if "contraction" in attributes:
+            del attributes["contraction"]
 
     return contracted_graph
 
@@ -85,26 +100,42 @@ def generate_graph_by_enum(graph_type: GraphType, n_nodes: int) -> nx.Graph:
     G = None
 
     # Generate Basic Graph
-    if graph_type == GraphType.BALANCED_TREE:
-        # TODO: Fix This R and H
-        G = nx.balanced_tree(r=10, h=3)
-    elif graph_type == GraphType.FULL_RARY_TREE:
-        # TODO: Fix this R
-        G = nx.full_rary_tree(r=3, n=n_nodes)
-    elif graph_type == GraphType.RANDOM_POWER_LAW_TREE:
-        # TODO: Fix this power law
-        G = nx.random_powerlaw_tree(n=n_nodes, tries=10000, seed=None)
-    elif graph_type == GraphType.RANDOM_UNLABELED_TREE:
+    if graph_type == GraphType.RANDOM_UNLABELED_TREE:
         G = nx.random_unlabeled_tree(n_nodes, number_of_trees=None, seed=None)
+    elif graph_type == GraphType.BARABASI_ALBERT:
+        G = nx.dual_barabasi_albert_graph(n=n_nodes, m1=2, m2=3, p=0.2)
+    elif graph_type == GraphType.SMALL_WORLD:
+        G: nx.DiGraph = nx.navigable_small_world_graph(
+            n=floor(sqrt(n_nodes)), p=2, q=2, r=2.0
+        )
+    elif graph_type == GraphType.RANDOM_GEOMETRIC:
+        pass
+
+    if isinstance(G, nx.DiGraph):
+        G = G.to_undirected()  # Convert to undirected if it is still a DiGraph
+
+    G.remove_edges_from(nx.selfloop_edges(G))  # Remove self-loops
+    mapping = {
+        node: f"{node[0]},{node[1]}" if isinstance(node, tuple) else str(node)
+        for node in G.nodes()
+    }
+    G = nx.relabel_nodes(G, mapping)
+
+    node_example = random.choice(list(G.nodes))
+    starting_node_id = get_starting_node(node_example)
 
     # Contract Paths
-    G = contract_paths(G, 0)
+    G = contract_paths(G, starting_node_id)
 
     # Set root and finish
-    G.nodes[0]["color"] = "red"
+    G.nodes[starting_node_id]["color"] = "red"
 
     # Find all leaf nodes (nodes with degree 1)
     leaf_nodes = [node for node in G.nodes if G.degree[node] == 1]
+    if len(leaf_nodes) == 0:
+        # A random node will become the goal
+        random_node = random.choice(list(G.nodes))
+        leaf_nodes.append(random_node)
     # # Choose a random leaf node and color it as green
     finish_node = random.choice(leaf_nodes)
     G.nodes[finish_node]["color"] = "green"
@@ -154,7 +185,7 @@ def parse_arguments():
     parser.add_argument(
         "--graph_type",
         type=GraphType,
-        default=GraphType.RANDOM_POWER_LAW_TREE,
+        default=GraphType.RANDOM_UNLABELED_TREE,
         help="Generator that should be used when generating new graphs",
     )
     parser.add_argument(

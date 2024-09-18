@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="113"/>
+<node id="118"/>
+<node id="130"/>
+<node id="141"/>
+<node id="160"/>
+<node id="164"/>
+<node id="178"/>
+<node id="191"/>
+<node id="210"/>
+<node id="223">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="230"/>
+<node id="233"/>
+<node id="247"/>
+<edge source="0" target="223"/>
+<edge source="0" target="164"/>
+<edge source="0" target="141"/>
+<edge source="0" target="130"/>
+<edge source="0" target="210"/>
+<edge source="0" target="233"/>
+<edge source="0" target="178"/>
+<edge source="0" target="230"/>
+<edge source="0" target="247"/>
+<edge source="0" target="113"/>
+<edge source="0" target="160"/>
+<edge source="0" target="191"/>
+<edge source="0" target="118"/>
+</graph></graphml>

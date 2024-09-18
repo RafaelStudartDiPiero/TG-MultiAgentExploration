@@ -1,0 +1,68 @@
+<?xml version='1.0' encoding='utf-8'?>
+<graphml xmlns="http://graphml.graphdrawing.org/xmlns" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://graphml.graphdrawing.org/xmlns http://graphml.graphdrawing.org/xmlns/1.0/graphml.xsd"><key id="d1" for="node" attr.name="finish" attr.type="boolean"/>
+<key id="d0" for="node" attr.name="color" attr.type="string"/>
+<graph edgedefault="undirected"><node id="0">
+  <data key="d0">red</data>
+</node>
+<node id="85"/>
+<node id="119"/>
+<node id="132"/>
+<node id="134"/>
+<node id="198"/>
+<node id="240"/>
+<node id="255"/>
+<node id="272"/>
+<node id="293"/>
+<node id="330"/>
+<node id="343"/>
+<node id="344"/>
+<node id="346"/>
+<node id="348"/>
+<node id="366"/>
+<node id="369"/>
+<node id="379"/>
+<node id="380"/>
+<node id="401"/>
+<node id="407"/>
+<node id="418"/>
+<node id="431"/>
+<node id="447"/>
+<node id="449">
+  <data key="d0">green</data>
+  <data key="d1">True</data>
+</node>
+<node id="464"/>
+<node id="467"/>
+<node id="474"/>
+<node id="483"/>
+<node id="490"/>
+<edge source="0" target="134"/>
+<edge source="0" target="380"/>
+<edge source="0" target="240"/>
+<edge source="0" target="85"/>
+<edge source="0" target="132"/>
+<edge source="0" target="449"/>
+<edge source="0" target="330"/>
+<edge source="0" target="366"/>
+<edge source="0" target="293"/>
+<edge source="0" target="464"/>
+<edge source="0" target="346"/>
+<edge source="0" target="119"/>
+<edge source="0" target="343"/>
+<edge source="0" target="418"/>
+<edge source="0" target="467"/>
+<edge source="0" target="407"/>
+<edge source="0" target="369"/>
+<edge source="0" target="431"/>
+<edge source="0" target="344"/>
+<edge source="0" target="483"/>
+<edge source="0" target="447"/>
+<edge source="0" target="272"/>
+<edge source="0" target="474"/>
+<edge source="0" target="401"/>
+<edge source="0" target="490"/>
+<edge source="0" target="198"/>
+<edge source="0" target="348"/>
+<edge source="0" target="379"/>
+<edge source="0" target="255"/>
+</graph></graphml>
