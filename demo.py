@@ -46,4 +46,4 @@ if __name__ == "__main__":
         starting_node_id=starting_node_id,
     )
 
-    simulation.simulate(shoud_print=True, should_print_trees=False)
+    simulation.simulate(shoud_print=False, should_print_trees=False)

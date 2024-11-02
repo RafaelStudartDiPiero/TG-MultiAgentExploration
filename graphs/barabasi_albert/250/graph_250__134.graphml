@@ -4,58 +4,33 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="22"/>
-<node id="25"/>
-<node id="26"/>
-<node id="30"/>
-<node id="91"/>
-<node id="93"/>
+<node id="99"/>
 <node id="100"/>
-<node id="105"/>
-<node id="121"/>
-<node id="126"/>
-<node id="145"/>
-<node id="156"/>
-<node id="157"/>
-<node id="163">
+<node id="111"/>
+<node id="138"/>
+<node id="158"/>
+<node id="181"/>
+<node id="187"/>
+<node id="191"/>
+<node id="196"/>
+<node id="205"/>
+<node id="207"/>
+<node id="225"/>
+<node id="232">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="182"/>
-<node id="186"/>
-<node id="210"/>
-<node id="213"/>
-<node id="237"/>
-<edge source="0" target="25"/>
-<edge source="0" target="105"/>
-<edge source="0" target="121"/>
-<edge source="0" target="156"/>
-<edge source="0" target="163"/>
-<edge source="0" target="91"/>
-<edge source="0" target="30"/>
-<edge source="0" target="182"/>
-<edge source="0" target="26"/>
-<edge source="0" target="22"/>
-<edge source="0" target="145"/>
-<edge source="0" target="93"/>
-<edge source="0" target="237"/>
+<edge source="0" target="99"/>
 <edge source="0" target="100"/>
-<edge source="0" target="210"/>
-<edge source="0" target="157"/>
-<edge source="0" target="213"/>
-<edge source="0" target="126"/>
-<edge source="0" target="186"/>
-<edge source="22" target="26"/>
-<edge source="22" target="30"/>
-<edge source="26" target="157"/>
-<edge source="26" target="182"/>
-<edge source="30" target="100"/>
-<edge source="30" target="156"/>
-<edge source="91" target="157"/>
-<edge source="91" target="186"/>
-<edge source="93" target="100"/>
-<edge source="93" target="186"/>
-<edge source="100" target="156"/>
-<edge source="100" target="213"/>
-<edge source="182" target="213"/>
+<edge source="0" target="111"/>
+<edge source="0" target="232"/>
+<edge source="0" target="138"/>
+<edge source="0" target="205"/>
+<edge source="0" target="196"/>
+<edge source="0" target="225"/>
+<edge source="0" target="181"/>
+<edge source="0" target="191"/>
+<edge source="0" target="158"/>
+<edge source="0" target="207"/>
+<edge source="0" target="187"/>
 </graph></graphml>

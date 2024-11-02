@@ -4,80 +4,17 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="2"/>
-<node id="8"/>
 <node id="9"/>
-<node id="10"/>
-<node id="15"/>
-<node id="34"/>
-<node id="35"/>
-<node id="41"/>
-<node id="44"/>
-<node id="45"/>
-<node id="49"/>
-<node id="52"/>
-<node id="61"/>
-<node id="63"/>
-<node id="64"/>
-<node id="66"/>
-<node id="70"/>
-<node id="74"/>
-<node id="77"/>
-<node id="78"/>
-<node id="80"/>
-<node id="81"/>
-<node id="82">
+<node id="67"/>
+<node id="68">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="90"/>
-<node id="99"/>
-<edge source="0" target="2"/>
+<node id="79"/>
+<node id="88"/>
+<edge source="0" target="68"/>
+<edge source="0" target="88"/>
 <edge source="0" target="9"/>
-<edge source="0" target="10"/>
-<edge source="0" target="49"/>
-<edge source="0" target="63"/>
-<edge source="0" target="82"/>
-<edge source="0" target="8"/>
-<edge source="0" target="35"/>
-<edge source="0" target="52"/>
-<edge source="0" target="70"/>
-<edge source="0" target="15"/>
-<edge source="0" target="45"/>
-<edge source="0" target="78"/>
-<edge source="0" target="44"/>
-<edge source="0" target="81"/>
-<edge source="0" target="74"/>
-<edge source="0" target="34"/>
-<edge source="0" target="66"/>
-<edge source="0" target="80"/>
-<edge source="0" target="41"/>
-<edge source="0" target="77"/>
-<edge source="0" target="90"/>
-<edge source="0" target="61"/>
-<edge source="0" target="99"/>
-<edge source="2" target="8"/>
-<edge source="2" target="64"/>
-<edge source="8" target="81"/>
-<edge source="9" target="15"/>
-<edge source="9" target="44"/>
-<edge source="9" target="70"/>
-<edge source="10" target="15"/>
-<edge source="10" target="34"/>
-<edge source="10" target="41"/>
-<edge source="10" target="61"/>
-<edge source="10" target="64"/>
-<edge source="10" target="81"/>
-<edge source="15" target="34"/>
-<edge source="15" target="61"/>
-<edge source="41" target="66"/>
-<edge source="41" target="90"/>
-<edge source="44" target="52"/>
-<edge source="49" target="64"/>
-<edge source="49" target="80"/>
-<edge source="52" target="77"/>
-<edge source="61" target="77"/>
-<edge source="66" target="70"/>
-<edge source="80" target="99"/>
-<edge source="90" target="99"/>
+<edge source="0" target="67"/>
+<edge source="0" target="79"/>
 </graph></graphml>

@@ -99,7 +99,7 @@ class Simulation:
         self.fraction_pioneer = 0
 
     def simulate(
-        self, shoud_print: Optional[bool], should_print_trees: Optional[bool]
+        self, shoud_print: Optional[bool], should_print_trees: Optional[bool], stop_after_pionner: Optional[bool] = False,
     ) -> None:
 
         if self.n_agents == 0:
@@ -115,6 +115,9 @@ class Simulation:
                     or agent.status == AgentStatus.STOPPED
                 ):
                     continue
+                
+                current_effective_path_len = len(agent.effective_path)
+                
                 agent.move_one_step(
                     graph=self.graph,
                     pioneer=pioneer,
@@ -136,6 +139,25 @@ class Simulation:
                         if agent.current_node_id in self.agents[j].effective_path:
                             self.lcl[agent.id][j] = agent.current_node_id
                             self.lcl[j][agent.id] = agent.current_node_id
+                    
+                    # Check only if the move was a step back
+                    if len(agent.effective_path) < current_effective_path_len:
+                        for i in range(self.n_agents):
+                            for j in range(i + 1, self.n_agents):
+                                current_lcl = self.lcl[i][j]
+
+                                # Validate if LCL is still in effective_path or the current node
+                                if (current_lcl not in self.agents[i].effective_path and current_lcl != self.agents[i].current_node_id) or \
+                                (current_lcl not in self.agents[j].effective_path and current_lcl != self.agents[j].current_node_id):
+                                    
+                                    # Find common nodes
+                                    common_nodes = [node for node in self.agents[i].effective_path if node in self.agents[j].effective_path]
+                                    if self.agents[i].current_node_id == self.agents[j].current_node_id:
+                                        common_nodes.append(self.agents[i].current_node_id)
+                                    
+                                    # Update lcl
+                                    self.lcl[i][j] = common_nodes[-1] if common_nodes else self.starting_node_id
+                                    self.lcl[j][i] = common_nodes[-1] if common_nodes else self.starting_node_id
 
                 if (
                     agent.status == AgentStatus.FINISHED
@@ -145,6 +167,8 @@ class Simulation:
                     if agent.finished and pioneer is None:
                         pioneer = agent.id
                         pioneer_effective_path = agent.effective_path
+            if stop_after_pionner and pioneer is not None:
+                break
 
         for agent in self.agents:
             search = agent.search

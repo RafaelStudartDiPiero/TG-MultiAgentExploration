@@ -490,12 +490,6 @@ class Agent:
         )
         total_number_of_neighbors = len(non_visited_neighbors)
 
-        if self.id == 1 and len(non_visited_neighbors) > 1:
-            for weight in neighbors_weights:
-                if weight[1] == weight[0]:
-                    print(f"IGUALOU!")
-                    print(f"Next Weights: [{weight[0]:.16f}, {weight[1]:.16f}]\n")
-
         # Decide next step based on interval
         for index, neighbor in enumerate(non_visited_neighbors):
             neighbor_interval = neighbors_weights[index]

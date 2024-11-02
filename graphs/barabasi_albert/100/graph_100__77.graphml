@@ -4,17 +4,33 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="40"/>
-<node id="41"/>
+<node id="3"/>
+<node id="32"/>
+<node id="34"/>
 <node id="44">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="55"/>
-<node id="71"/>
-<edge source="0" target="55"/>
-<edge source="0" target="71"/>
-<edge source="0" target="40"/>
+<node id="52"/>
+<node id="53"/>
+<node id="57"/>
+<node id="59"/>
+<node id="84"/>
+<edge source="0" target="3"/>
 <edge source="0" target="44"/>
-<edge source="0" target="41"/>
+<edge source="0" target="32"/>
+<edge source="0" target="53"/>
+<edge source="0" target="59"/>
+<edge source="0" target="52"/>
+<edge source="0" target="57"/>
+<edge source="0" target="34"/>
+<edge source="0" target="84"/>
+<edge source="3" target="34"/>
+<edge source="3" target="57"/>
+<edge source="34" target="53"/>
+<edge source="52" target="53"/>
+<edge source="52" target="59"/>
+<edge source="53" target="59"/>
+<edge source="53" target="84"/>
+<edge source="57" target="84"/>
 </graph></graphml>

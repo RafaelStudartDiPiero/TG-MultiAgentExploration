@@ -106,7 +106,7 @@ def generate_graph_by_enum(graph_type: GraphType, n_nodes: int) -> nx.Graph:
         G = nx.dual_barabasi_albert_graph(n=n_nodes, m1=2, m2=3, p=0.2)
     elif graph_type == GraphType.SMALL_WORLD:
         G: nx.DiGraph = nx.navigable_small_world_graph(
-            n=floor(sqrt(n_nodes)), p=2, q=2, r=2.0
+            n=floor(sqrt(n_nodes)), p=1, q=1, r=2.5
         )
     elif graph_type == GraphType.RANDOM_GEOMETRIC:
         pass

@@ -4,40 +4,94 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="3"/>
-<node id="77"/>
-<node id="100"/>
-<node id="108"/>
-<node id="116">
+<node id="20"/>
+<node id="37"/>
+<node id="40"/>
+<node id="48"/>
+<node id="64"/>
+<node id="86"/>
+<node id="88"/>
+<node id="94"/>
+<node id="95">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="127"/>
-<node id="151"/>
-<node id="190"/>
-<node id="193"/>
-<node id="217"/>
-<node id="225"/>
-<node id="226"/>
-<node id="238"/>
-<node id="245"/>
-<node id="247"/>
-<edge source="0" target="3"/>
-<edge source="0" target="108"/>
-<edge source="0" target="217"/>
-<edge source="0" target="226"/>
-<edge source="0" target="190"/>
-<edge source="0" target="100"/>
-<edge source="0" target="238"/>
-<edge source="0" target="247"/>
-<edge source="0" target="77"/>
-<edge source="0" target="127"/>
-<edge source="0" target="151"/>
-<edge source="0" target="116"/>
-<edge source="0" target="193"/>
-<edge source="0" target="245"/>
-<edge source="0" target="225"/>
-<edge source="3" target="100"/>
-<edge source="3" target="245"/>
-<edge source="100" target="245"/>
+<node id="98"/>
+<node id="99"/>
+<node id="117"/>
+<node id="118"/>
+<node id="122"/>
+<node id="123"/>
+<node id="125"/>
+<node id="133"/>
+<node id="142"/>
+<node id="146"/>
+<node id="147"/>
+<node id="158"/>
+<node id="166"/>
+<node id="168"/>
+<node id="175"/>
+<node id="180"/>
+<node id="185"/>
+<node id="196"/>
+<node id="231"/>
+<node id="232"/>
+<node id="233"/>
+<node id="237"/>
+<node id="239"/>
+<node id="243"/>
+<edge source="0" target="20"/>
+<edge source="0" target="64"/>
+<edge source="0" target="123"/>
+<edge source="0" target="158"/>
+<edge source="0" target="185"/>
+<edge source="0" target="180"/>
+<edge source="0" target="86"/>
+<edge source="0" target="94"/>
+<edge source="0" target="125"/>
+<edge source="0" target="147"/>
+<edge source="0" target="40"/>
+<edge source="0" target="48"/>
+<edge source="0" target="95"/>
+<edge source="0" target="231"/>
+<edge source="0" target="243"/>
+<edge source="0" target="175"/>
+<edge source="0" target="98"/>
+<edge source="0" target="99"/>
+<edge source="0" target="118"/>
+<edge source="0" target="122"/>
+<edge source="0" target="142"/>
+<edge source="0" target="37"/>
+<edge source="0" target="232"/>
+<edge source="0" target="117"/>
+<edge source="0" target="146"/>
+<edge source="0" target="166"/>
+<edge source="0" target="239"/>
+<edge source="0" target="196"/>
+<edge source="0" target="133"/>
+<edge source="0" target="168"/>
+<edge source="0" target="88"/>
+<edge source="0" target="237"/>
+<edge source="0" target="233"/>
+<edge source="20" target="117"/>
+<edge source="20" target="185"/>
+<edge source="37" target="48"/>
+<edge source="37" target="98"/>
+<edge source="40" target="237"/>
+<edge source="40" target="185"/>
+<edge source="48" target="118"/>
+<edge source="64" target="122"/>
+<edge source="64" target="237"/>
+<edge source="86" target="123"/>
+<edge source="86" target="133"/>
+<edge source="98" target="117"/>
+<edge source="98" target="196"/>
+<edge source="99" target="133"/>
+<edge source="99" target="168"/>
+<edge source="117" target="175"/>
+<edge source="118" target="123"/>
+<edge source="122" target="158"/>
+<edge source="123" target="168"/>
+<edge source="158" target="196"/>
+<edge source="168" target="175"/>
 </graph></graphml>

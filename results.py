@@ -133,7 +133,7 @@ def simulate_graph_exploration(
                             starting_node_id=starting_node_id,
                         )
 
-                        simulation.simulate(False, False)
+                        simulation.simulate(False, False, True)
                         agent_steps.append(
                             simulation.total_steps / agents if agents > 0 else 0
                         )

@@ -4,51 +4,45 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="35"/>
-<node id="53"/>
-<node id="59"/>
-<node id="66"/>
-<node id="91"/>
-<node id="92"/>
-<node id="119">
+<node id="30"/>
+<node id="87"/>
+<node id="118"/>
+<node id="139"/>
+<node id="140"/>
+<node id="145"/>
+<node id="148"/>
+<node id="153"/>
+<node id="167"/>
+<node id="175"/>
+<node id="195">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="123"/>
-<node id="131"/>
-<node id="136"/>
-<node id="158"/>
-<node id="183"/>
-<node id="221"/>
-<node id="222"/>
+<node id="200"/>
+<node id="209"/>
+<node id="219"/>
 <node id="223"/>
-<node id="229"/>
-<node id="240"/>
-<edge source="0" target="35"/>
-<edge source="0" target="53"/>
-<edge source="0" target="131"/>
-<edge source="0" target="136"/>
-<edge source="0" target="123"/>
-<edge source="0" target="183"/>
-<edge source="0" target="158"/>
-<edge source="0" target="221"/>
-<edge source="0" target="240"/>
-<edge source="0" target="92"/>
-<edge source="0" target="59"/>
-<edge source="0" target="119"/>
+<node id="225"/>
+<node id="233"/>
+<node id="241"/>
+<node id="246"/>
+<edge source="0" target="30"/>
+<edge source="0" target="139"/>
+<edge source="0" target="148"/>
+<edge source="0" target="246"/>
+<edge source="0" target="200"/>
+<edge source="0" target="87"/>
+<edge source="0" target="241"/>
+<edge source="0" target="167"/>
+<edge source="0" target="195"/>
+<edge source="0" target="233"/>
+<edge source="0" target="219"/>
+<edge source="0" target="175"/>
+<edge source="0" target="118"/>
+<edge source="0" target="225"/>
+<edge source="0" target="140"/>
 <edge source="0" target="223"/>
-<edge source="0" target="91"/>
-<edge source="0" target="222"/>
-<edge source="0" target="229"/>
-<edge source="0" target="66"/>
-<edge source="35" target="59"/>
-<edge source="35" target="223"/>
-<edge source="59" target="229"/>
-<edge source="66" target="123"/>
-<edge source="66" target="222"/>
-<edge source="91" target="92"/>
-<edge source="91" target="229"/>
-<edge source="92" target="222"/>
-<edge source="123" target="221"/>
-<edge source="221" target="223"/>
+<edge source="0" target="145"/>
+<edge source="0" target="209"/>
+<edge source="0" target="153"/>
 </graph></graphml>

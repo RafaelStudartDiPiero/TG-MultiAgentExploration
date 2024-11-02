@@ -44,7 +44,7 @@ def get_algorithm_label(algorithm: Algorithm) -> str:
         Algorithm.TARRY: "Tarry",
         Algorithm.TWO_INTERVAL: "2I",
         Algorithm.TARRY_INTERVAL_TIE_BREAKER: "Tarry-Tie",
-        Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER: "Tarry-Delay-Tie",
+        Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER: "Tarry-Delay",
         Algorithm.TARRY_INTERVAL_PRIORITY: "Tarry-Priority",
     }
     return algorithm_labels[algorithm]
@@ -71,6 +71,7 @@ def compare_explorations(
     metrics: List[Metric],
     split_legend: bool,
     title: str,
+    relative: bool = False,
 ):
     algorithm_colors = ["blue", "red", "green", "orange"]
     metric_markers = [".", "d", "s"]
@@ -84,6 +85,8 @@ def compare_explorations(
         ) as f:
             results = pickle.load(f)
             algorithms_results.append(results)
+    # Define Baseline
+    baseline_results = algorithms_results[0] if relative else None
 
     # Starting Figure
     plt.figure(figsize=(10, 6))
@@ -94,11 +97,19 @@ def compare_explorations(
         # Creating lines for each metric
         for metric_index, metric in enumerate(metrics):
             metric_data = [result[metric.value] for result in results]
+            
+            if relative and baseline_results is not None:
+                baseline_data = [baseline_result[metric.value] for baseline_result in baseline_results]
+                metric_data = [
+                    (current - baseline) / baseline if baseline != 0 else 0
+                    for current, baseline in zip(metric_data, baseline_data)
+                ]
+            metric_label_prefix = "Relative " if relative else ""
             # Create the line plots
             (metric_line,) = plt.plot(
                 agents,
                 metric_data,
-                label=f"{get_algorithm_label(algorithms[algorithm_index])} - {get_metric_label(metric)}",
+                label=f"{get_algorithm_label(algorithms[algorithm_index])} - {metric_label_prefix}{get_metric_label(metric)}",
                 marker=metric_markers[metric_index % len(metric_markers)],
                 color=algorithm_colors[algorithm_index % len(algorithm_colors)],
                 linestyle="--" if metric == Metric.STD_STEPS else None,
@@ -106,7 +117,12 @@ def compare_explorations(
             used_lines.append(metric_line)
     # Creating Labels and Legend
     plt.xlabel("Number of Agents")
-    plt.ylabel("Steps")
+    ylabel = "Steps"
+    if all("fraction" in metric.value for metric in metrics):
+        ylabel = "Relative Difference of Explored Fraction" if relative else "Explored Fraction"
+    else:
+        ylabel = "Relative Difference of Steps" if relative else "Steps"
+    plt.ylabel(ylabel=ylabel)
     plt.title(title)
     # Display the plot
     plt.grid(True)
@@ -128,6 +144,8 @@ def compare_explorations(
         "results/plot/compare", base_path
     )
     os.makedirs(algorithms_base_path_comparison_dir, exist_ok=True)
+    
+    relative_suffix = "_relative" if relative else ""
 
     # Creating Directory
     algorithms_comparison_dir = os.path.join(
@@ -135,7 +153,7 @@ def compare_explorations(
     )
     os.makedirs(algorithms_comparison_dir, exist_ok=True)
 
-    file_path = f"results/plot/compare/{base_path}/{algorithms_string}/{metrics_string}_{graph_size.value}.svg"
+    file_path = f"results/plot/compare/{base_path}/{algorithms_string}/{metrics_string}_{graph_size.value}{relative_suffix}.svg"
     plt.savefig(file_path, format="svg")
     # Saving Legend
     if split_legend:
@@ -201,6 +219,12 @@ def parse_arguments():
         default="Graph Exploration",
         help="Title of Generated Plot",
     )
+    parser.add_argument(
+        "--relative",
+        type=bool,
+        default=False,
+        help="Relative Metrics"
+    )
     args = parser.parse_args()
 
     # Convert comma-separated strings to lists of enums
@@ -222,4 +246,5 @@ if __name__ == "__main__":
         args.metrics,
         args.split_legend,
         args.title,
+        args.relative,
     )

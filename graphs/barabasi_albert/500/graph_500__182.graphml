@@ -4,41 +4,49 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="82">
+<node id="108"/>
+<node id="210"/>
+<node id="248"/>
+<node id="271"/>
+<node id="291"/>
+<node id="308"/>
+<node id="323"/>
+<node id="336"/>
+<node id="343"/>
+<node id="355"/>
+<node id="358"/>
+<node id="361"/>
+<node id="370"/>
+<node id="410"/>
+<node id="427"/>
+<node id="430">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="161"/>
-<node id="167"/>
-<node id="170"/>
-<node id="196"/>
-<node id="224"/>
-<node id="288"/>
-<node id="295"/>
-<node id="316"/>
-<node id="317"/>
-<node id="318"/>
-<node id="324"/>
-<node id="334"/>
-<node id="356"/>
-<node id="405"/>
-<node id="408"/>
+<node id="431"/>
+<node id="436"/>
+<node id="442"/>
 <node id="467"/>
-<edge source="0" target="356"/>
-<edge source="0" target="82"/>
-<edge source="0" target="316"/>
-<edge source="0" target="170"/>
-<edge source="0" target="324"/>
-<edge source="0" target="405"/>
-<edge source="0" target="196"/>
-<edge source="0" target="288"/>
-<edge source="0" target="318"/>
-<edge source="0" target="295"/>
-<edge source="0" target="224"/>
-<edge source="0" target="408"/>
-<edge source="0" target="161"/>
-<edge source="0" target="167"/>
-<edge source="0" target="334"/>
+<node id="478"/>
+<edge source="0" target="291"/>
+<edge source="0" target="431"/>
+<edge source="0" target="248"/>
+<edge source="0" target="271"/>
+<edge source="0" target="336"/>
+<edge source="0" target="478"/>
+<edge source="0" target="210"/>
+<edge source="0" target="343"/>
+<edge source="0" target="108"/>
+<edge source="0" target="358"/>
+<edge source="0" target="430"/>
+<edge source="0" target="410"/>
+<edge source="0" target="355"/>
+<edge source="0" target="323"/>
+<edge source="0" target="436"/>
+<edge source="0" target="361"/>
+<edge source="0" target="442"/>
+<edge source="0" target="308"/>
+<edge source="0" target="370"/>
 <edge source="0" target="467"/>
-<edge source="0" target="317"/>
+<edge source="0" target="427"/>
 </graph></graphml>

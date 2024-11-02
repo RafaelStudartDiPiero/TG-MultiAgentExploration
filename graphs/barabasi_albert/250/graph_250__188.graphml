@@ -4,53 +4,33 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="38"/>
-<node id="48">
+<node id="24"/>
+<node id="123"/>
+<node id="155"/>
+<node id="156"/>
+<node id="172"/>
+<node id="177"/>
+<node id="182"/>
+<node id="186">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="119"/>
-<node id="139"/>
-<node id="142"/>
-<node id="146"/>
-<node id="148"/>
-<node id="150"/>
-<node id="152"/>
-<node id="153"/>
-<node id="166"/>
-<node id="170"/>
-<node id="196"/>
-<node id="197"/>
-<node id="198"/>
-<node id="204"/>
-<node id="218"/>
-<node id="223"/>
-<node id="224"/>
+<node id="190"/>
+<node id="209"/>
+<node id="219"/>
+<node id="225"/>
 <node id="229"/>
-<node id="232"/>
-<node id="238"/>
-<node id="239"/>
-<edge source="0" target="38"/>
-<edge source="0" target="148"/>
-<edge source="0" target="166"/>
-<edge source="0" target="170"/>
-<edge source="0" target="218"/>
-<edge source="0" target="48"/>
-<edge source="0" target="139"/>
-<edge source="0" target="150"/>
-<edge source="0" target="198"/>
-<edge source="0" target="204"/>
-<edge source="0" target="232"/>
-<edge source="0" target="119"/>
-<edge source="0" target="196"/>
-<edge source="0" target="239"/>
-<edge source="0" target="152"/>
-<edge source="0" target="224"/>
+<edge source="0" target="24"/>
 <edge source="0" target="229"/>
-<edge source="0" target="142"/>
-<edge source="0" target="197"/>
-<edge source="0" target="238"/>
-<edge source="0" target="223"/>
-<edge source="0" target="153"/>
-<edge source="0" target="146"/>
+<edge source="0" target="225"/>
+<edge source="0" target="123"/>
+<edge source="0" target="177"/>
+<edge source="0" target="186"/>
+<edge source="0" target="209"/>
+<edge source="0" target="156"/>
+<edge source="0" target="172"/>
+<edge source="0" target="182"/>
+<edge source="0" target="219"/>
+<edge source="0" target="155"/>
+<edge source="0" target="190"/>
 </graph></graphml>

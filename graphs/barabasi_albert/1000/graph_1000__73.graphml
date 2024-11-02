@@ -4,255 +4,101 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="76"/>
-<node id="94"/>
-<node id="101"/>
-<node id="110"/>
-<node id="111"/>
-<node id="115"/>
-<node id="117"/>
-<node id="122"/>
-<node id="138"/>
-<node id="141"/>
-<node id="145"/>
-<node id="152"/>
-<node id="161"/>
-<node id="165"/>
-<node id="168"/>
-<node id="175"/>
-<node id="176"/>
-<node id="179"/>
-<node id="193"/>
-<node id="194"/>
-<node id="229"/>
-<node id="255"/>
-<node id="260"/>
-<node id="270"/>
-<node id="280"/>
-<node id="298"/>
-<node id="305"/>
-<node id="343"/>
-<node id="345"/>
-<node id="351"/>
-<node id="355"/>
-<node id="358"/>
-<node id="363"/>
-<node id="370"/>
-<node id="387"/>
-<node id="422"/>
-<node id="436"/>
-<node id="477"/>
-<node id="515"/>
-<node id="518"/>
-<node id="527"/>
-<node id="530"/>
-<node id="534"/>
-<node id="551"/>
-<node id="558"/>
-<node id="562"/>
-<node id="577"/>
-<node id="584"/>
-<node id="586"/>
-<node id="596"/>
-<node id="619"/>
-<node id="623">
+<node id="22"/>
+<node id="84"/>
+<node id="190"/>
+<node id="198"/>
+<node id="220"/>
+<node id="224"/>
+<node id="234"/>
+<node id="237"/>
+<node id="259">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="627"/>
-<node id="661"/>
-<node id="667"/>
-<node id="675"/>
-<node id="682"/>
-<node id="688"/>
-<node id="718"/>
-<node id="739"/>
-<node id="743"/>
-<node id="767"/>
-<node id="771"/>
-<node id="779"/>
-<node id="784"/>
-<node id="800"/>
+<node id="270"/>
+<node id="307"/>
+<node id="364"/>
+<node id="376"/>
+<node id="395"/>
+<node id="479"/>
+<node id="485"/>
+<node id="508"/>
+<node id="543"/>
+<node id="633"/>
+<node id="644"/>
+<node id="645"/>
+<node id="651"/>
+<node id="672"/>
+<node id="673"/>
+<node id="674"/>
+<node id="681"/>
+<node id="694"/>
+<node id="753"/>
+<node id="766"/>
+<node id="787"/>
+<node id="789"/>
 <node id="810"/>
-<node id="812"/>
-<node id="818"/>
-<node id="819"/>
-<node id="820"/>
-<node id="822"/>
-<node id="834"/>
-<node id="850"/>
-<node id="854"/>
+<node id="825"/>
+<node id="833"/>
+<node id="840"/>
+<node id="856"/>
+<node id="865"/>
+<node id="867"/>
+<node id="875"/>
 <node id="876"/>
-<node id="881"/>
 <node id="900"/>
-<node id="904"/>
-<node id="920"/>
-<node id="921"/>
-<node id="925"/>
+<node id="905"/>
 <node id="926"/>
-<node id="931"/>
-<node id="936"/>
-<node id="952"/>
-<node id="954"/>
-<node id="955"/>
-<node id="964"/>
-<node id="994"/>
-<node id="999"/>
-<edge source="0" target="101"/>
-<edge source="0" target="138"/>
-<edge source="0" target="161"/>
-<edge source="0" target="255"/>
-<edge source="0" target="260"/>
-<edge source="0" target="387"/>
-<edge source="0" target="596"/>
-<edge source="0" target="623"/>
-<edge source="0" target="834"/>
-<edge source="0" target="881"/>
-<edge source="0" target="900"/>
-<edge source="0" target="954"/>
-<edge source="0" target="165"/>
-<edge source="0" target="527"/>
-<edge source="0" target="152"/>
-<edge source="0" target="194"/>
-<edge source="0" target="904"/>
-<edge source="0" target="76"/>
-<edge source="0" target="115"/>
-<edge source="0" target="820"/>
-<edge source="0" target="343"/>
-<edge source="0" target="110"/>
-<edge source="0" target="111"/>
-<edge source="0" target="675"/>
-<edge source="0" target="767"/>
-<edge source="0" target="193"/>
-<edge source="0" target="822"/>
-<edge source="0" target="229"/>
-<edge source="0" target="94"/>
-<edge source="0" target="925"/>
-<edge source="0" target="627"/>
-<edge source="0" target="122"/>
-<edge source="0" target="305"/>
-<edge source="0" target="876"/>
-<edge source="0" target="175"/>
-<edge source="0" target="363"/>
-<edge source="0" target="477"/>
-<edge source="0" target="682"/>
-<edge source="0" target="345"/>
-<edge source="0" target="819"/>
-<edge source="0" target="145"/>
-<edge source="0" target="168"/>
-<edge source="0" target="176"/>
-<edge source="0" target="551"/>
-<edge source="0" target="436"/>
-<edge source="0" target="179"/>
-<edge source="0" target="270"/>
-<edge source="0" target="661"/>
-<edge source="0" target="800"/>
-<edge source="0" target="854"/>
-<edge source="0" target="586"/>
-<edge source="0" target="850"/>
-<edge source="0" target="358"/>
-<edge source="0" target="370"/>
-<edge source="0" target="422"/>
-<edge source="0" target="994"/>
-<edge source="0" target="718"/>
-<edge source="0" target="779"/>
-<edge source="0" target="936"/>
-<edge source="0" target="667"/>
-<edge source="0" target="810"/>
-<edge source="0" target="141"/>
-<edge source="0" target="562"/>
-<edge source="0" target="818"/>
-<edge source="0" target="355"/>
-<edge source="0" target="920"/>
-<edge source="0" target="688"/>
-<edge source="0" target="577"/>
-<edge source="0" target="518"/>
-<edge source="0" target="921"/>
-<edge source="0" target="530"/>
-<edge source="0" target="931"/>
-<edge source="0" target="558"/>
-<edge source="0" target="999"/>
-<edge source="0" target="812"/>
-<edge source="0" target="739"/>
-<edge source="0" target="743"/>
-<edge source="0" target="515"/>
-<edge source="0" target="955"/>
+<node id="938"/>
+<node id="942"/>
+<node id="943"/>
+<node id="991"/>
+<edge source="0" target="220"/>
+<edge source="0" target="644"/>
+<edge source="0" target="681"/>
+<edge source="0" target="865"/>
 <edge source="0" target="926"/>
-<edge source="0" target="584"/>
-<edge source="0" target="784"/>
-<edge source="0" target="280"/>
-<edge source="0" target="952"/>
-<edge source="0" target="534"/>
-<edge source="0" target="771"/>
-<edge source="0" target="298"/>
-<edge source="0" target="117"/>
-<edge source="0" target="351"/>
-<edge source="0" target="964"/>
-<edge source="0" target="619"/>
-<edge source="76" target="117"/>
-<edge source="76" target="351"/>
-<edge source="94" target="530"/>
-<edge source="94" target="767"/>
-<edge source="101" target="596"/>
-<edge source="101" target="955"/>
-<edge source="101" target="964"/>
-<edge source="110" target="175"/>
-<edge source="110" target="477"/>
-<edge source="111" target="117"/>
-<edge source="111" target="999"/>
-<edge source="115" target="260"/>
-<edge source="115" target="358"/>
-<edge source="122" target="152"/>
-<edge source="122" target="558"/>
-<edge source="141" target="515"/>
-<edge source="141" target="926"/>
-<edge source="152" target="718"/>
-<edge source="161" target="515"/>
-<edge source="161" target="784"/>
-<edge source="161" target="955"/>
-<edge source="161" target="260"/>
-<edge source="165" target="255"/>
-<edge source="165" target="586"/>
-<edge source="165" target="999"/>
-<edge source="168" target="194"/>
-<edge source="168" target="530"/>
-<edge source="175" target="351"/>
-<edge source="175" target="854"/>
-<edge source="193" target="305"/>
-<edge source="193" target="358"/>
-<edge source="194" target="596"/>
-<edge source="229" target="627"/>
-<edge source="229" target="921"/>
-<edge source="255" target="280"/>
-<edge source="260" target="270"/>
-<edge source="260" target="850"/>
-<edge source="270" target="688"/>
-<edge source="280" target="854"/>
-<edge source="305" target="926"/>
-<edge source="343" target="355"/>
-<edge source="343" target="370"/>
-<edge source="345" target="558"/>
-<edge source="345" target="771"/>
-<edge source="355" target="527"/>
-<edge source="358" target="534"/>
-<edge source="358" target="739"/>
-<edge source="358" target="743"/>
-<edge source="370" target="921"/>
-<edge source="387" target="718"/>
-<edge source="387" target="743"/>
-<edge source="387" target="784"/>
-<edge source="477" target="534"/>
-<edge source="477" target="936"/>
-<edge source="527" target="661"/>
-<edge source="577" target="586"/>
-<edge source="577" target="952"/>
-<edge source="619" target="688"/>
-<edge source="619" target="771"/>
-<edge source="627" target="812"/>
-<edge source="661" target="739"/>
-<edge source="767" target="936"/>
-<edge source="771" target="850"/>
-<edge source="784" target="810"/>
-<edge source="810" target="952"/>
-<edge source="812" target="964"/>
+<edge source="0" target="867"/>
+<edge source="0" target="237"/>
+<edge source="0" target="479"/>
+<edge source="0" target="694"/>
+<edge source="0" target="307"/>
+<edge source="0" target="395"/>
+<edge source="0" target="938"/>
+<edge source="0" target="856"/>
+<edge source="0" target="942"/>
+<edge source="0" target="22"/>
+<edge source="0" target="259"/>
+<edge source="0" target="633"/>
+<edge source="0" target="645"/>
+<edge source="0" target="224"/>
+<edge source="0" target="651"/>
+<edge source="0" target="234"/>
+<edge source="0" target="840"/>
+<edge source="0" target="943"/>
+<edge source="0" target="376"/>
+<edge source="0" target="543"/>
+<edge source="0" target="905"/>
+<edge source="0" target="198"/>
+<edge source="0" target="485"/>
+<edge source="0" target="833"/>
+<edge source="0" target="825"/>
+<edge source="0" target="508"/>
+<edge source="0" target="84"/>
+<edge source="0" target="190"/>
+<edge source="0" target="875"/>
+<edge source="0" target="876"/>
+<edge source="0" target="672"/>
+<edge source="0" target="270"/>
+<edge source="0" target="810"/>
+<edge source="0" target="900"/>
+<edge source="0" target="674"/>
+<edge source="0" target="789"/>
+<edge source="0" target="787"/>
+<edge source="0" target="766"/>
+<edge source="0" target="673"/>
+<edge source="0" target="753"/>
+<edge source="0" target="364"/>
+<edge source="0" target="991"/>
 </graph></graphml>

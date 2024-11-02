@@ -4,21 +4,33 @@
 <graph edgedefault="undirected"><node id="0">
   <data key="d0">red</data>
 </node>
-<node id="30"/>
-<node id="56"/>
-<node id="75"/>
-<node id="84"/>
-<node id="85"/>
-<node id="87">
+<node id="16"/>
+<node id="20"/>
+<node id="21"/>
+<node id="39">
   <data key="d0">green</data>
   <data key="d1">True</data>
 </node>
-<node id="90"/>
-<edge source="0" target="84"/>
-<edge source="0" target="90"/>
-<edge source="0" target="56"/>
-<edge source="0" target="87"/>
-<edge source="0" target="75"/>
-<edge source="0" target="30"/>
+<node id="78"/>
+<node id="80"/>
+<node id="82"/>
+<node id="85"/>
+<node id="88"/>
+<node id="94"/>
+<node id="95"/>
+<node id="97"/>
+<node id="99"/>
+<edge source="0" target="20"/>
+<edge source="0" target="80"/>
+<edge source="0" target="94"/>
+<edge source="0" target="99"/>
+<edge source="0" target="78"/>
+<edge source="0" target="82"/>
+<edge source="0" target="21"/>
+<edge source="0" target="88"/>
+<edge source="0" target="16"/>
+<edge source="0" target="39"/>
+<edge source="0" target="97"/>
 <edge source="0" target="85"/>
+<edge source="0" target="95"/>
 </graph></graphml>
