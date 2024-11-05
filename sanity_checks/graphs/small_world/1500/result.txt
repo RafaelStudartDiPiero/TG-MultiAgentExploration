@@ -1,0 +1,3 @@
+Mean Depth: 0
+Mean Leaf Count: 1
+Mean Nodes: 1442.376

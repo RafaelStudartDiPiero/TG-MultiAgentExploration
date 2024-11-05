@@ -10,6 +10,8 @@ import networkx as nx
 
 from simulation.graph_utils import convert_maze, load_graph, get_starting_node
 from simulation.graph import sort_neighbors
+import sys
+sys.setrecursionlimit(3000)  # Adjust the limit as needed
 
 
 def custom_dfs_tree(graph, start_node):
@@ -41,13 +43,8 @@ def analyze_graph(graph: nx.Graph, root_id: str) -> Tuple[int, int, int]:
         visited.add(node)
         max_depth = depth
         leaf_count = 0
-        # print(parent)
-        # print(depth)
-        # print(max_depth)
-
         neighbors = list(tree.neighbors(node))
         valid_neighbors = [n for n in neighbors if n != parent]
-        print(valid_neighbors)
 
         # If node is a leaf (no valid children)
         if not valid_neighbors:
