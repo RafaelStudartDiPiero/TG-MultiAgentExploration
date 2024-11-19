@@ -40,9 +40,9 @@ class Metric(Enum):
 
 def get_algorithm_label(algorithm: Algorithm) -> str:
     algorithm_labels = {
-        Algorithm.SELF: "1I",
+        Algorithm.SELF: "Base Exploration Algorithm",
         Algorithm.TARRY: "Tarry",
-        Algorithm.TWO_INTERVAL: "2I",
+        Algorithm.TWO_INTERVAL: "Backward Interval Filling",
         Algorithm.TARRY_INTERVAL_TIE_BREAKER: "Tarry-Tie",
         Algorithm.TARRY_DELAYED_INTERVAL_TIE_BREAKER: "Tarry-Delay",
         Algorithm.TARRY_INTERVAL_PRIORITY: "Tarry-Priority",
@@ -157,7 +157,7 @@ def compare_explorations(
     plt.savefig(file_path, format="svg")
     # Saving Legend
     if split_legend:
-        fig_legend = plt.figure(figsize=(4, 2))
+        fig_legend = plt.figure(figsize=(6, 2))
         legend = fig_legend.legend(handles=used_lines, loc="center", ncol=1)
         fig_legend.canvas.draw()
         # Save the legend as SVG
